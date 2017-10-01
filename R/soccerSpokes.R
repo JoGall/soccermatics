@@ -6,7 +6,7 @@ NULL
 #' Draw spokes on a soccer pitch.
 #' @description Draws spokes showing the direction of all movements made in each sector of the pitch. Note: This function is prototypical and intended to eventually visualise pass and shot event data, but there are no open-source samples of such data available as yet.
 #' 
-#' @param df dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}, and angular information (in radians, ranging between -pi and pi) in a column \code{'direction'}.
+#' @param df dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'} and angular information (in radians, ranging between -pi and pi) in a column \code{'direction'}.
 #' @param xBins,yBins integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.
 #' @param angleBins integer, the number of angle bins movement directions are divided up into. For example, a value of 4 clusters directions in each bin into north, east, south and west.
 #' @param lengthPitch,widthPitch numeric, length and width of pitch in metres.

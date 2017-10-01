@@ -1,5 +1,6 @@
 #' @import ggplot2
 #' @import dplyr
+#' @import magrittr "%>%"
 NULL
 #' Draw a path of player trajectory on a soccer pitch.
 #'

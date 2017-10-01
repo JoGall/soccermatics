@@ -4,17 +4,15 @@
 \alias{soccerFlow}
 \title{Draw a flow field on a soccer pitch.}
 \usage{
-soccerFlow(df, bins, lengthPitch = 105, widthPitch = 68, yBins = NULL,
+soccerFlow(df, xBins, lengthPitch = 105, widthPitch = 68, yBins = NULL,
   grass = FALSE, plot = NULL)
 }
 \arguments{
-\item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}.}
+\item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'} and angular information (in radians, ranging between -pi and pi) in a column \code{'direction'}.}
 
-\item{bins}{integer, the number of horizontal bins (length-wise) the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, this value will also be used for the number of vertical (width-wise) bins.}
+\item{xBins, yBins}{integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.}
 
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres.}
-
-\item{yBins}{integer, the number of vertical bins (width-wise) the soccer patch is to be divided up into. If \code{NULL}, the same value is used as for \code{bins}}
 
 \item{grass}{if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.}
 
@@ -29,10 +27,10 @@ Draws a flow field showing the mean direction of movement made in each sector of
 \examples{
 data(tromso_extra)
 # draw flow field showing mean direction of player #8's movement
-soccerFlow(subset(tromso_extra, id == 8), bins = 5, grass = TRUE)
+soccerFlow(subset(tromso_extra, id == 8), xBins = 5, grass = TRUE)
 # draw flow field over player heatmap
-p <- soccerHeatmap(subset(tromso_extra, id == 8), bins = 5)
-soccerFlow(subset(tromso_extra, id == 8), bins = 5, plot = p)
+p <- soccerHeatmap(subset(tromso_extra, id == 8), xBins = 5)
+soccerFlow(subset(tromso_extra, id == 8), xBins = 5, plot = p)
 
 }
 \seealso{

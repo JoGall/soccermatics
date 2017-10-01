@@ -9,7 +9,7 @@ soccerSpokes(df, xBins, lengthPitch = 105, widthPitch = 68,
   plot = NULL)
 }
 \arguments{
-\item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}, and angular information (in radians, ranging between -pi and pi) in a column \code{'direction'}.}
+\item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'} and angular information (in radians, ranging between -pi and pi) in a column \code{'direction'}.}
 
 \item{xBins, yBins}{integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.}
 
