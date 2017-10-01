@@ -13,6 +13,7 @@ NULL
 #' @param lengthPitch,widthPitch numeric, length and width of pitch in metres.
 #' @param grass if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.
 #' @param line_col colour of pitch lines
+#' @param lwd thickness of arrow lines
 #' @param minLength numeric, ratio between size of shortest arrow and longest arrow depending on number of events.
 #' @param minAlpha numeric, minimum alpha of the arrow with the lowest number of events.
 #' @param legend if TRUE, adds legend showing relationship between arrow transparency and number of events
@@ -26,7 +27,7 @@ NULL
 #'   dplyr::filter(id == 8) %>%
 #'   dplyr::sample_n(100)
 #' # 10x10 x,y-bins, 8 angle-bins, grass pitch
-#' soccerSpokes(id8, xBins = 5, angleBins = 8, grass = TRUE)
+#' soccerSpokes(id8, xBins = 5, angleBins = 8, grass = TRUE, minLength = 0.3, minAlpha = 0.7)
 #' # 5x5 x,y-bins, 16 angle-bins, blank pitch w/ grey lines
 #' soccerSpokes(id8, xBins = 5, angleBins = 16, line_col = "grey40")
 #' # draw spokes over player heatmap
@@ -35,7 +36,7 @@ NULL
 #' 
 #' @seealso \code{\link{soccerHeatmap}} for drawing a heatmap of player position, or \code{\link{soccerSpokes}} for summarising mean direction in each pitch sector
 #' @export
-soccerSpokes <- function(df, xBins, lengthPitch = 105, widthPitch = 68, angleBins = 16, yBins = NULL, grass = FALSE, line_col = "black", minLength = 0.6, minAlpha = 0.4, legend = TRUE, plot = NULL) {
+soccerSpokes <- function(df, xBins, lengthPitch = 105, widthPitch = 68, angleBins = 16, yBins = NULL, grass = FALSE, line_col = "black", lwd = 0.5, minLength = 0.6, minAlpha = 0.4, legend = TRUE, plot = NULL) {
   
   # check value for vertical bins and match to horizontal bins if NULL
   if(is.null(yBins)) yBins <- xBins
@@ -86,13 +87,13 @@ soccerSpokes <- function(df, xBins, lengthPitch = 105, widthPitch = 68, angleBin
   if(missing(plot)) {
     p <- soccerPitchBG(lengthPitch = lengthPitch, widthPitch = widthPitch, grass = grass, line_col = line_col) +
       geom_point(data = df, aes(x = x.bin.coord, y = y.bin.coord)) +
-      geom_spoke(data = df, aes(x = x.bin.coord, y = y.bin.coord, angle = angle.theta, alpha = n.angles, radius = radius), arrow=arrow(length = unit(0.15,"cm"))) +
+      geom_spoke(data = df, aes(x = x.bin.coord, y = y.bin.coord, angle = angle.theta, alpha = n.angles, radius = radius), size = lwd, arrow=arrow(length = unit(0.15,"cm"))) +
       scale_alpha(name="Movements", range = c(minAlpha, 1)) +
       guides(fill=FALSE)
   } else {
     p <- plot +
       geom_point(data = df, aes(x = x.bin.coord, y = y.bin.coord)) +
-      geom_spoke(data = df, aes(x = x.bin.coord, y = y.bin.coord, angle = angle.theta, alpha = n.angles, radius = radius), arrow=arrow(length = unit(0.15,"cm"))) +
+      geom_spoke(data = df, aes(x = x.bin.coord, y = y.bin.coord, angle = angle.theta, alpha = n.angles, radius = radius), size = lwd, arrow=arrow(length = unit(0.15,"cm"))) +
       scale_alpha(name="Movements", range = c(0.3, 1)) +
       guides(fill=FALSE)
   }

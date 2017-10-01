@@ -10,6 +10,7 @@ NULL
 #' @param xBins,yBins integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.
 #' @param lengthPitch,widthPitch numeric, length and width of pitch in metres.
 #' @param grass if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.
+#' @param lwd thickness of arrow lines
 #' @param plot optional, adds wagon wheels to an existing ggplot object if provided
 #' @return a ggplot object of a heatmap on a soccer pitch.
 #' @examples
@@ -22,7 +23,7 @@ NULL
 #'
 #' @seealso \code{\link{soccerHeatmap}} for drawing a heatmap of player position, or \code{\link{soccerSpokes}} for drawing spokes to show all directions in each area of the pitch.
 #' @export
-soccerFlow <- function(df, xBins, lengthPitch = 105, widthPitch = 68, yBins = NULL, grass = FALSE, plot = NULL) {
+soccerFlow <- function(df, xBins, yBins = NULL, lengthPitch = 105, widthPitch = 68, grass = FALSE, line_col = "black", lwd = 1, plot = NULL) {
   
   # check value for vertical bins and match to horizontal bins if NULL
   if(is.null(yBins)) yBins <- xBins
@@ -60,14 +61,14 @@ soccerFlow <- function(df, xBins, lengthPitch = 105, widthPitch = 68, yBins = NU
   df <- left_join(df, y.bin.coords, by = "y.bin")
   
   if(missing(plot)) {
-    soccerPitchBG(lengthPitch = lengthPitch, widthPitch = widthPitch, grass = grass) +
+    soccerPitchBG(lengthPitch = lengthPitch, widthPitch = widthPitch, grass = grass, line_col = line_col) +
       geom_point(data = df, aes(x = x.bin.coord, y = y.bin.coord)) +
-      geom_spoke(data = df, aes(x = x.bin.coord, y = y.bin.coord, angle = angle.mean), radius = widthPitch / (yBins+2), arrow=arrow(length = unit(0.2,"cm"))) +
+      geom_spoke(data = df, aes(x = x.bin.coord, y = y.bin.coord, angle = angle.mean), radius = widthPitch / (yBins+2), size = lwd, arrow=arrow(length = unit(0.2,"cm"))) +
       guides(fill=FALSE)
   } else {
     plot +
       geom_point(data = df, aes(x = x.bin.coord, y = y.bin.coord)) +
-      geom_spoke(data = df, aes(x = x.bin.coord, y = y.bin.coord, angle = angle.mean), radius = widthPitch / (yBins+2), arrow=arrow(length = unit(0.2,"cm"))) +
+      geom_spoke(data = df, aes(x = x.bin.coord, y = y.bin.coord, angle = angle.mean), radius = widthPitch / (yBins+2), size = lwd, arrow=arrow(length = unit(0.2,"cm"))) +
       guides(fill=FALSE)
   }
 }
