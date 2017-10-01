@@ -1,4 +1,6 @@
 #' @include soccerPitchFG.R
+#' @import ggplot2
+#' @import dplyr
 NULL
 #' Plot average player position on a soccer pitch.
 #' @description Draws the average x,y-positions of all players in a dataframe and plots over

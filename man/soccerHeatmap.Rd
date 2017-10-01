@@ -4,17 +4,15 @@
 \alias{soccerHeatmap}
 \title{Draw a heatmap on a soccer pitch.}
 \usage{
-soccerHeatmap(df, bins = 5, lengthPitch = 105, widthPitch = 68,
-  yBins = NULL, colLow = "white", colHigh = "red")
+soccerHeatmap(df, xBins, lengthPitch = 105, widthPitch = 68, yBins = NULL,
+  colLow = "white", colHigh = "red")
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}.}
 
-\item{bins}{integer, the number of horizontal bins (length-wise) the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, this value will also be used for the number of vertical (width-wise) bins.}
+\item{xBins, yBins}{integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.}
 
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres.}
-
-\item{yBins}{integer, the number of vertical bins (width-wise) the soccer patch is to be divided up into. If \code{NULL}, the same value is used as for \code{bins}.}
 
 \item{colLow, colHigh}{character, colours for the low and high ends of the heatmap gradient.}
 }
@@ -29,8 +27,11 @@ uses \code{ggplot2::geom_bin2d} to map 2D bin counts
 }
 \examples{
 data(tromso)
-# draw heatmap of player #9's position
-soccerHeatmap(subset(tromso, id == 8), bins = 15)
+# simple heatmap of player #9's position
+soccerHeatmap(subset(tromso, id == 8), xBins = 10)
+
+# draw heatmap with approximately 5m x 5m bins (105 / 5 = 21, 68.5 / 5 = 13.6)
+soccerHeatmap(subset(tromso, id == 8), xBins = 21, yBins = 14)
 
 }
 \seealso{

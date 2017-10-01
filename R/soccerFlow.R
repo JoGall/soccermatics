@@ -1,5 +1,7 @@
 #' @include soccerHeatmap.R
 #' @include soccerSpokes.R
+#' @import ggplot2
+#' @import dplyr
 NULL
 #' Draw a flow field on a soccer pitch.
 #' @description Draws a flow field showing the mean direction of movement made in each sector of the pitch and adds pitch outlines. Note: This function is prototypical and intended to eventually visualise pass and shot event data, but there are no open-source samples of such data available as yet.

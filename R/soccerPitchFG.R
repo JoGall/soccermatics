@@ -1,4 +1,6 @@
 #' @include soccerPitchFG.R
+#' @import ggplot2
+#' @importFrom ggforce geom_arc geom_circle
 NULL
 #' Add soccer pitch outlines to an existing ggplot
 #'

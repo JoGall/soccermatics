@@ -1,3 +1,5 @@
+#' @import ggplot2
+#' @import dplyr
 NULL
 #' Draw a path of player trajectory on a soccer pitch.
 #'
