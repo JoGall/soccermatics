@@ -6,7 +6,8 @@
 \usage{
 soccerSpokes(df, xBins, lengthPitch = 105, widthPitch = 68,
   angleBins = 16, yBins = NULL, grass = FALSE, line_col = "black",
-  minLength = 0.6, minAlpha = 0.4, legend = TRUE, plot = NULL)
+  lwd = 0.5, minLength = 0.6, minAlpha = 0.4, legend = TRUE,
+  plot = NULL)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'} and angular information (in radians, ranging between -pi and pi) in a column \code{'direction'}.}
@@ -20,6 +21,8 @@ soccerSpokes(df, xBins, lengthPitch = 105, widthPitch = 68,
 \item{grass}{if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.}
 
 \item{line_col}{colour of pitch lines}
+
+\item{lwd}{thickness of arrow lines}
 
 \item{minLength}{numeric, ratio between size of shortest arrow and longest arrow depending on number of events.}
 
@@ -43,7 +46,7 @@ id8 <- tromso_extra \%>\%
   dplyr::filter(id == 8) \%>\%
   dplyr::sample_n(100)
 # 10x10 x,y-bins, 8 angle-bins, grass pitch
-soccerSpokes(id8, xBins = 5, angleBins = 8, grass = TRUE)
+soccerSpokes(id8, xBins = 5, angleBins = 8, grass = TRUE, minLength = 0.3, minAlpha = 0.7)
 # 5x5 x,y-bins, 16 angle-bins, blank pitch w/ grey lines
 soccerSpokes(id8, xBins = 5, angleBins = 16, line_col = "grey40")
 # draw spokes over player heatmap

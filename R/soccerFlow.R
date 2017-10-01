@@ -10,7 +10,8 @@ NULL
 #' @param xBins,yBins integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.
 #' @param lengthPitch,widthPitch numeric, length and width of pitch in metres.
 #' @param grass if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.
-#' @param lwd thickness of arrow lines
+#' @param line_col colour of pitch lines.
+#' @param lwd thickness of arrow lines.
 #' @param plot optional, adds wagon wheels to an existing ggplot object if provided
 #' @return a ggplot object of a heatmap on a soccer pitch.
 #' @examples

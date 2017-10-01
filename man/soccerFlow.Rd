@@ -4,8 +4,8 @@
 \alias{soccerFlow}
 \title{Draw a flow field on a soccer pitch.}
 \usage{
-soccerFlow(df, xBins, lengthPitch = 105, widthPitch = 68, yBins = NULL,
-  grass = FALSE, plot = NULL)
+soccerFlow(df, xBins, yBins = NULL, lengthPitch = 105, widthPitch = 68,
+  grass = FALSE, line_col = "black", lwd = 1, plot = NULL)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'} and angular information (in radians, ranging between -pi and pi) in a column \code{'direction'}.}
@@ -15,6 +15,10 @@ soccerFlow(df, xBins, lengthPitch = 105, widthPitch = 68, yBins = NULL,
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres.}
 
 \item{grass}{if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.}
+
+\item{line_col}{colour of pitch lines.}
+
+\item{lwd}{thickness of arrow lines.}
 
 \item{plot}{optional, adds wagon wheels to an existing ggplot object if provided}
 }
