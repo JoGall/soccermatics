@@ -5,7 +5,7 @@
 \title{Add an arrow showing the direction of play to a soccer pitch ggplot.}
 \usage{
 soccerDirection(plot, direction = c("right", "left"), lengthPitch = 105,
-  widthPitch = 68, arrow_col = "black", grass = FALSE)
+  widthPitch = 68, arrow_col = "black", grass = FALSE, topBuffer = 0)
 }
 \arguments{
 \item{plot}{an existing ggplot object to add arrow to.}
@@ -17,6 +17,8 @@ soccerDirection(plot, direction = c("right", "left"), lengthPitch = 105,
 \item{arrow_col}{character, colour of arrow (defaults to \code{"black"}).}
 
 \item{grass}{if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.}
+
+\item{topBuffer}{numeric, modify y-position of arrow}
 }
 \value{
 a ggplot object
