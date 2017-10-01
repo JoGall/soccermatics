@@ -27,9 +27,9 @@ library(soccermatics)
 
 Below are some sample visualisations produced by `soccermetrics`. See the [package manual pdf](https://github.com/JoGall/soccermatics/blob/master/soccermatics.pdf) or the individual help files for each function (e.g. `?soccerHeatmap`) for more information and example code.
 
-<img src="https://user-images.githubusercontent.com/17113779/30522413-71806bce-9bc7-11e7-9e48-50e77ced3865.png" width="500">
+<img src="https://user-images.githubusercontent.com/17113779/31055658-1bd30c2a-a6be-11e7-8669-37270197b124.png" width="500">
 
-**Figure 1.** Player heatmap over 90 minutes (player #9; Tromsø IL vs. Strømsgodset, 2013-11-03). Arrow shows direction of play. Made using `soccerHeatmap()` and `soccerDirection()`.
+**Figure 1.** Player heatmap over 90 minutes (player #8; Tromsø IL vs. Anzhi, 2013-11-07). Bins are appromximately 5m x 5m; arrow shows direction of play. Made using `soccerHeatmap()` and `soccerDirection()`.
 
 <img src="https://user-images.githubusercontent.com/17113779/30522405-4311a35c-9bc7-11e7-8d16-a5d5efe154e6.png" width="500">
 
@@ -39,9 +39,9 @@ Below are some sample visualisations produced by `soccermetrics`. See the [packa
 
 **Figure 3.** Average position of each player (Tromsø IL vs. Strømsgodset, 2013-11-03). Arrow shows direction of play. Made using `soccerPositions()` and `soccerDirection()`.
 
-<img src="https://user-images.githubusercontent.com/17113779/31047494-a6139168-a603-11e7-9dac-d5a795aff193.png" width="500">
+<img src="https://user-images.githubusercontent.com/17113779/31055659-1bd82eee-a6be-11e7-9a99-084e6116e926.png" width="500">
 
-**Figure 4.** Spoke map of all movement events in each pitch bin (player #9; Tromsø IL vs. Strømsgodset, 2013-11-03). This figure uses a random sample of player movement, but this method is intended to visualise pass or shot event data which are not yet publicly available. Made using `soccerSpokes()`.
+**Figure 4.** Spoke map of all movement events in each pitch bin (player #8; Tromsø IL vs. Anzhi, 2013-11-07). This figure uses a random sample of player movement, but this method is intended to visualise pass or shot event data which are not yet publicly available. Made using `soccerSpokes()`.
 
 **Figure 5.** Movement path of one player over 120 seconds (player #9; Tromsø IL vs. Strømsgodset, 2013-11-03). Made using `soccerPath()`.
 
