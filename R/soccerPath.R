@@ -1,6 +1,6 @@
 #' @import ggplot2
 #' @import dplyr
-#' @import magrittr "%>%"
+#' @importFrom magrittr %>%
 NULL
 #' Draw a path of player trajectory on a soccer pitch.
 #'
@@ -20,8 +20,8 @@ NULL
 #'   soccerPath(col = "red", grass = TRUE)
 #' # draw path of all players over first 1200 frames
 #' tromso %>%
-#'   group_by(id) %>%
-#'   slice(1:1200) %>%
+#'   dplyr::group_by(id) %>%
+#'   dplyr::slice(1:1200) %>%
 #'   soccerPath("id")
 #' 
 #' @export

@@ -34,8 +34,8 @@ data(tromso_extra)
 # resample movement dataset to plot 100 movement directions 
 # (in absence of pass / shot event data as yet)
 id8 <- tromso_extra \%>\%
-  filter(id == 8) \%>\%
-  sample_n(100)
+  dplyr::filter(id == 8) \%>\%
+  dplyr::sample_n(100)
 soccerSpokes(id8, xBins = 5, angleBins = 8, grass = TRUE)
 # draw spokes over player heatmap
 p <- soccerHeatmap(id8, xBins = 5)

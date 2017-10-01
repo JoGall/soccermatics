@@ -33,8 +33,8 @@ subset(tromso, id == 8)[1:1200,] \%>\%
   soccerPath(col = "red", grass = TRUE)
 # draw path of all players over first 1200 frames
 tromso \%>\%
-  group_by(id) \%>\%
-  slice(1:1200) \%>\%
+  dplyr::group_by(id) \%>\%
+  dplyr::slice(1:1200) \%>\%
   soccerPath("id")
 
 }

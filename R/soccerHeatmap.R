@@ -16,7 +16,7 @@ NULL
 #' # simple heatmap of player #9's position
 #' soccerHeatmap(subset(tromso, id == 8), xBins = 10)
 #' 
-#' # draw heatmap with approximately 5m x 5m bins (105 / 5 = 21, 68.5 / 5 = 13.6)
+#' # draw heatmap with approximately 5m x 5m bins (pitchLength / 5 = 21, pitchWidth / 5 = 13.6)
 #' soccerHeatmap(subset(tromso, id == 8), xBins = 21, yBins = 14)
 #' 
 #' @seealso \code{\link{soccerPitchBG}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc..

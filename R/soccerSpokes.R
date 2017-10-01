@@ -2,6 +2,7 @@
 #' @include soccerFlow.R
 #' @import ggplot2
 #' @import dplyr
+#' @importFrom magrittr %>%
 NULL
 #' Draw spokes on a soccer pitch.
 #' @description Draws spokes showing the direction of all movements made in each sector of the pitch. Note: This function is prototypical and intended to eventually visualise pass and shot event data, but there are no open-source samples of such data available as yet.
@@ -19,8 +20,8 @@ NULL
 #' # resample movement dataset to plot 100 movement directions 
 #' # (in absence of pass / shot event data as yet)
 #' id8 <- tromso_extra %>%
-#'   filter(id == 8) %>%
-#'   sample_n(100)
+#'   dplyr::filter(id == 8) %>%
+#'   dplyr::sample_n(100)
 #' soccerSpokes(id8, xBins = 5, angleBins = 8, grass = TRUE)
 #' # draw spokes over player heatmap
 #' p <- soccerHeatmap(id8, xBins = 5)

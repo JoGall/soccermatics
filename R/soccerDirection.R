@@ -28,7 +28,7 @@ soccerDirection <- function(plot, direction = c("right", "left"), lengthPitch = 
   
   # plot
   p <- plot +
-    geom_rect(aes(xmin = -4, xmax = lengthPitch + 4, ymin = widthPitch + 4, ymax = widthPitch + 9), fill = bg_col)
+    geom_rect(aes_string(xmin = -4, xmax = lengthPitch + 4, ymin = widthPitch + 4, ymax = widthPitch + 11 + topBuffer), fill = bg_col)
   
   if(direction == "right") {
     p + 
