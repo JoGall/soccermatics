@@ -4,12 +4,15 @@
 \alias{soccerPitchBG}
 \title{Draw a soccer pitch.}
 \usage{
-soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = FALSE)
+soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = FALSE,
+  line_col = "black")
 }
 \arguments{
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres.}
 
 \item{grass}{if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.}
+
+\item{line_col}{colour of pitch lines}
 }
 \value{
 a ggplot object

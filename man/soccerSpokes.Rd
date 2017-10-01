@@ -5,8 +5,8 @@
 \title{Draw spokes on a soccer pitch.}
 \usage{
 soccerSpokes(df, xBins, lengthPitch = 105, widthPitch = 68,
-  angleBins = 16, yBins = NULL, grass = FALSE, legend = TRUE,
-  plot = NULL)
+  angleBins = 16, yBins = NULL, grass = FALSE, line_col = "black",
+  minLength = 0.6, minAlpha = 0.4, legend = TRUE, plot = NULL)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'} and angular information (in radians, ranging between -pi and pi) in a column \code{'direction'}.}
@@ -18,6 +18,12 @@ soccerSpokes(df, xBins, lengthPitch = 105, widthPitch = 68,
 \item{angleBins}{integer, the number of angle bins movement directions are divided up into. For example, a value of 4 clusters directions in each bin into north, east, south and west.}
 
 \item{grass}{if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.}
+
+\item{line_col}{colour of pitch lines}
+
+\item{minLength}{numeric, ratio between size of shortest arrow and longest arrow depending on number of events.}
+
+\item{minAlpha}{numeric, minimum alpha of the arrow with the lowest number of events.}
 
 \item{legend}{if TRUE, adds legend showing relationship between arrow transparency and number of events}
 
@@ -36,7 +42,10 @@ data(tromso_extra)
 id8 <- tromso_extra \%>\%
   dplyr::filter(id == 8) \%>\%
   dplyr::sample_n(100)
+# 10x10 x,y-bins, 8 angle-bins, grass pitch
 soccerSpokes(id8, xBins = 5, angleBins = 8, grass = TRUE)
+# 5x5 x,y-bins, 16 angle-bins, blank pitch w/ grey lines
+soccerSpokes(id8, xBins = 5, angleBins = 16, line_col = "grey40")
 # draw spokes over player heatmap
 p <- soccerHeatmap(id8, xBins = 5)
 soccerSpokes(id8, xBins = 5, plot = p)
