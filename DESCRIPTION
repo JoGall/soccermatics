@@ -9,7 +9,6 @@ License: GPL (>=3.0) Note: Use of the name 'soccermatics' was kindly permitted b
 Encoding: UTF-8
 LazyData: true
 Collate: 
-    'pipe.R'
     'soccerPitchFG.R'
     'soccerPitchBG.R'
     'soccerDirection.R'
