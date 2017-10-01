@@ -43,6 +43,8 @@ Below are some sample visualisations produced by `soccermetrics`. See the [packa
 
 **Figure 4.** Spoke map of all movement events in each pitch bin (player #8; Tromsø IL vs. Anzhi, 2013-11-07). This figure uses a random sample of player movement, but this method is intended to visualise pass or shot event data which are not yet publicly available. Made using `soccerSpokes()`.
 
+<img src="https://user-images.githubusercontent.com/17113779/31047494-a6139168-a603-11e7-9dac-d5a795aff193.png" width="500">
+
 **Figure 5.** Movement path of one player over 120 seconds (player #9; Tromsø IL vs. Strømsgodset, 2013-11-03). Made using `soccerPath()`.
 
 <img src="https://user-images.githubusercontent.com/17113779/31047495-a617407e-a603-11e7-9d41-8e79928175f8.png" width="500">
