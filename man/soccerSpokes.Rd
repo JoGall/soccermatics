@@ -4,19 +4,22 @@
 \alias{soccerSpokes}
 \title{Draw spokes on a soccer pitch.}
 \usage{
-soccerSpokes(df, bins, lengthPitch = 105, widthPitch = 68, yBins = NULL,
-  grass = FALSE, plot = NULL)
+soccerSpokes(df, xBins, lengthPitch = 105, widthPitch = 68,
+  angleBins = 16, yBins = NULL, grass = FALSE, legend = TRUE,
+  plot = NULL)
 }
 \arguments{
-\item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}, and angular information of these events in a column \code{'direction'}}
+\item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}, and angular information (in radians, ranging between -pi and pi) in a column \code{'direction'}.}
 
-\item{bins}{integer, the number of horizontal bins (length-wise) the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, this value will also be used for the number of vertical (width-wise) bins.}
+\item{xBins, yBins}{integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.}
 
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres.}
 
-\item{yBins}{integer, the number of vertical bins (width-wise) the soccer patch is to be divided up into. If \code{NULL}, the same value is used as for \code{bins}}
+\item{angleBins}{integer, the number of angle bins movement directions are divided up into. For example, a value of 4 clusters directions in each bin into north, east, south and west.}
 
 \item{grass}{if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.}
+
+\item{legend}{if TRUE, adds legend showing relationship between arrow transparency and number of events}
 
 \item{plot}{optional, adds spokes to an existing ggplot object if provided}
 }
@@ -28,14 +31,15 @@ Draws spokes showing the direction of all movements made in each sector of the p
 }
 \examples{
 data(tromso_extra)
-# resample movement dataset to plot 100 movement directions (in absence of pass / shot event data as yet)
-id8 <- subset(tromso_extra, id == 8)
-id8_sample <- id8[sample(1:nrow(id8), 100),]
-# draw spokes showing directions of player #8's movement
-soccerSpokes(id8_sample, bins = 5, grass = TRUE)
+# resample movement dataset to plot 100 movement directions 
+# (in absence of pass / shot event data as yet)
+id8 <- tromso_extra \%>\%
+  filter(id == 8) \%>\%
+  sample_n(100)
+soccerSpokes(id8, xBins = 5, angleBins = 8, grass = TRUE)
 # draw spokes over player heatmap
-p <- soccerHeatmap(id8, bins = 5)
-soccerSpokes(id8_sample, bins = 5, plot = p)
+p <- soccerHeatmap(id8, xBins = 5)
+soccerSpokes(id8, xBins = 5, plot = p)
 
 }
 \seealso{
