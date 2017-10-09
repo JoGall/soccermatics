@@ -53,7 +53,7 @@ soccerFlow <- function(df, xBins, yBins = NULL, lengthPitch = 105, widthPitch = 
     select(id, bin, x.bin, y.bin, id, x, y, direction) %>%
     mutate(x.mean = mean(x),
            y.mean = mean(y),
-           angle.mean = mean(direction),
+           angle.mean = mean(direction, na.rm=T),
            n = n()) %>%
     ungroup()
   
@@ -63,12 +63,10 @@ soccerFlow <- function(df, xBins, yBins = NULL, lengthPitch = 105, widthPitch = 
   
   if(missing(plot)) {
     soccerPitchBG(lengthPitch = lengthPitch, widthPitch = widthPitch, grass = grass, line_col = line_col) +
-      geom_point(data = df, aes(x = x.bin.coord, y = y.bin.coord)) +
       geom_spoke(data = df, aes(x = x.bin.coord, y = y.bin.coord, angle = angle.mean), radius = widthPitch / (yBins+2), size = lwd, arrow=arrow(length = unit(0.2,"cm"))) +
       guides(fill=FALSE)
   } else {
     plot +
-      geom_point(data = df, aes(x = x.bin.coord, y = y.bin.coord)) +
       geom_spoke(data = df, aes(x = x.bin.coord, y = y.bin.coord, angle = angle.mean), radius = widthPitch / (yBins+2), size = lwd, arrow=arrow(length = unit(0.2,"cm"))) +
       guides(fill=FALSE)
   }

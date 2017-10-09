@@ -25,23 +25,34 @@ NULL
 #'   soccerPath("id")
 #' 
 #' @export
-soccerPath <- function(df, id_var = NULL, lengthPitch = 105, widthPitch = 68, grass = FALSE, col = "black", lwd = 1, legend = TRUE) {
+soccerPath <- function(df, id_var = NULL, lengthPitch = 105, widthPitch = 68, grass = FALSE, col = "black", lwd = 1, legend = TRUE, plot = NULL) {
   
   if(is.null(id_var)) {
-    # one player
-    soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = grass) + 
-    geom_path(data = df, aes(x, y), colour = col, lwd = lwd)
+    if(missing(plot)) {
+      # one player
+      p <- soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = grass) + 
+        geom_path(data = df, aes(x, y), colour = col, lwd = lwd)
+    } else {
+      p <- plot +
+        geom_path(data = df, aes(x, y), colour = col, lwd = lwd)
+    }
   } else {
     # multiple players
-    if(legend) {
-      soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = grass) + 
+    if(missing(plot)) {
+      p <- soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = grass) + 
         geom_path(data = df, aes_string("x", "y", group = id_var, colour = id_var), lwd = lwd) +
         scale_colour_brewer(type = "seq", palette = "Paired", labels = 1:12)
     } else {
-      soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = grass) + 
+      p <- plot + 
         geom_path(data = df, aes_string("x", "y", group = id_var, colour = id_var), lwd = lwd) +
-        scale_colour_brewer(type = "seq", palette = "Paired", labels = 1:12) +
+        scale_colour_brewer(type = "seq", palette = "Paired", labels = 1:12)
+    }
+    
+    #legend
+    if(legend == FALSE) {
+      p +
         guides(colour=FALSE)
     }
   }
+  p
 }

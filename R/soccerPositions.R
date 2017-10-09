@@ -22,16 +22,22 @@ NULL
 #' 
 #' @seealso \code{\link{soccerPitchBG}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc..
 #' @export
-soccerPositions <- function(df, id_var = "id", lengthPitch = 105, widthPitch = 68, col1 = "red", col2 = "white", size = 8, grass = FALSE) {
+soccerPositions <- function(df, id_var = "id", lengthPitch = 105, widthPitch = 68, col1 = "red", col2 = "white", size = 8, grass = FALSE, plot = NULL) {
   # get average position of 11 players with most detected frames
   pos <- df %>%
     filter(x > 0 & x < lengthPitch & y > 0 & y < widthPitch) %>%
     group_by_(id_var) %>%
-    summarise(x.mean = mean(x), y.mean = mean(y), n = n()) %>%
-    arrange(desc(n)) %>%
-    head(11)
+    summarise(x.mean = mean(x), y.mean = mean(y), n = n())
+    # arrange(desc(n)) %>%
+    # head(11)
   
-  soccerPitchBG(lengthPitch = lengthPitch, widthPitch = widthPitch, grass = grass) +
-    geom_point(data = pos, aes(x.mean, y.mean), shape = 21, size = size, fill = col1, colour = col2, stroke = 1.5) +
-    geom_text(data = pos, aes(x.mean, y.mean, label=id), hjust=0.5, vjust=0.5, colour = col2, fontface = "bold", size = size - 4)
+  if(missing(plot)) {
+    soccerPitchBG(lengthPitch = lengthPitch, widthPitch = widthPitch, grass = grass) +
+      geom_point(data = pos, aes(x.mean, y.mean), shape = 16, size = size, colour = col1, stroke = 1.5) +
+      geom_text(data = pos, aes(x.mean, y.mean, label=id), hjust=0.5, vjust=0.5, colour = col2, fontface = "bold", size = size - 4)
+  } else {
+    plot + 
+      geom_point(data = pos, aes(x.mean, y.mean), shape = 16, size = size, colour = col1) +
+      geom_text(data = pos, aes(x.mean, y.mean, label=id), hjust=0.5, vjust=0.5, colour = col2, fontface = "bold", size = size - 4)
+  }
 }
