@@ -5,7 +5,7 @@
 \title{Plot average player position on a soccer pitch.}
 \usage{
 soccerPositions(df, id_var = "id", lengthPitch = 105, widthPitch = 68,
-  col1 = "red", col2 = "white", size = 8, grass = FALSE)
+  col1 = "red", col2 = "white", size = 8, grass = FALSE, plot = NULL)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}.}

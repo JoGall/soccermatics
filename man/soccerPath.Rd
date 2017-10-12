@@ -5,7 +5,7 @@
 \title{Draw a path of player trajectory on a soccer pitch.}
 \usage{
 soccerPath(df, id_var = NULL, lengthPitch = 105, widthPitch = 68,
-  grass = FALSE, col = "black", lwd = 1, legend = TRUE)
+  grass = FALSE, col = "black", lwd = 1, legend = TRUE, plot = NULL)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}.}

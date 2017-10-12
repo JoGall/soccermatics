@@ -19,4 +19,5 @@ Collate:
     'soccerPositions.R'
     'tromso.R'
     'tromso_extra.R'
+    'utils.R'
 RoxygenNote: 6.0.1
