@@ -1,13 +1,13 @@
 soccermatics
 =====
 
-soccermatics provides tools to visualise spatial information from football (soccer) matches using x,y-coordinates of players. There are currently functions to visualise player trajectory paths, heatmaps showing player position frequency, flow fields showing player movement over the pitch, and average position of all players, and pitch lines can be drawn over all plots to provide context.
+soccermatics provides tools to visualise spatial information from football (soccer) matches using x,y-coordinates of players. There are currently functions to visualise player trajectory paths, heatmaps showing player position frequency, flow fields showing player movement over the pitch, and average position of all players. Pitch lines can be drawn over these visualisations to give context.
 
-More functions are planned, but the biggest limitation at the moment is acquiring data. The sample x,y-coordinate data in `tromso` and `tromso_extra` are made available in a [publication by Pettersen et al. (2014)](http://home.ifi.uio.no/paalh/dataset/alfheim/), but I have yet to find any other publicly-available performance datasets - especially passing event, touch event, or shot event data - and access to these data is expensive. I may therefore add a function to simulate event data for the purposes of creating visualisations in the near future.
+Many more functions are planned (see [To Do List](#to-do-list) below), but the biggest limitation at the moment is acquiring data. The sample x,y-coordinate data in `tromso` and `tromso_extra` are made available in a [publication by Pettersen et al. (2014)](http://home.ifi.uio.no/paalh/dataset/alfheim/), but I have yet to find any other publicly-available performance datasets - especially passing event, touch event, or shot event data - and access to these data is expensive. I may therefore add a function to simulate event data for the purposes of creating visualisations in the near future.
 
-Use of the name 'soccermatics' kindly permitted by the eponymous book author, [David Sumpter](https://www.bloomsbury.com/uk/soccermatics-9781472924124/).
+Use of the name 'soccermatics' kindly permitted by the eponymous book's author, [David Sumpter](https://www.bloomsbury.com/uk/soccermatics-9781472924124/).
 
-soccermatics is built on R v3.4.1.
+soccermatics is built on R v3.4.2.
 
 ---
 
@@ -55,6 +55,9 @@ Below are some sample visualisations produced by `soccermetrics`. See the [packa
 
 **Bonus figure.** Jackson Pollock, Number 19. Made using `soccerPath()`.
 
+
+#### To Do List
+...
 
 #### Pitch dimensions
 Many performance datasets (e.g. [WhoScored](https://www.whoscored.com/)) provide relative x,y-coordinates on a scale of 0-100. Real-life pitch dimensions (i.e. in metres) are therefore required in order to determine true distances (e.g. pass length, shot distance).
