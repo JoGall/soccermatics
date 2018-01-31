@@ -3,7 +3,7 @@ soccermatics
 
 soccermatics provides tools to visualise spatial information from football (soccer) matches using x,y-coordinates of players. There are currently functions to visualise player trajectory paths, heatmaps showing player position frequency, flow fields showing player movement over the pitch, and average position of all players. Pitch lines can be drawn over these visualisations to give context.
 
-Many more functions are planned - see [To Do List](#to-do-list) below, suggestions are welcomed! One of the biggest limitations at the moment is acquiring data; tracking and event data are prohibitively expensive and/or protected by non-disclosure agreements. The sample x,y-coordinate data in `tromso` and `tromso_extra` were made available [by Pettersen et al. (2014)](http://home.ifi.uio.no/paalh/dataset/alfheim/), but I'm still hunting for open-source sample of event (passing, shooting) data.
+Many more functions are planned - see [To Do List](#to-do-list) below, suggestions are welcomed! One of the biggest limitations at the moment is acquiring data as tracking and event data are prohibitively expensive and/or protected by non-disclosure agreements. The sample x,y-coordinate data in `tromso` and `tromso_extra` were made available [by Pettersen et al. (2014)](http://home.ifi.uio.no/paalh/dataset/alfheim/), but I'm still hunting for open-source sample of event (passing, shooting) data.
 
 Use of the name `soccermatics` kindly permitted by the eponymous book's author, [David Sumpter](https://www.bloomsbury.com/uk/soccermatics-9781472924124/).
 
@@ -55,6 +55,7 @@ Below are some sample visualisations produced by `soccermetrics`. See the [packa
 
 **Bonus figure.** Jackson Pollock, Number 19. Made using `soccerPath()`.
 
+---
 
 ### To Do List
 
@@ -75,6 +76,8 @@ Below are some sample visualisations produced by `soccermetrics`. See the [packa
 * Estimate threat (distance / angle of ball from opposition goal, number of defending players in front of goal, number of attacking players nearby)
 * Pressing effectiveness (e.g. average distance of defending players from ball, area of bounding box formed by defending team, time for n nearest players to close gap after possession change)
 * Team movements (speed of movement in possession, distance moved forward per possession, average, synchronisation of movement direction)
+
+---
 
 ### Pitch dimensions
 Many performance datasets (e.g. [WhoScored](https://www.whoscored.com/)) provide relative x,y-coordinates on a scale of 0-100. Real-life pitch dimensions (i.e. in metres) are therefore required in order to determine true distances (e.g. pass length, shot distance).
