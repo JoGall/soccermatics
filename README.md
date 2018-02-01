@@ -73,6 +73,7 @@ Below are some sample visualisations produced by `soccermetrics`. See the [packa
 ##### Advanced metrics
 * Infer most likely player in possession (from proximity of ball to players and current possession)
 * Infer shot and pass events (from ball position / velocity and proximity to players)
+* Identify sequence (possession spell and final product, i.e. does it end in final third, end in shot, end in goal)
 * Estimate threat (distance / angle of ball from opposition goal, number of defending players in front of goal, number of attacking players nearby)
 * Pressing effectiveness (e.g. average distance of defending players from ball, area of bounding box formed by defending team, time for n nearest players to close gap after possession change)
 * Team movements (speed of movement in possession, distance moved forward per possession, average, synchronisation of movement direction)
