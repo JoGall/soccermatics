@@ -2,7 +2,7 @@
 #' @import ggplot2
 #' @import dplyr
 NULL
-#' Plot average player position on a soccer pitch.
+#' Plot average player position on a soccer pitch. Note: Function soon to be deprecated in favour of `soccerPositionMap`.
 #' @description Draws the average x,y-positions of all players in a dataframe and plots over
 #' a soccer pitch.
 #' 
