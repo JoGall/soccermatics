@@ -3,7 +3,9 @@ soccermatics
 
 soccermatics provides tools to visualise spatial information from football (soccer) matches using x,y-coordinates of players. There are currently functions to visualise player trajectory paths, heatmaps showing player position frequency, flow fields showing player movement over the pitch, and average position of all players. Pitch lines can be drawn over these visualisations to give context.
 
-Many more functions are planned - see [To Do List](https://github.com/JoGall/soccermatics/issues/8), suggestions are welcomed! One of the biggest limitations at the moment is acquiring data as tracking and event data are prohibitively expensive and/or protected by non-disclosure agreements. The sample x,y-coordinate data in `tromso` and `tromso_extra` were made available [by Pettersen et al. (2014)](http://home.ifi.uio.no/paalh/dataset/alfheim/), but I'm still hunting for open-source sample of event (passing, shooting) data.
+The sample x,y-coordinate data in `tromso` and `tromso_extra` were thankfully made available [by Pettersen et al. (2014)](http://home.ifi.uio.no/paalh/dataset/alfheim/), but much further development is hindered by access to x,y-tracking data and event data (e.g. passing, shooting) being prohibitively expensive or protected by NDAs / copyrights.
+
+Many more functions are planned - see [To Do List](https://github.com/JoGall/soccermatics/issues/8), suggestions are welcomed!
 
 Use of the name `soccermatics` kindly permitted by the eponymous book's author, [David Sumpter](https://www.bloomsbury.com/uk/soccermatics-9781472924124/).
 
@@ -19,6 +21,16 @@ if (!require("devtools")) install.packages("devtools")
 devtools::install_github("jogall/soccermatics")
 
 library(soccermatics)
+```
+
+---
+
+### Updates
+
+The package is getting a makeover over the next few months and may occassionally break during this time. Should installation fail during this time, please install the latest stable version (v0.8.4) from [this tarball](https://github.com/JoGall/soccermatics/blob/master/soccermatics_0.8.4.tar.gz) like so:
+
+```{r}
+install.packages("https://github.com/JoGall/soccermatics/blob/master/soccermatics_0.8.4.tar.gz", repo=NULL, type="source")
 ```
 
 ---
