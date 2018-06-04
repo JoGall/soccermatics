@@ -6,12 +6,12 @@ NULL
 #'
 #' @description Draws a path connecting consecutive x,y-coordinates of a player on a soccer pitch. 
 #' 
-#' @param df dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}.
-#' @param id_var character, the name of the column containing player identity. Only required if \code{'df'} contains multiple players.
-#' @param lengthPitch,widthPitch numeric, length and width of pitch in metres.
-#' @param grass if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.
-#' @param col colour of path if no \code{'id_var'} is provided. If an \code{'id_var'} is present, colours from ColorBrewer's 'Paired' palette are used.
-#' @param lwd thickness of path
+#' @param dat dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}
+#' @param id_var character, the name of the column containing player identity. Only required if \code{'dat'} contains multiple players
+#' @param lengthPitch,widthPitch length and width of pitch in metres
+#' @param grass  if TRUE, draws a more realistic looking pitch
+#' @param col colour of path if no \code{'id_var'} is provided. If an \code{'id_var'} is present, colours from ColorBrewer's 'Paired' palette are used
+#' @param lwd player path thickness
 #' @return a ggplot object
 #' @examples
 #' data(tromso)
@@ -25,26 +25,26 @@ NULL
 #'   soccerPath("id")
 #' 
 #' @export
-soccerPath <- function(df, id_var = NULL, lengthPitch = 105, widthPitch = 68, grass = FALSE, col = "black", lwd = 1, legend = TRUE, plot = NULL) {
+soccerPath <- function(dat, id_var = NULL, lengthPitch = 105, widthPitch = 68, col = "black", fillPitch = "white", colPitch = "grey60", grass = FALSE, lwd = 1, legend = TRUE, plot = NULL) {
   
   if(is.null(id_var)) {
     if(missing(plot)) {
       # one player
-      p <- soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = grass) + 
-        geom_path(data = df, aes(x, y), colour = col, lwd = lwd)
+      p <- soccerPitchBG(lengthPitch = lengthPitch, widthPitch = widthPitch, fillPitch = fillPitch, colPitch = colPitch, grass = grass) + 
+        geom_path(data = dat, aes(x, y), col = col, lwd = lwd)
     } else {
       p <- plot +
-        geom_path(data = df, aes(x, y), colour = col, lwd = lwd)
+        geom_path(data = dat, aes(x, y), col = col, lwd = lwd)
     }
   } else {
     # multiple players
     if(missing(plot)) {
-      p <- soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = grass) + 
-        geom_path(data = df, aes_string("x", "y", group = id_var, colour = id_var), lwd = lwd) +
+      p <- soccerPitchBG(lengthPitch = lengthPitch, widthPitch = widthPitch, fillPitch = fillPitch, colPitch = colPitch, grass = grass) + 
+        geom_path(data = dat, aes_string("x", "y", group = id_var, colour = id_var), lwd = lwd) +
         scale_colour_brewer(type = "seq", palette = "Paired", labels = 1:12)
     } else {
       p <- plot + 
-        geom_path(data = df, aes_string("x", "y", group = id_var, colour = id_var), lwd = lwd) +
+        geom_path(data = dat, aes_string("x", "y", group = id_var, colour = id_var), lwd = lwd) +
         scale_colour_brewer(type = "seq", palette = "Paired", labels = 1:12)
     }
     
