@@ -4,15 +4,21 @@
 \alias{soccerPitchBG}
 \title{Draw a soccer pitch.}
 \usage{
-soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = FALSE,
-  line_col = "black")
+soccerPitchBG(lengthPitch = 105, widthPitch = 68, fillPitch = "white",
+  colPitch = "grey60", grass = FALSE, lwd = 1, border = c(4, 4, 4, 4))
 }
 \arguments{
-\item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres.}
+\item{lengthPitch, widthPitch}{length and width of pitch in metres}
 
-\item{grass}{if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.}
+\item{fillPitch}{pitch fill colour}
 
-\item{line_col}{colour of pitch lines}
+\item{colPitch}{pitch line colour}
+
+\item{grass}{if TRUE, draws a more realistic looking pitch}
+
+\item{lwd}{pitch line width}
+
+\item{border}{size of border drawn around pitch perimeter (t,r,b,l)}
 }
 \value{
 a ggplot object
@@ -26,7 +32,7 @@ data(tromso)
 dd <- subset(tromso, id == 9)[1:1200,]
 # draw player path on pitch
 soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = TRUE) + 
-  geom_path(data = dd, aes(x, y), lwd = 2)
+  geom_path(data = dd, aes(x, y), lwd = 1.2)
 
 }
 \seealso{

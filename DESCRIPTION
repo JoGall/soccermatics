@@ -1,5 +1,5 @@
 Package: soccermatics
-Version: 0.8.4
+Version: 0.9.0
 Authors@R: person("Joe", "Gallagher", email = "joedgallagher@gmail.com", role = c("aut", "cre"))
 Title: Visualise spatial data from soccer matches
 Description: Provides tools to visualise x,y-coordinates of soccer players in the manner presented in David Sumpter's eponymous book. Uses ggplot to draw soccer pitch and overplot player trajectories, average player positions, heatmaps of player position, flow fields to show binned player movement or passing, and more.
@@ -12,12 +12,13 @@ Collate:
     'soccerPitchFG.R'
     'soccerPitchBG.R'
     'soccerDirection.R'
+    'soccerFlipHoriz.R'
     'soccerHeatmap.R'
     'soccerSpokes.R'
     'soccerFlow.R'
     'soccerPath.R'
-    'soccerPositions.R'
+    'soccerNormXY.R'
+    'soccerPositionMap.R'
     'tromso.R'
     'tromso_extra.R'
-    'utils.R'
 RoxygenNote: 6.0.1

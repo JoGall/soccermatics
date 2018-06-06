@@ -5,7 +5,7 @@
 \title{Add soccer pitch outlines to an existing ggplot}
 \usage{
 soccerPitchFG(plot, lengthPitch = 105, widthPitch = 68,
-  line_col = "black")
+  colPitch = "black", lwd = 1)
 }
 \arguments{
 \item{plot}{an existing ggplot object to add layers to.}

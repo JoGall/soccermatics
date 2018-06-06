@@ -18,33 +18,33 @@ NULL
 #' 
 #' @seealso \code{\link{soccerPitchBG}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc..
 #' @export
-soccerPitchFG <- function(plot, lengthPitch = 105, widthPitch = 68, line_col = "black") {
+soccerPitchFG <- function(plot, lengthPitch = 105, widthPitch = 68, colPitch = "black", lwd = 1) {
   
   plot +
     geom_rect(aes(xmin = -4, xmax = lengthPitch + 4, ymin = -4, ymax = widthPitch + 4), fill = "NA") +
     # outer lines
-    geom_rect(aes(xmin = 0, xmax = lengthPitch, ymin = 0, ymax = widthPitch), fill = "NA", col = line_col, lwd = 1.2) +
+    geom_rect(aes(xmin = 0, xmax = lengthPitch, ymin = 0, ymax = widthPitch), fill = "NA", col = colPitch, lwd = lwd) +
     # centre circle
-    geom_circle(aes(x0 = lengthPitch / 2, y0 = widthPitch / 2, r = 9.15), fill = "NA", col = line_col, lwd = 1.2) +
+    geom_circle(aes(x0 = lengthPitch / 2, y0 = widthPitch / 2, r = 9.15), fill = "NA", col = colPitch, lwd = lwd) +
     # kick off spot
-    geom_circle(aes(x0 = lengthPitch / 2, y0 = widthPitch / 2, r = 0.5), fill = line_col, col = line_col, lwd = 1.2) +
+    geom_circle(aes(x0 = lengthPitch / 2, y0 = widthPitch / 2, r = 0.5), fill = colPitch, col = colPitch, lwd = lwd) +
     # halfway line
-    geom_segment(aes(x = lengthPitch / 2, y = 0, xend = lengthPitch / 2, yend = widthPitch), col = line_col, lwd = 1.2) +
+    geom_segment(aes(x = lengthPitch / 2, y = 0, xend = lengthPitch / 2, yend = widthPitch), col = colPitch, lwd = lwd) +
     # penalty areas
-    geom_rect(aes(xmin = 0, xmax = 16.5, ymin = widthPitch / 2 - (40.3 / 2), ymax = widthPitch / 2 + (40.3 / 2)), fill = "NA", col = line_col, lwd = 1.2) +
-    geom_rect(aes(xmin = lengthPitch - 16.5, xmax = lengthPitch, ymin = widthPitch / 2 - (40.3 / 2), ymax = widthPitch / 2 + (40.3 / 2)), fill = "NA", col = line_col, lwd = 1.2) +
+    geom_rect(aes(xmin = 0, xmax = 16.5, ymin = widthPitch / 2 - (40.3 / 2), ymax = widthPitch / 2 + (40.3 / 2)), fill = "NA", col = colPitch, lwd = lwd) +
+    geom_rect(aes(xmin = lengthPitch - 16.5, xmax = lengthPitch, ymin = widthPitch / 2 - (40.3 / 2), ymax = widthPitch / 2 + (40.3 / 2)), fill = "NA", col = colPitch, lwd = lwd) +
     # penalty spots
-    geom_circle(aes(x0 = 11, y0 = widthPitch / 2, r = 0.5), fill = line_col, col = line_col, lwd = 1.2) +
-    geom_circle(aes(x0 = lengthPitch - 11, y0 = widthPitch / 2, r = 0.5), fill = line_col, col = line_col, lwd = 1.2) +
+    geom_circle(aes(x0 = 11, y0 = widthPitch / 2, r = 0.5), fill = colPitch, col = colPitch, lwd = lwd) +
+    geom_circle(aes(x0 = lengthPitch - 11, y0 = widthPitch / 2, r = 0.5), fill = colPitch, col = colPitch, lwd = lwd) +
     # penalty arcs
-    geom_arc(aes(x0= 11, y0 = widthPitch / 2, r = 9.15, start = 0.65, end = 2.49), col = line_col, lwd = 1.2) +
-    geom_arc(aes(x0 = lengthPitch - 11, y0 = widthPitch / 2, r = 9.15, start = 3.79, end = 5.63), col = line_col, lwd = 1.2) +
+    geom_arc(aes(x0= 11, y0 = widthPitch / 2, r = 9.15, start = 0.65, end = 2.49), col = colPitch, lwd = lwd) +
+    geom_arc(aes(x0 = lengthPitch - 11, y0 = widthPitch / 2, r = 9.15, start = 3.79, end = 5.63), col = colPitch, lwd = lwd) +
     # six yard boxes
-    geom_rect(aes(xmin = 0, xmax = 5.5, ymin = (widthPitch / 2) - 9.16, ymax = (widthPitch / 2) + 9.16), fill = "NA", col = line_col, lwd = 1.2) +
-    geom_rect(aes(xmin = lengthPitch - 5.5, xmax = lengthPitch, ymin = (widthPitch / 2) - 9.16, ymax = (widthPitch / 2) + 9.16), fill = "NA", col = line_col, lwd = 1.2) +
+    geom_rect(aes(xmin = 0, xmax = 5.5, ymin = (widthPitch / 2) - 9.16, ymax = (widthPitch / 2) + 9.16), fill = "NA", col = colPitch, lwd = lwd) +
+    geom_rect(aes(xmin = lengthPitch - 5.5, xmax = lengthPitch, ymin = (widthPitch / 2) - 9.16, ymax = (widthPitch / 2) + 9.16), fill = "NA", col = colPitch, lwd = lwd) +
     # goals
-    geom_rect(aes(xmin = -2, xmax = 0, ymin = (widthPitch / 2) - 3.66, ymax = (widthPitch / 2) + 3.66), fill = "NA", col = line_col, lwd = 1.2) +
-    geom_rect(aes(xmin = lengthPitch, xmax = lengthPitch + 2, ymin = (widthPitch / 2) - 3.66, ymax = (widthPitch / 2) + 3.66), fill = "NA", col = line_col, lwd = 1.2) +
+    geom_rect(aes(xmin = -2, xmax = 0, ymin = (widthPitch / 2) - 3.66, ymax = (widthPitch / 2) + 3.66), fill = "NA", col = colPitch, lwd = lwd) +
+    geom_rect(aes(xmin = lengthPitch, xmax = lengthPitch + 2, ymin = (widthPitch / 2) - 3.66, ymax = (widthPitch / 2) + 3.66), fill = "NA", col = colPitch, lwd = lwd) +
     coord_fixed() +
     theme(rect = element_blank(), 
           line = element_blank(),

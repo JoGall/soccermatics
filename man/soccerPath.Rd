@@ -4,21 +4,22 @@
 \alias{soccerPath}
 \title{Draw a path of player trajectory on a soccer pitch.}
 \usage{
-soccerPath(df, id_var = NULL, lengthPitch = 105, widthPitch = 68,
-  grass = FALSE, col = "black", lwd = 1, legend = TRUE, plot = NULL)
+soccerPath(dat, id_var = NULL, lengthPitch = 105, widthPitch = 68,
+  col = "black", fillPitch = "white", colPitch = "grey60",
+  grass = FALSE, lwd = 1, legend = TRUE, plot = NULL)
 }
 \arguments{
-\item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}.}
+\item{dat}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}}
 
-\item{id_var}{character, the name of the column containing player identity. Only required if \code{'df'} contains multiple players.}
+\item{id_var}{character, the name of the column containing player identity. Only required if \code{'dat'} contains multiple players}
 
-\item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres.}
+\item{lengthPitch, widthPitch}{length and width of pitch in metres}
 
-\item{grass}{if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.}
+\item{col}{colour of path if no \code{'id_var'} is provided. If an \code{'id_var'} is present, colours from ColorBrewer's 'Paired' palette are used}
 
-\item{col}{colour of path if no \code{'id_var'} is provided. If an \code{'id_var'} is present, colours from ColorBrewer's 'Paired' palette are used.}
+\item{grass}{if TRUE, draws a more realistic looking pitch}
 
-\item{lwd}{thickness of path}
+\item{lwd}{player path thickness}
 }
 \value{
 a ggplot object
