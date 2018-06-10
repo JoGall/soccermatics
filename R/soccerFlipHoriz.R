@@ -14,7 +14,8 @@ NULL
 #' @param pitchLength,pitchWidth = length, width of pitch in metres
 #' @return a dataframe
 #' @examples
-#' # to flip coordinates in 2nd half of a dataframe with 1st/2nd half identity labelled by variable named `period`
+#' # to flip coordinates in 2nd half of a dataframe with 1st/2nd half identity 
+#' # labelled by variable named `period`
 #' soccerFlipHoriz(df, "period", 2, 105, 68)
 #' 
 #' @export

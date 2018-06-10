@@ -14,7 +14,7 @@ soccerPitchBG(lengthPitch = 105, widthPitch = 68, fillPitch = "white",
 
 \item{colPitch}{pitch line colour}
 
-\item{grass}{if TRUE, draws a more realistic looking pitch}
+\item{grass}{if \code{TRUE}, draws a more realistic looking pitch}
 
 \item{lwd}{pitch line width}
 

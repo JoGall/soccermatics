@@ -5,8 +5,7 @@
 #' @name tromso
 #' @format A dataframe containing 12000 frames of x,y-coordinates and timestamps from 11 players.
 #' @source \href{http://home.ifi.uio.no/paalh/dataset/alfheim/}{ZXY Sport Tracking}
-#' @references Pettersen et al. (2014) Proceedings of the International Conference on Multimedia Systems (MMSys)
-#' (\href{http://home.ifi.uio.no/paalh/publications/files/mmsys2014-dataset.pdf}{pdf})
+#' @references \href{http://home.ifi.uio.no/paalh/publications/files/mmsys2014-dataset.pdf}{Pettersen et al. (2014)} Proceedings of the International Conference on Multimedia Systems (MMSys)
 #' @usage data(tromso)
 #' @examples
 #' data(tromso)

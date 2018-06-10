@@ -19,6 +19,7 @@ Collate:
     'soccerPath.R'
     'soccerNormXY.R'
     'soccerPositionMap.R'
+    'soccerResample.R'
     'tromso.R'
     'tromso_extra.R'
 RoxygenNote: 6.0.1

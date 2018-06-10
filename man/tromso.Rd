@@ -22,6 +22,5 @@ soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = TRUE) +
 
 }
 \references{
-Pettersen et al. (2014) Proceedings of the International Conference on Multimedia Systems (MMSys)
-(\href{http://home.ifi.uio.no/paalh/publications/files/mmsys2014-dataset.pdf}{pdf})
+\href{http://home.ifi.uio.no/paalh/publications/files/mmsys2014-dataset.pdf}{Pettersen et al. (2014)} Proceedings of the International Conference on Multimedia Systems (MMSys)
 }

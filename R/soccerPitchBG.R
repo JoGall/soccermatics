@@ -9,7 +9,7 @@ NULL
 #' @param lengthPitch,widthPitch length and width of pitch in metres
 #' @param fillPitch pitch fill colour
 #' @param colPitch pitch line colour
-#' @param grass if TRUE, draws a more realistic looking pitch
+#' @param grass if \code{TRUE}, draws a more realistic looking pitch
 #' @param lwd pitch line width
 #' @param border size of border drawn around pitch perimeter (t,r,b,l)
 #' @return a ggplot object
