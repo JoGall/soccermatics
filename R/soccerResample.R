@@ -17,7 +17,7 @@ NULL
 soccerResample <- function(dat, r = 10) {
   
   # create new time index 
-  time.index <- seq(min(dat$t), max(dat$t), by = as.difftime(1/resample_fps, units='secs'))
+  time.index <- seq(min(dat$t), max(dat$t), by = as.difftime(1/r, units='secs'))
   
   # remove ALL rows that have duplicated timestamps
   dat <- dat %>% 
