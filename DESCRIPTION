@@ -20,6 +20,7 @@ Collate:
     'soccerNormXY.R'
     'soccerPositionMap.R'
     'soccerResample.R'
+    'soccerVelocity.R'
     'tromso.R'
     'tromso_extra.R'
 RoxygenNote: 6.0.1
