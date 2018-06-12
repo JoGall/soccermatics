@@ -5,7 +5,8 @@
 \title{Draw a soccer pitch.}
 \usage{
 soccerPitchBG(lengthPitch = 105, widthPitch = 68, fillPitch = "white",
-  colPitch = "grey60", grass = FALSE, lwd = 1, border = c(4, 4, 4, 4))
+  colPitch = "grey60", grass = FALSE, lwd = 1, border = c(4, 4, 4, 4),
+  direction = c("none", "r", "l"), SB = FALSE)
 }
 \arguments{
 \item{lengthPitch, widthPitch}{length and width of pitch in metres}
