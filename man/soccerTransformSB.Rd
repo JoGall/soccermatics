@@ -26,5 +26,5 @@ d <- soccerTransformSB(d)
 
 }
 \seealso{
-\code{\link{soccePitchBG}} readily visualises StatsBomb data with the argument `SB = TRUE`. \code{\link{soccerTransform}} transforms any arbitrary x,y-coordinates to metre units
+\code{\link{soccerPitchBG}} readily visualises StatsBomb data with the argument `SB = TRUE`. \code{\link{soccerTransform}} transforms any arbitrary x,y-coordinates to metre units
 }

@@ -1,4 +1,5 @@
 #' @include soccerTransform.R
+#' @include soccerPitchBG.R
 NULL
 #' Normalises all x,y-coordinate data from StatsBomb data
 #'
@@ -15,7 +16,7 @@ NULL
 #' # transform
 #' d <- soccerTransformSB(d)
 #' 
-#' @seealso \code{\link{soccePitchBG}} readily visualises StatsBomb data with the argument `SB = TRUE`. \code{\link{soccerTransform}} transforms any arbitrary x,y-coordinates to metre units
+#' @seealso \code{\link{soccerPitchBG}} readily visualises StatsBomb data with the argument `SB = TRUE`. \code{\link{soccerTransform}} transforms any arbitrary x,y-coordinates to metre units
 #' @export
 soccerTransformSB <- function(dat) {
   
