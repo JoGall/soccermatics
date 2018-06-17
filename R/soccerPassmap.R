@@ -24,9 +24,9 @@ NULL
 #' 
 #' # shotmap of Manchester City WFC
 #' d %>% 
-#'   filter(type.name == "Shot",
+#'   filter(type.name == "Pass",
 #'   team.name == "Manchester City WFC") %>% 
-#'   soccerShotmap(fillPitch = "#1C1F26", colPitch = "white", SB = TRUE)
+#'   soccerPassmap(SB = TRUE)
 #' 
 #' @seealso \code{\link{soccerPitchBG}} for drawing a soccer pitch as foreground over an existing ggplot object
 #' @export

@@ -22,11 +22,11 @@ NULL
 #' # transform all x,y-coordinates of StatsBomb data
 #' d <- soccerTransformSB(d)
 #' 
-#' # shotmap of Manchester City WFC
+#' # pass map of Manchester City WFC
 #' d %>% 
-#'   filter(type.name == "Pass",
+#'   filter(type.name == "Shot",
 #'   team.name == "Manchester City WFC") %>% 
-#'   soccerPassmap(SB = TRUE)
+#'   soccerShotmap(fillPitch = "#1C1F26", colPitch = "white", SB = TRUE)
 #' 
 #' @seealso \code{\link{soccerPitchBG}} for drawing a soccer pitch as foreground over an existing ggplot object
 #' @export
