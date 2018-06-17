@@ -1,5 +1,6 @@
 #' @include soccerTransform.R
 #' @include soccerPitchBG.R
+#' @import dplyr
 NULL
 #' Normalises all x,y-coordinate data from StatsBomb data
 #'
@@ -9,7 +10,7 @@ NULL
 #' @return a dataframe
 #' @examples
 #' # get data
-#' Comps <- FreeCompetitions()
+#' library(StatsBombR)
 #' Matches <- FreeMatches(37)
 #' d <- allinfo(Matches[1])
 #' 

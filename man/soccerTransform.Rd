@@ -7,11 +7,11 @@
 soccerTransform(dat, xMin, xMax, yMin, yMax, pitchLength, pitchWidth)
 }
 \arguments{
-\item{dat}{= dataframe containing unnormalised x,y-coordinates named `x` and `y`}
+\item{dat}{dataframe containing unnormalised x,y-coordinates named `x` and `y`}
 
-\item{xMin, xMax, yMin, yMax}{= range of x,y-coordinates possible in the raw dataset}
+\item{xMin, xMax, yMin, yMax}{range of x,y-coordinates possible in the raw dataset}
 
-\item{pitchLength, pitchWidth}{= length, width of pitch in metres}
+\item{pitchLength, pitchWidth}{length, width of pitch in metres}
 }
 \value{
 a dataframe
@@ -68,5 +68,7 @@ soccerPath(df, lengthPitch = lengthPitch, widthPitch = widthPitch)
 
 }
 \seealso{
+\code{\link{soccerTransformSB}} readily transforms data from StatsBomb for use with soccermatics
+
 \code{\link{soccerTransformSB}} for transforming data from StatsBomb
 }

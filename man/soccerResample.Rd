@@ -20,4 +20,5 @@ Downsample or upsample dataframe containing x,y-coordinates and a time variable 
 \examples{
 # resample tromso dataset from ~21 fps to 10 fps
 soccerResample(tromso)
+
 }

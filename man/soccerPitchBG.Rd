@@ -5,7 +5,7 @@
 \title{Draw a soccer pitch.}
 \usage{
 soccerPitchBG(lengthPitch = 105, widthPitch = 68, fillPitch = "white",
-  colPitch = "grey60", grass = FALSE, lwd = 1, border = c(4, 4, 4, 4),
+  colPitch = "grey60", grass = FALSE, lwd = 0.5, border = c(4, 4, 4, 4),
   direction = c("none", "r", "l"), SB = FALSE)
 }
 \arguments{
@@ -33,7 +33,7 @@ data(tromso)
 dd <- subset(tromso, id == 9)[1:1200,]
 # draw player path on pitch
 soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = TRUE) + 
-  geom_path(data = dd, aes(x, y), lwd = 1.2)
+  geom_path(data = dd, aes(x, y))
 
 }
 \seealso{

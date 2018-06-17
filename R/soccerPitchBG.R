@@ -19,11 +19,11 @@ NULL
 #' dd <- subset(tromso, id == 9)[1:1200,]
 #' # draw player path on pitch
 #' soccerPitchBG(lengthPitch = 105, widthPitch = 68, grass = TRUE) + 
-#'   geom_path(data = dd, aes(x, y), lwd = 1.2)
+#'   geom_path(data = dd, aes(x, y))
 #' 
 #' @seealso \code{\link{soccerPitchFG}} for drawing a soccer pitch as foreground over an existing ggplot object
 #' @export
-soccerPitchBG <- function(lengthPitch = 105, widthPitch = 68, fillPitch = "white", colPitch = "grey60", grass = FALSE, lwd = 1, border = c(4, 4, 4, 4), direction = c("none", "r", "l"), SB = FALSE) {
+soccerPitchBG <- function(lengthPitch = 105, widthPitch = 68, fillPitch = "white", colPitch = "grey60", grass = FALSE, lwd = 0.5, border = c(4, 4, 4, 4), direction = c("none", "r", "l"), SB = FALSE) {
 
   if(grass) {
     fill1 <- "#008000"
@@ -78,11 +78,11 @@ soccerPitchBG <- function(lengthPitch = 105, widthPitch = 68, fillPitch = "white
           axis.text = element_blank())
   
   if(direction[1] == "r") {
-    p <- p + geom_segment(aes(x = 0, y = -3.5, xend = 25, yend = -3.5), colour = "#435366", size = 1.5, arrow = arrow(length = unit(0.2, "cm"), type="closed")) + 
-      annotate("text", x = 0, y = -1.5, label = "Direction of play", colour = "#435366", fontface=2, size = 5, hjust = 0)
+    p <- p + geom_segment(aes(x = 0, y = -5, xend = 30, yend = -5), colour = "#435366", size = 1.5, arrow = arrow(length = unit(0.2, "cm"), type="closed")) + 
+      annotate("text", x = 0, y = -2, label = "Direction of play", colour = "#435366", fontface=2, size = 4, hjust = 0)
   } else if(direction[1] == "l") {
-    p <- p + geom_segment(aes(x = pitchLength, y = -3.5, xend = pitchLength - 25, yend = -3.5), colour = "#435366", size = 1.5, arrow = arrow(length = unit(0.2, "cm"), type="closed")) + 
-      annotate("text", x = pitchLength, y = -1.5, label = "Direction of play", colour = "#435366", fontface=2, size = 5, hjust = 1)
+    p <- p + geom_segment(aes(x = lengthPitch, y = -5, xend = lengthPitch - 30, yend = -5), colour = "#435366", size = 1.5, arrow = arrow(length = unit(0.2, "cm"), type="closed")) + 
+      annotate("text", x = lengthPitch, y = -2, label = "Direction of play", colour = "#435366", fontface=2, size = 4, hjust = 1)
   }
   
   p

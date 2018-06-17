@@ -17,7 +17,7 @@ Normalises x,y-coordinates from StatsBomb data to metre units for use with socce
 }
 \examples{
 # get data
-Comps <- FreeCompetitions()
+library(StatsBombR)
 Matches <- FreeMatches(37)
 d <- allinfo(Matches[1])
 

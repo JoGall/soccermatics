@@ -9,6 +9,7 @@ NULL
 #' @examples
 #' # calculate distance, speed, and direction for tromso dataset
 #' soccerVelocity(tromso)
+#' 
 #' @export
 soccerVelocity <- function(dat) {
   

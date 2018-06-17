@@ -1,7 +1,8 @@
 #' @import ggplot2
 #' @import dplyr
-#' @import xts
-#' @import zoo
+#' @importFrom xts xts
+#' @importFrom zoo na.approx
+#' @importFrom ggplot2 fortify
 NULL
 #' Resample the frequency of x,y,t- time series with linear interpolation of x,y-coordinates.
 #'
@@ -13,6 +14,7 @@ NULL
 #' @examples
 #' # resample tromso dataset from ~21 fps to 10 fps
 #' soccerResample(tromso)
+#' 
 #' @export
 soccerResample <- function(dat, r = 10) {
   
@@ -32,7 +34,7 @@ soccerResample <- function(dat, r = 10) {
     ss <- dat[dat$id == x,]
     
     # convert data to xts object
-    ss.xts <- xts(ss %>% select(-t),
+    ss.xts <- xts::xts(ss %>% select(-t),
                   ss$t)
     
     # join to time index
@@ -42,8 +44,8 @@ soccerResample <- function(dat, r = 10) {
     
     # linear interpolatation of x,y,z with omission of leading / lagging NAs; constant interpolation of other variables
     ss.join %>% 
-      mutate_at(vars(-one_of("t", "x", "y", "z")), function(x) na.approx(x, method = "constant", na.rm=F)) %>%
-      mutate_at(vars(one_of("x", "y", "z")), function(x) na.approx(x, na.rm=F)) %>% 
+      mutate_at(vars(-one_of("t", "x", "y", "z")), function(x) zoo::na.approx(x, method = "constant", na.rm=F)) %>%
+      mutate_at(vars(one_of("x", "y", "z")), function(x) zoo::na.approx(x, na.rm=F)) %>% 
       filter(t %in% time.index)
     
   }) %>% 

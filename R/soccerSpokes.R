@@ -2,7 +2,6 @@
 #' @include soccerHeatmap.R
 #' @import ggplot2
 #' @import dplyr
-#' @importFrom magrittr %>%
 NULL
 #' Visualise movement direction on a soccer pitch.
 #' @description Draws spokes showing the direction of x,y-movements made in each sector of the pitch.

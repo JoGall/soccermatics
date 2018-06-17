@@ -1,16 +1,15 @@
-#' @include soccerPath.R
 #' @include soccerTransformSB.R
-#' @import ggplot2
-#' @importFrom ggforce geom_arc geom_circle
 NULL
 #' Normalises x,y-coordinates to metres units for use with soccermatics functions
 #'
 #' @description Normalises x,y-coordinates from between any arbitrary bounds to metre units bounded by [0 < x < pitchLength, 0 < y < pitchWidth]
 #' 
-#' @param dat = dataframe containing unnormalised x,y-coordinates named `x` and `y`
-#' @param xMin,xMax,yMin,yMax = range of x,y-coordinates possible in the raw dataset
-#' @param pitchLength,pitchWidth = length, width of pitch in metres
+#' @param dat dataframe containing unnormalised x,y-coordinates named `x` and `y`
+#' @param xMin,xMax,yMin,yMax range of x,y-coordinates possible in the raw dataset
+#' @param pitchLength,pitchWidth length, width of pitch in metres
 #' @return a dataframe
+#' 
+#' @seealso \code{\link{soccerTransformSB}} readily transforms data from StatsBomb for use with soccermatics
 #' @examples
 #' # Three examples with true pitch dimesions (in metres):
 #' lengthPitch <- 101

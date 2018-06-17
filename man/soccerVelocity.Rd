@@ -18,4 +18,5 @@ Compute instantaneous distance moved (in metres), speed (in metres per second), 
 \examples{
 # calculate distance, speed, and direction for tromso dataset
 soccerVelocity(tromso)
+
 }
