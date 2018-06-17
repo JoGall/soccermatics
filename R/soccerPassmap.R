@@ -6,6 +6,8 @@ NULL
 #' 
 #' @param lengthPitch,widthPitch length and width of pitch in metres
 #' @param colGoal,colMiss colour of circles for scored and missed shots 
+#' @param alpha transparency of points
+#' @param legend boolean, include legend or not
 #' @param fillPitch pitch fill colour
 #' @param colPitch pitch line colour
 #' @param grass if \code{TRUE}, draws a more realistic looking pitch
@@ -30,15 +32,23 @@ NULL
 #' 
 #' @seealso \code{\link{soccerPitchBG}} for drawing a soccer pitch as foreground over an existing ggplot object
 #' @export
-soccerPassmap <- function(dat, lengthPitch = 105, widthPitch = 68, colComplete = "blue", colFail = "red", alpha = 0.8, fillPitch = "white", colPitch = "grey60", grass = FALSE, lwd = 0.5, border = c(4, 4, 4, 4), SB = FALSE) {
+soccerPassmap <- function(dat, lengthPitch = 105, widthPitch = 68, colComplete = "blue", colFail = "red", alpha = 0.8, legend = FALSE, fillPitch = "white", colPitch = "grey60", grass = FALSE, lwd = 0.5, border = c(4, 4, 4, 4), SB = FALSE) {
   
   dat <- dat %>% 
     mutate(pass.outcome = as.factor(if_else(is.na(pass.outcome.name), 1, 0)))
   
-  soccerPitchBG(lengthPitch, widthPitch, fillPitch = fillPitch, colPitch = colPitch, grass = grass, lwd = lwd, SB = SB) +
-    geom_segment(data = filter(dat, pass.outcome == 0), aes(x = location.x, xend = pass.end_location.x, y = location.y, yend = pass.end_location.y), col = colFail, alpha = alpha) +
-    geom_point(data = filter(dat, pass.outcome == 0), aes(x = location.x, y = location.y), col = colFail, alpha = alpha) +
-    geom_segment(data = filter(dat, pass.outcome == 1), aes(x = location.x, xend = pass.end_location.x, y = location.y, yend = pass.end_location.y), col = colComplete, alpha = alpha) +
-    geom_point(data = filter(dat, pass.outcome == 1), aes(x = location.x, y = location.y), col = colComplete, alpha = alpha)
+  p <- soccerPitchBG(lengthPitch, widthPitch, fillPitch = fillPitch, colPitch = colPitch, grass = grass, lwd = lwd, SB = SB) +
+    geom_segment(data = filter(dat, pass.outcome == 0), aes(x = location.x, xend = pass.end_location.x, y = location.y, yend = pass.end_location.y, col = "Failed"), alpha = alpha) +
+    geom_point(data = filter(dat, pass.outcome == 0), aes(x = location.x, y = location.y, col = "Failed"), alpha = alpha) +
+    geom_segment(data = filter(dat, pass.outcome == 1), aes(x = location.x, xend = pass.end_location.x, y = location.y, yend = pass.end_location.y, col = "Completed"), alpha = alpha) +
+    geom_point(data = filter(dat, pass.outcome == 1), aes(x = location.x, y = location.y, col = "Completed"), alpha = alpha)
   
+  if(legend) {
+    p <- p +
+      scale_colour_manual(name = "Pass outcome", breaks = c("Completed", "Failed"), values = c(colComplete, colFail)) +
+      theme(legend.position = "top")
+  }
+  
+  p
+ 
 }
