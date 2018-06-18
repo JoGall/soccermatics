@@ -1,8 +1,8 @@
 Package: soccermatics
 Version: 0.9.0
 Authors@R: person("Joe", "Gallagher", email = "joedgallagher@gmail.com", role = c("aut", "cre"))
-Title: Visualise spatial data from soccer matches
-Description: Provides tools to visualise x,y-coordinates of soccer players in the manner presented in David Sumpter's eponymous book. Uses ggplot to draw soccer pitch and overplot player trajectories, average player positions, heatmaps of player position, flow fields to show binned player movement or passing, and more.
+Title: Visualise tracking and event data from soccer matches
+Description: Provides tools to visualise x,y-coordinates of soccer players and event data (passes, shots). Uses ggplot to draw soccer pitch and overplot expected goal maps, pass maps, average player positions, player heatmaps, individual player paths, player flow fields, and more.
 Depends: R (>= 3.4.1)
 Imports: dplyr, magrittr, ggplot2, ggforce, zoo
 License: GPL (>=3.0) Note: Use of the name 'soccermatics' was kindly permitted by David Sumpter and is protected from commercial use under EU copyright law.
