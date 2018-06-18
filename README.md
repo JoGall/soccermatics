@@ -1,11 +1,11 @@
 soccermatics
 =====
 
-soccermatics provides tools to visualise spatial information from football (soccer) matches using x,y-coordinates of players. There are currently functions to visualise player trajectory paths, heatmaps showing player position frequency, flow fields showing player movement over the pitch, and average position of all players. Pitch lines can be drawn over these visualisations to give context.
-
-The sample x,y-coordinate data in `tromso` and `tromso_extra` were thankfully made available [by Pettersen et al. (2014)](http://home.ifi.uio.no/paalh/dataset/alfheim/), but much further development is hindered by access to x,y-tracking data and event data (e.g. passing, shooting) being prohibitively expensive or protected by NDAs / copyrights.
+soccermatics provides tools to visualise spatial tracking and event data from football (soccer) matches. There are currently functions to visualise shot maps and expected goals, passing diagrams, heatmaps of player position, flow fields of passing or movement direction, average formation, and individual player trajectories.
 
 Many more functions are planned - see [To Do List](https://github.com/JoGall/soccermatics/issues/8), suggestions are welcomed!
+
+The sample x,y-coordinate data in `tromso` and `tromso_extra` were made available [by Pettersen et al. (2014)](http://home.ifi.uio.no/paalh/dataset/alfheim/), whilst event data has been kindly made public by StatsBomb.
 
 Use of the name `soccermatics` kindly permitted by the eponymous book's author, [David Sumpter](https://www.bloomsbury.com/uk/soccermatics-9781472924124/).
 
