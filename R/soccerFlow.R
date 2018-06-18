@@ -24,7 +24,7 @@ NULL
 #'
 #' @seealso \code{\link{soccerHeatmap}} for drawing a heatmap of player position, or \code{\link{soccerSpokes}} for drawing spokes to show all directions in each area of the pitch.
 #' @export
-soccerFlow <- function(df, xBins, yBins = NULL, lengthPitch = 105, widthPitch = 68, grass = FALSE, line_col = "black", lwd = 1, plot = NULL) {
+soccerFlow <- function(df, lengthPitch = 105, widthPitch = 68, xBins = 5, yBins = NULL, fillPitch = "white", colPitch = "grey60", grass = FALSE, lwd = 0.5, border = c(4, 4, 4, 4), plot = NULL) {
   
   # check value for vertical bins and match to horizontal bins if NULL
   if(is.null(yBins)) yBins <- xBins
@@ -42,7 +42,7 @@ soccerFlow <- function(df, xBins, yBins = NULL, lengthPitch = 105, widthPitch = 
   # bin data
   df <- df %>%
     rowwise() %>%
-    mutate(x.bin = max(which(x > x.range)),
+    mutate_(x.bin = max(which(x > x.range)),
            y.bin = max(which(y > y.range)),
            bin = paste(x.bin, y.bin, sep = "_")) %>%
     ungroup()
@@ -53,8 +53,7 @@ soccerFlow <- function(df, xBins, yBins = NULL, lengthPitch = 105, widthPitch = 
     select(id, bin, x.bin, y.bin, id, x, y, direction) %>%
     mutate(x.mean = mean(x),
            y.mean = mean(y),
-           angle.mean = mean(direction, na.rm=T),
-           n = n()) %>%
+           angle.mean = mean(direction, na.rm=T)) %>%
     ungroup()
   
   # add x,y-coords for bin centres
@@ -62,7 +61,7 @@ soccerFlow <- function(df, xBins, yBins = NULL, lengthPitch = 105, widthPitch = 
   df <- left_join(df, y.bin.coords, by = "y.bin")
   
   if(missing(plot)) {
-    soccerPitchBG(lengthPitch = lengthPitch, widthPitch = widthPitch, grass = grass, line_col = line_col) +
+    soccerPitchBG(lengthPitch = lengthPitch, widthPitch = widthPitch, fillPitch = fillPitch, colPitch = colPitch, grass = grass) +
       geom_spoke(data = df, aes(x = x.bin.coord, y = y.bin.coord, angle = angle.mean), radius = widthPitch / (yBins+2), size = lwd, arrow=arrow(length = unit(0.2,"cm"))) +
       guides(fill=FALSE)
   } else {

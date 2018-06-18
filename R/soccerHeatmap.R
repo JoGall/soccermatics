@@ -21,7 +21,7 @@ NULL
 #' 
 #' @seealso \code{\link{soccerPitchBG}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc..
 #' @export
-soccerHeatmap <- function(df, xBins, lengthPitch = 105, widthPitch = 68, yBins = NULL, colLow = "white", colHigh = "red") {
+soccerHeatmap <- function(df, lengthPitch = 105, widthPitch = 68, xBins = 10, yBins = NULL, colPitch = "black", colLow = "white", colHigh = "red") {
   # check value for vertical bins and match to horizontal bins if NULL
   if(is.null(yBins)) yBins <- xBins
   
@@ -38,5 +38,5 @@ soccerHeatmap <- function(df, xBins, lengthPitch = 105, widthPitch = 68, yBins =
     scale_fill_gradient(low = colLow, high = colHigh) +
     guides(fill=FALSE)
   
-  soccerPitchFG(p, lengthPitch = lengthPitch, widthPitch = widthPitch)
+  soccerPitchFG(p, lengthPitch = lengthPitch, widthPitch = widthPitch, colPitch = colPitch)
 }

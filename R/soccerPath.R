@@ -24,7 +24,7 @@ NULL
 #'   soccerPath("id")
 #' 
 #' @export
-soccerPath <- function(dat, id_var = NULL, lengthPitch = 105, widthPitch = 68, col = "black", fillPitch = "white", colPitch = "grey60", grass = FALSE, lwd = 1, legend = TRUE, plot = NULL) {
+soccerPath <- function(dat, lengthPitch = 105, widthPitch = 68, id_var = NULL, col = "black", fillPitch = "white", colPitch = "grey60", grass = FALSE, lwd = 1, legend = TRUE, plot = NULL) {
   
   if(is.null(id_var)) {
     if(missing(plot)) {

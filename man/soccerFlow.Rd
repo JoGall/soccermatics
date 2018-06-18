@@ -4,23 +4,24 @@
 \alias{soccerFlow}
 \title{Draw a flow field on a soccer pitch.}
 \usage{
-soccerFlow(df, xBins, yBins = NULL, lengthPitch = 105, widthPitch = 68,
-  grass = FALSE, line_col = "black", lwd = 1, plot = NULL)
+soccerFlow(df, lengthPitch = 105, widthPitch = 68, xBins = 5,
+  yBins = NULL, fillPitch = "white", colPitch = "grey60", grass = FALSE,
+  lwd = 0.5, border = c(4, 4, 4, 4), plot = NULL)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'} and angular information (in radians, ranging between -pi and pi) in a column \code{'direction'}.}
 
-\item{xBins, yBins}{integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.}
-
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres.}
 
-\item{grass}{if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.}
+\item{xBins, yBins}{integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.}
 
-\item{line_col}{colour of pitch lines.}
+\item{grass}{if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.}
 
 \item{lwd}{thickness of arrow lines.}
 
 \item{plot}{optional, adds wagon wheels to an existing ggplot object if provided}
+
+\item{line_col}{colour of pitch lines.}
 }
 \value{
 a ggplot object of a heatmap on a soccer pitch.

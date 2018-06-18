@@ -5,12 +5,16 @@
 \title{Draw a map of all passes from StatsBomb data}
 \usage{
 soccerPassmap(dat, lengthPitch = 105, widthPitch = 68,
-  colComplete = "blue", colFail = "red", alpha = 0.8,
+  colComplete = "blue", colFail = "red", alpha = 0.8, legend = FALSE,
   fillPitch = "white", colPitch = "grey60", grass = FALSE, lwd = 0.5,
   border = c(4, 4, 4, 4), SB = FALSE)
 }
 \arguments{
 \item{lengthPitch, widthPitch}{length and width of pitch in metres}
+
+\item{alpha}{transparency of points}
+
+\item{legend}{boolean, include legend or not}
 
 \item{fillPitch}{pitch fill colour}
 
@@ -42,9 +46,9 @@ d <- soccerTransformSB(d)
 
 # shotmap of Manchester City WFC
 d \%>\% 
-  filter(type.name == "Shot",
+  filter(type.name == "Pass",
   team.name == "Manchester City WFC") \%>\% 
-  soccerShotmap(fillPitch = "#1C1F26", colPitch = "white", SB = TRUE)
+  soccerPassmap(SB = TRUE)
 
 }
 \seealso{

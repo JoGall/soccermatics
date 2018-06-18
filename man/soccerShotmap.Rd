@@ -5,14 +5,18 @@
 \title{Draw a shotmap on a half pitch from StatsBomb data}
 \usage{
 soccerShotmap(dat, lengthPitch = 105, widthPitch = 68,
-  colGoal = "skyblue", colMiss = "grey60", alpha = 0.8,
+  colGoal = "skyblue", colMiss = "grey60", alpha = 0.8, legend = FALSE,
   fillPitch = "white", colPitch = "grey60", grass = FALSE, lwd = 0.5,
   border = c(4, 4, 4, 4), SB = FALSE)
 }
 \arguments{
 \item{lengthPitch, widthPitch}{length and width of pitch in metres}
 
-\item{colGoal, colMiss}{colour of circles for scored and missed shots}
+\item{colGoal, colMiss}{colour of points representing scored and missed shots}
+
+\item{alpha}{transparency of points}
+
+\item{legend}{boolean, include legend or not}
 
 \item{fillPitch}{pitch fill colour}
 
@@ -40,11 +44,11 @@ d <- allinfo(Matches[1])
 # transform all x,y-coordinates of StatsBomb data
 d <- soccerTransformSB(d)
 
-# shotmap of Manchester City WFC
+# pass map of Manchester City WFC
 d \%>\% 
-  filter(type.name == "Pass",
+  filter(type.name == "Shot",
   team.name == "Manchester City WFC") \%>\% 
-  soccerPassmap(SB = TRUE)
+  soccerShotmap(fillPitch = "#1C1F26", colPitch = "white", SB = TRUE)
 
 }
 \seealso{

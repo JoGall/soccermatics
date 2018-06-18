@@ -4,15 +4,15 @@
 \alias{soccerHeatmap}
 \title{Draw a heatmap on a soccer pitch.}
 \usage{
-soccerHeatmap(df, xBins, lengthPitch = 105, widthPitch = 68, yBins = NULL,
-  colLow = "white", colHigh = "red")
+soccerHeatmap(df, lengthPitch = 105, widthPitch = 68, xBins = 10,
+  yBins = NULL, colPitch = "black", colLow = "white", colHigh = "red")
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}.}
 
-\item{xBins, yBins}{integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.}
-
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres.}
+
+\item{xBins, yBins}{integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.}
 
 \item{colLow, colHigh}{character, colours for the low and high ends of the heatmap gradient.}
 }

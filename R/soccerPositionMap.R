@@ -2,34 +2,39 @@
 #' @import ggplot2
 #' @import dplyr
 NULL
-#' Plot average player position on a soccer pitch.
-#' @description Draws the average x,y-positions of all players in a dataframe and plots over
-#' a soccer pitch.
+#' Plot average player position
+#' @description Draws the average x,y-positions of each player from one or both teams on a soccer pitch.
 #' 
-#' @param df dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}.
-#' @param id_var character, the name of the column containing player identity. Defaults to \code{'id'}.
-#' @param lengthPitch,widthPitch numeric, length and width of pitch in metres.
-#' @param col1 character, fill colour of position points.
-#' @param col2 character, border colour of position points.
-#' @param size numeric, size of position points and text.
-#' @param grass if TRUE, draws pitch background in green and lines in white. If FALSE, draws pitch background in white and lines in black.
+#' @param df dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}
+#' @param lengthPitch,widthPitch numeric, length and width of pitch in metres
+#' @param id_var character, the name of the column containing player identity. Defaults to \code{'id'}
+#' @param group_var character, the name of the column containing team identity. Optional, defaults to \code{'NULL'}
+#' @param fill1,fill2 character, fill colour of position points for team one (and team two if `group_var` provided)
+#' @param col1,col2 character, border colour of position points for team one (and team two if `group_var` provided)
+#' @param node_size numeric, size of position points
+#' @param label_size numeric, size of label names
+#' @param label boolean, draw labels or not
+#' @param fillPitch pitch fill colour
+#' @param colPitch pitch line colour
+#' @param grass if \code{TRUE}, draws a more realistic looking pitch
+#' @param lwd pitch line width
+#' @param border size of border drawn around pitch perimeter (t,r,b,l)
 #' @examples
 #' data(tromso)
 #' # draw average player position of players
-#' p <- soccerPositions(tromso, lengthPitch = 105, widthPitch = 68, grass = TRUE)
+#' p <- soccerPositionMap(tromso, lengthPitch = 105, widthPitch = 68, grass = TRUE)
 #' # draw arrow showing direction of play
 #' soccerDirection(p, "right", lengthPitch = 105, widthPitch = 68, grass = TRUE)
 #' 
-#' @seealso \code{\link{soccerPitchBG}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc..
+#' @seealso \code{\link{soccerPitchBG}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc...
 #' @export
-soccerPositionMap <- function(df, id_var = "id", group_var = NULL, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = "white", fill2 = "blue", col2 = "white", node_size = 6, label_size = 3, label = TRUE, fillPitch = "white", colPitch = "grey60", grass = FALSE) {
+soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, id_var = "id", group_var = NULL, x_var = "x", y_var = "y", fill1 = "red", col1 = "white", fill2 = "blue", col2 = "white", node_size = 6, label_size = 3, label = TRUE, fillPitch = "white", colPitch = "grey60", lwd = 0.5, grass = FALSE) {
   
   if(!is.null(group_var)) {
-    # get average position of 11 players with most detected frames for both teams
+    # get average position for both teams
     pos <- df %>%
-      dplyr::filter(x > 0 & x < lengthPitch & y > 0 & y < widthPitch) %>%
-      dplyr::group_by_(group_var, id_var) %>%
-      dplyr::summarise(x.mean = mean(x), y.mean = mean(y), n = n()) %>% 
+      group_by_(group_var, id_var) %>%
+      summarise(x.mean = mean(!!sym(x_var)), y.mean = mean(!!sym(y_var))) %>% 
       ungroup() %>% 
       mutate_(team = group_var, id = id_var) %>% 
       mutate(team = as.factor(team), id = as.factor(id))
@@ -41,11 +46,10 @@ soccerPositionMap <- function(df, id_var = "id", group_var = NULL, lengthPitch =
       guides(colour = FALSE, fill = FALSE)
     
   } else {
-    # get average position of 11 players with most detected frames for one team
+    # get average position for one team
     pos <- df %>%
-      dplyr::filter(x > 0 & x < lengthPitch & y > 0 & y < widthPitch) %>%
-      dplyr::group_by_(id_var) %>%
-      dplyr::summarise(x.mean = mean(x), y.mean = mean(y), n = n()) %>% 
+      group_by_(id_var) %>%
+      summarise(x.mean = mean(!!sym(x_var)), y.mean = mean(!!sym(y_var))) %>% 
       ungroup() %>% 
       mutate_(id = id_var) %>% 
       mutate(id = as.factor(id))

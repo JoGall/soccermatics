@@ -18,7 +18,12 @@ NULL
 #' 
 #' @seealso \code{\link{soccerPitchBG}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc..
 #' @export
-soccerPitchFG <- function(plot, lengthPitch = 105, widthPitch = 68, colPitch = "black", lwd = 1) {
+soccerPitchFG <- function(plot, lengthPitch = 105, widthPitch = 68, colPitch = "black", lwd = 0.5, SB = FALSE) {
+  
+  if(SB) {
+    lengthPitch <- 106
+    widthPitch <- 70.4
+  }
   
   plot +
     geom_rect(aes(xmin = -4, xmax = lengthPitch + 4, ymin = -4, ymax = widthPitch + 4), fill = "NA") +
