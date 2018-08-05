@@ -41,23 +41,23 @@ Below are some sample visualisations produced by `soccermetrics`. See the [packa
 
 <img src="https://user-images.githubusercontent.com/17113779/41536877-c7f93904-72fe-11e8-806e-0d225475b9cd.png" width="500">
 
-**Figure 1.** Shot map of Manchester City WFC (vs. Chelsea LFC, 2018-02-24) showing xG and shot outcome. Event data made available by StatsBomb; figure made using `soccerShotmap()`.
+**Figure 1.** Shot map of Manchester City WFC (vs. Chelsea LFC, 2018-02-24; data made available by StatsBomb) showing xG and shot outcome. Made using `soccerShotmap()`.
 
 <img src="https://user-images.githubusercontent.com/17113779/41536876-c7dc1ad6-72fe-11e8-9be6-4331a846b033.png" width="500">
 
-**Figure 2.** Pass map of Manchester City WFC (vs. Chelsea LFC, 2018-02-24) showing pass origin origin (circles), path (lines) and outcome. Event data made available by StatsBomb; figure made using `soccerPassmap()`.
+**Figure 2.** Pass map of Manchester City WFC (vs. Chelsea LFC, 2018-02-24; data made available by StatsBomb) showing pass origin origin (circles), path (lines) and outcome. Made using `soccerPassmap()`.
 
 <img src="https://user-images.githubusercontent.com/17113779/41537613-eef2567e-7300-11e8-8bd4-0517246c7e0e.png" width="500">
 
-**Figure 3.** Average position of Tromsø IL players (vs. Strømsgodset, 2013-11-03). Made using `soccerPositions()` and `soccerDirection()`.
+**Figure 3.** Average position of Tromsø IL players (vs. Strømsgodset, 2013-11-03). Made using `soccerPositions()`.
 
-<img src="https://user-images.githubusercontent.com/17113779/41537612-eed60e24-7300-11e8-9da0-beae21cf5f17.png" width="500">
+<img src="https://user-images.githubusercontent.com/17113779/41552740-955daace-7327-11e8-9d61-2f8764bbe7e2.png" width="500">
 
-**Figure 4.** Average position of Manchester City WFC players (vs. Chelsea LFC, 2018-02-24). Made using `soccerPositions()` and `soccerDirection()`.
+**Figure 4.** Average position of Manchester City WFC (dark blue) and Chelsea LFC (sky blue) players (2018-02-24). Made using `soccerPositions()`.
 
 <img src="https://user-images.githubusercontent.com/17113779/41536878-c81847ea-72fe-11e8-994a-6d7fe711bace.png" width="500">
 
-**Figure 5.** Player heatmap over 90 minutes (player #8; Tromsø IL vs. Anzhi, 2013-11-07). Bins are appromximately 5m x 5m; arrow shows direction of play. Made using `soccerHeatmap()` and `soccerDirection()`.
+**Figure 5.** Player heatmap over 90 minutes (player #8; Tromsø IL vs. Anzhi, 2013-11-07). Bins are appromximately 5m x 5m; arrow shows direction of play. Made using `soccerHeatmap()`.
 
 <img src="https://user-images.githubusercontent.com/17113779/41536879-c82f3eaa-72fe-11e8-8472-7cc43311b5cf.png" width="500">
 
