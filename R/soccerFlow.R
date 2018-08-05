@@ -42,7 +42,7 @@ soccerFlow <- function(df, lengthPitch = 105, widthPitch = 68, xBins = 5, yBins 
   # bin data
   df <- df %>%
     rowwise() %>%
-    mutate_(x.bin = max(which(x > x.range)),
+    mutate(x.bin = max(which(x > x.range)),
            y.bin = max(which(y > y.range)),
            bin = paste(x.bin, y.bin, sep = "_")) %>%
     ungroup()
