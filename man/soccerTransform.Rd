@@ -4,7 +4,8 @@
 \alias{soccerTransform}
 \title{Normalises x,y-coordinates to metres units for use with soccermatics functions}
 \usage{
-soccerTransform(dat, xMin, xMax, yMin, yMax, pitchLength, pitchWidth)
+soccerTransform(dat, xMin, xMax, yMin, yMax, pitchLength = 105,
+  pitchWidth = 68, method = c("manual", "statsbomb"))
 }
 \arguments{
 \item{dat}{dataframe containing unnormalised x,y-coordinates named `x` and `y`}
@@ -66,9 +67,4 @@ df <- soccerTransform(df, -5250, 5250, -3400, 3400, lengthPitch, widthPitch)
 
 soccerPath(df, lengthPitch = lengthPitch, widthPitch = widthPitch)
 
-}
-\seealso{
-\code{\link{soccerTransformSB}} readily transforms data from StatsBomb for use with soccermatics
-
-\code{\link{soccerTransformSB}} for transforming data from StatsBomb
 }

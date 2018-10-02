@@ -4,12 +4,16 @@
 \alias{soccerResample}
 \title{Resample the frequency of x,y,t- time series with linear interpolation of x,y-coordinates.}
 \usage{
-soccerResample(dat, r = 10)
+soccerResample(dat, r = 10, x = "x", y = "y", z = "z", t = "t")
 }
 \arguments{
-\item{dat}{= dataframe containing unnormalised x,y-coordinates named `x` and `y` and a time variable named `t`}
+\item{dat}{= dataframe containing x,y-coordinates with time variable}
 
 \item{r}{resampling rate in frames per second}
+
+\item{x, y, z}{= name of variables containing x,y(,z)-coordinates}
+
+\item{t}{= name of variable containing time data}
 }
 \value{
 a dataframe

@@ -1,4 +1,3 @@
-#' @include soccerTransformSB.R
 NULL
 #' Normalises x,y-coordinates to metres units for use with soccermatics functions
 #'
@@ -9,7 +8,6 @@ NULL
 #' @param pitchLength,pitchWidth length, width of pitch in metres
 #' @return a dataframe
 #' 
-#' @seealso \code{\link{soccerTransformSB}} readily transforms data from StatsBomb for use with soccermatics
 #' @examples
 #' # Three examples with true pitch dimesions (in metres):
 #' lengthPitch <- 101
@@ -57,12 +55,17 @@ NULL
 #' 
 #' soccerPath(df, lengthPitch = lengthPitch, widthPitch = widthPitch)
 #' 
-#' @seealso \code{\link{soccerTransformSB}} for transforming data from StatsBomb
 #' @export
-soccerTransform <- function(dat, xMin, xMax, yMin, yMax, pitchLength, pitchWidth) {
+soccerTransform <- function(dat, xMin, xMax, yMin, yMax, pitchLength = 105, pitchWidth = 68, method = c("manual", "statsbomb")) {
   
-  dat$x <- (dat$x - xMin) / diff(c(xMin,xMax)) * pitchLength
-  dat$y <- (dat$y - yMin) / diff(c(yMin,yMax)) * pitchWidth
+  if(method == "statsbomb") {
+    dat <- dat %>% 
+      mutate_at(vars(contains('.x')), funs((. - 0) / diff(c(0, 120)) * pitchLength)) %>% 
+      mutate_at(vars(contains('.y')), funs(pitchWidth - (. - 0)/diff(c(0, 80)) * pitchWidth))
+  } else {
+    dat$x <- (dat$x - xMin) / diff(c(xMin,xMax)) * pitchLength
+    dat$y <- (dat$y - yMin) / diff(c(yMin,yMax)) * pitchWidth
+  }
   
   return(dat)
 }

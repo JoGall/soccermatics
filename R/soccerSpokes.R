@@ -1,4 +1,4 @@
-#' @include soccerPitchBG.R
+#' @include soccerPitch.R
 #' @include soccerHeatmap.R
 #' @import ggplot2
 #' @import dplyr
@@ -6,14 +6,15 @@ NULL
 #' Visualise movement direction on a soccer pitch.
 #' @description Draws spokes showing the direction of x,y-movements made in each sector of the pitch.
 #' 
-#' @param plot plot of soccer pitch returned by \code{\link{soccerPitchBG}} to add spokes to
-#' @param df dataframe containing x,y-coordinates of player position in columns named \code{x} and \code{y} and angular information (in radians, ranging between \code{-pi} and \code{pi}) in a column \code{direction}.
-#' @param lengthPitch,widthPitch length and width of pitch in metres.
-#' @param xBins,yBins integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.
-#' @param angleBins integer, the number of angle bins movement directions are divided up into. For example, a value of 4 clusters directions in each bin into north, east, south and west.
+#' @param plot plot of soccer pitch returned by \code{\link{soccerPitch}} to add spokes to
+#' @param df dataframe containing x,y-coordinates of player position in columns named \code{x} and \code{y} and angular information (in radians, ranging between \code{-pi} and \code{pi}) in a column specified by argument \code{angle}
+#' @param lengthPitch,widthPitch length and width of pitch in metres
+#' @param xBins,yBins integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}
+#' @param angleBins integer, the number of angle bins movement directions are divided up into. For example, a value of 4 clusters has direction vectors north, east, south and west
 #' @param lwd thickness of arrow lines
 #' @param minLength numeric, ratio between size of shortest arrow and longest arrow depending on number of events.
-#' @param legend if \code{TRUE}, adds legend showing relationship between arrow transparency and number of events
+#' @param legend if \code{TRUE}, adds legend for arrow thickness and transparency
+#' @param x,y,angle = name of variables containing x,y-coordinates and angular data
 
 #' @return a ggplot object
 #' @examples
@@ -24,18 +25,24 @@ NULL
 #'   dplyr::filter(id == 8) %>%
 #'   dplyr::sample_n(100)
 #' # 5x5 x,y-bins, 16 angle-bins, blank pitch
-#' soccerPitchBG(pitchLength, pitchWidth) %>% 
+#' soccerPitch(pitchLength, pitchWidth) %>% 
 #'   soccerSpokes(id8, xBins = 5, angleBins = 16, minLength = 0.4)
 #' # 10x10 x,y-bins, 8 angle-bins, grass pitch
-#' soccerPitchBG(pitchLength, pitchWidth, grass = T) %>% 
+#' soccerPitch(pitchLength, pitchWidth, grass = T) %>% 
 #'   soccerSpokes(id8, xBins = 10, angleBins = 8, minLength = 0.2, lwd = 1)
 #' # draw spokes over player heatmap w/ 5x5 x,y-bins, 8 angle-bins
 #' soccerHeatmap(id8, xBins = 5) %>% 
 #'   soccerSpokes(id8, xBins = 5, angleBins = 8, lwd = 1)
 #' 
-#' @seealso \code{\link{soccerPitchBG}} for drawing a heatmap of player position, \code{\link{soccerHeatmap}} for drawing a heatmap of player position
+#' @seealso \code{\link{soccerPitch}} for drawing a heatmap of player position, \code{\link{soccerHeatmap}} for drawing a heatmap of player position
 #' @export
-soccerSpokes <- function(plot, df, lengthPitch = 105, widthPitch = 68, xBins, yBins = NULL, angleBins = 16, lwd = 0.5, minLength = 0.6, minAlpha = 0.4, legend = TRUE) {
+soccerSpokes <- function(plot, df, lengthPitch = 105, widthPitch = 68, xBins, yBins = NULL, angleBins = 16, lwd = 0.5, minLength = 0.6, minAlpha = 0.4, legend = TRUE, x = "x", y = "y", angle = "angle") {
+  
+  df$x <- df[,x]
+  df$y <- df[,y]
+  df$angle <- df[,angle]
+  
+  border <- c(4, 4, 4, 4)
   
   # check value for vertical bins and match to horizontal bins if NULL
   if(is.null(yBins)) yBins <- xBins
@@ -66,7 +73,7 @@ soccerSpokes <- function(plot, df, lengthPitch = 105, widthPitch = 68, xBins, yB
   df <- df %>%
     group_by(bin) %>%
     rowwise() %>%
-    mutate(angle.bin = max(which(direction > angle.bin))) %>%
+    mutate(angle.bin = max(which(angle > angle.bin))) %>%
     ungroup()
   
   # count number of events in each angle bin

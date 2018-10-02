@@ -6,8 +6,7 @@
 \usage{
 soccerShotmap(dat, lengthPitch = 105, widthPitch = 68,
   colGoal = "skyblue", colMiss = "grey60", alpha = 0.8, legend = FALSE,
-  fillPitch = "white", colPitch = "grey60", grass = FALSE, lwd = 0.5,
-  border = c(4, 4, 4, 4), SB = FALSE)
+  theme = c("light", "dark", "grass"), lwd = 0.5)
 }
 \arguments{
 \item{lengthPitch, widthPitch}{length and width of pitch in metres}
@@ -18,39 +17,24 @@ soccerShotmap(dat, lengthPitch = 105, widthPitch = 68,
 
 \item{legend}{boolean, include legend or not}
 
-\item{fillPitch}{pitch fill colour}
+\item{lwd}{numeric, pitch line width}
 
-\item{colPitch}{pitch line colour}
+\item{fillPitch, colPitch}{pitch background and line colour}
 
-\item{grass}{if \code{TRUE}, draws a more realistic looking pitch}
-
-\item{lwd}{pitch line width}
-
-\item{border}{size of border drawn around pitch perimeter (t,r,b,l)}
+\item{grass}{if \code{TRUE}, uses a more realistic pitch}
 }
 \value{
 a ggplot object
 }
 \description{
-Draw a shotmap on a half pitch from StatsBomb data. Compatability with non-StatsBomb data will be added soon.
+Draw a shotmap on a half pitch from StatsBomb data. Compatability with other (non-StatsBomb) shot data will be added soon.
 }
 \examples{
-library(StatsBombR)
+data(statsbomb)
 
-# get data
-Matches <- FreeMatches(37)
-d <- allinfo(Matches[1])
+# shot map of France vs. Argentina (2018-06-30)
+statsbomb \%>\% 
+  filter(team.name == "France") \%>\% 
+  soccerShotmap()
 
-# transform all x,y-coordinates of StatsBomb data
-d <- soccerTransformSB(d)
-
-# pass map of Manchester City WFC
-d \%>\% 
-  filter(type.name == "Shot",
-  team.name == "Manchester City WFC") \%>\% 
-  soccerShotmap(fillPitch = "#1C1F26", colPitch = "white", SB = TRUE)
-
-}
-\seealso{
-\code{\link{soccerPitchBG}} for drawing a soccer pitch as foreground over an existing ggplot object
 }

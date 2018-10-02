@@ -5,16 +5,26 @@
 \title{Draw a heatmap on a soccer pitch.}
 \usage{
 soccerHeatmap(df, lengthPitch = 105, widthPitch = 68, xBins = 10,
-  yBins = NULL, colPitch = "black", colLow = "white", colHigh = "red")
+  yBins = NULL, arrow = c("none", "r", "l"), colPitch = "black",
+  colLow = "white", colHigh = "red", title = NULL, subtitle = NULL,
+  x = "x", y = "y")
 }
 \arguments{
-\item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}.}
+\item{df}{dataframe containing x,y-coordinates of player position}
 
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres.}
 
 \item{xBins, yBins}{integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.}
 
+\item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
+
+\item{colPitch}{pitch line colour}
+
 \item{colLow, colHigh}{character, colours for the low and high ends of the heatmap gradient.}
+
+\item{title, subtitle}{optional, adds title and subtitle to plot}
+
+\item{x, y}{= name of variables containing x,y-coordinates}
 }
 \value{
 a ggplot object of a heatmap on a soccer pitch.
@@ -26,14 +36,18 @@ Draws a heatmap showing player position frequency in each area of the pitch and 
 uses \code{ggplot2::geom_bin2d} to map 2D bin counts
 }
 \examples{
+# Heatmap of Tromso IL #9's position
 data(tromso)
-# simple heatmap of player #9's position
 soccerHeatmap(subset(tromso, id == 8), xBins = 10)
 
-# draw heatmap with approximately 5m x 5m bins (pitchLength / 5 = 21, pitchWidth / 5 = 13.6)
-soccerHeatmap(subset(tromso, id == 8), xBins = 21, yBins = 14)
+# Heatmap of France defensive pressure locations w/ ~5x5m bins (pitchLength / 5 = 21, pitchWidth / 5 = 13.6) 
+statsbomb \%>\%
+  filter(type.name == "Pressure" & team.name == "France") \%>\% 
+  soccerHeatmap(x = "location.x", y = "location.y", xBins = 21, yBins = 14,
+               title = "France (vs Argentina, 30th June 2016)", 
+               subtitle = "Defensive pressure heatmap")
 
 }
 \seealso{
-\code{\link{soccerPitchBG}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc..
+\code{\link{soccerPitch}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc..
 }

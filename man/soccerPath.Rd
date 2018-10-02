@@ -4,22 +4,35 @@
 \alias{soccerPath}
 \title{Draw a path of player trajectory on a soccer pitch.}
 \usage{
-soccerPath(dat, lengthPitch = 105, widthPitch = 68, id_var = NULL,
-  col = "black", fillPitch = "white", colPitch = "grey60",
-  grass = FALSE, lwd = 1, legend = TRUE, plot = NULL)
+soccerPath(dat, lengthPitch = 105, widthPitch = 68, id = NULL,
+  col = "black", colPitch = "grey60", fillPitch = "white",
+  grass = FALSE, arrow = c("none", "r", "l"), lwd = 1, legend = TRUE,
+  x = "x", y = "y", plot = NULL)
 }
 \arguments{
-\item{dat}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}}
+\item{dat}{dataframe containing x,y-coordinates of player position}
 
 \item{lengthPitch, widthPitch}{length and width of pitch in metres}
 
-\item{id_var}{character, the name of the column containing player identity. Only required if \code{'dat'} contains multiple players}
+\item{id}{character, the name of the column containing player identity. Only required if \code{'dat'} contains multiple players}
 
-\item{col}{colour of path if no \code{'id_var'} is provided. If an \code{'id_var'} is present, colours from ColorBrewer's 'Paired' palette are used}
+\item{col}{colour of path if no \code{'id'} is provided. If an \code{'id'} is present, colours from ColorBrewer's 'Paired' palette are used}
 
-\item{grass}{if TRUE, draws a more realistic looking pitch}
+\item{fillPitch, colPitch}{pitch background and line colour}
+
+\item{grass}{if \code{TRUE}, uses a more realistic pitch}
+
+\item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
 
 \item{lwd}{player path thickness}
+
+\item{legend}{boolean, include legend}
+
+\item{x, y}{= name of variables containing x,y-coordinates}
+
+\item{plot}{plot to add path to, if desired}
+
+\item{title, subtitle}{optional, adds title and subtitle to plot}
 }
 \value{
 a ggplot object
@@ -36,6 +49,6 @@ subset(tromso, id == 8)[1:1200,] \%>\%
 tromso \%>\%
   dplyr::group_by(id) \%>\%
   dplyr::slice(1:1200) \%>\%
-  soccerPath("id")
+  soccerPath(id = "id")
 
 }

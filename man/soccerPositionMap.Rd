@@ -4,30 +4,27 @@
 \alias{soccerPositionMap}
 \title{Plot average player position}
 \usage{
-soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, id_var = "id",
-  group_var = NULL, x_var = "x", y_var = "y", fill1 = "red",
+soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, fill1 = "red",
   col1 = "white", fill2 = "blue", col2 = "white", node_size = 6,
-  label_size = 3, label = TRUE, fillPitch = "white",
-  colPitch = "grey60", lwd = 0.5, grass = FALSE)
+  label = TRUE, label_size = 3, fillPitch = "white",
+  colPitch = "grey60", lwd = 0.5, grass = FALSE, arrow = c("none", "r",
+  "l"), title = NULL, subtitle = NULL, x = "x", y = "y", id = "id",
+  team = NULL)
 }
 \arguments{
-\item{df}{dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}}
+\item{df}{dataframe containing x,y-coordinates of player position}
 
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres}
 
-\item{id_var}{character, the name of the column containing player identity. Defaults to \code{'id'}}
+\item{fill1, fill2}{character, fill colour of position points (team 1, team 2 (if present))}
 
-\item{group_var}{character, the name of the column containing team identity. Optional, defaults to \code{'NULL'}}
-
-\item{fill1, fill2}{character, fill colour of position points for team one (and team two if `group_var` provided)}
-
-\item{col1, col2}{character, border colour of position points for team one (and team two if `group_var` provided)}
+\item{col1, col2}{character, border colour of position points and labels (team 1, team 2 (if present))}
 
 \item{node_size}{numeric, size of position points}
 
-\item{label_size}{numeric, size of label names}
-
 \item{label}{boolean, draw labels or not}
+
+\item{label_size}{numeric, size of label names}
 
 \item{fillPitch}{pitch fill colour}
 
@@ -35,21 +32,37 @@ soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, id_var = "id",
 
 \item{lwd}{pitch line width}
 
-\item{grass}{if \code{TRUE}, draws a more realistic looking pitch}
+\item{grass}{if \code{TRUE}, uses a more realistic pitch}
 
-\item{border}{size of border drawn around pitch perimeter (t,r,b,l)}
+\item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
+
+\item{title, subtitle}{optional, adds title and subtitle to plot}
+
+\item{x, y}{= name of variables containing x,y-coordinates}
+
+\item{id}{character, the name of the column containing player identity. Defaults to \code{'id'}}
+
+\item{team}{character, the name of the column containing team identity. Optional, defaults to \code{'NULL'}}
 }
 \description{
 Draws the average x,y-positions of each player from one or both teams on a soccer pitch.
 }
 \examples{
+# Tromso IL average player position
 data(tromso)
-# draw average player position of players
-p <- soccerPositionMap(tromso, lengthPitch = 105, widthPitch = 68, grass = TRUE)
-# draw arrow showing direction of play
-soccerDirection(p, "right", lengthPitch = 105, widthPitch = 68, grass = TRUE)
+soccerPositionMap(tromso, grass = TRUE)
+
+# France average pass position
+data(statsbomb)
+statsbomb \%>\% 
+  filter(type.name == "Pass" & team.name == "France" & minute < 43) \%>\% 
+  soccerPositionMap(id = "player.name", x = "location.x", y = "location.y", 
+                    fill1 = "blue", grass = T,
+                    arrow = "r", 
+                    title = "France (vs Argentina, 30th June 2016)", 
+                    subtitle = "Average pass position (1' - 42')")
 
 }
 \seealso{
-\code{\link{soccerPitchBG}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc...
+\code{\link{soccerPitch}}  for plotting a soccer pitch for the purpose of drawing over event data, average position, player trajectories, etc..
 }

@@ -2,30 +2,33 @@
 % Please edit documentation in R/soccerPitchFG.R
 \name{soccerPitchFG}
 \alias{soccerPitchFG}
-\title{Add soccer pitch outlines to an existing ggplot}
+\title{Helper function to add soccer pitch outlines to an existing ggplot object}
 \usage{
 soccerPitchFG(plot, lengthPitch = 105, widthPitch = 68,
-  colPitch = "black", lwd = 0.5, SB = FALSE)
+  colPitch = "black", arrow = c("none", "r", "l"), arrow_col = "black",
+  lwd = 0.5, title = NULL, subtitle = NULL)
 }
 \arguments{
-\item{plot}{an existing ggplot object to add layers to.}
+\item{plot}{an existing ggplot object to add pitch lines to}
 
-\item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres.}
+\item{lengthPitch, widthPitch}{length and width of pitch in metres}
+
+\item{colPitch}{pitch fill and line colour}
+
+\item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
+
+\item{arrow_col}{colour of attack direction arrow}
+
+\item{lwd}{numeric, pitch line width}
+
+\item{title, subtitle}{optional, adds title and subtitle to plot}
 }
 \value{
 a ggplot object
 }
 \description{
-Draws soccer pitch outlines (with transparent fill) over an existing ggplot object to provide context for heatmaps, passing maps, etc..
-}
-\examples{
-data(tromso)
-# draw heatmap of player #9's position
-p <- soccerHeatmap(subset(tromso, id == 8), bins = 15, lengthPitch = 105, widthPitch = 68)
-# add pitch lines to plot
-soccerPitchFG(p, lengthPitch = 105, widthPitch = 68)
-
+Adds soccer pitch outlines (with transparent fill) to an existing ggplot object (e.g. heatmaps, passing maps, etc..)
 }
 \seealso{
-\code{\link{soccerPitchBG}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc..
+\code{\link{soccerPitch}} for plotting a soccer pitch for the purpose of drawing over event data, average position, player trajectories, etc..
 }

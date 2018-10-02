@@ -5,41 +5,51 @@ NULL
 #' Plot average player position
 #' @description Draws the average x,y-positions of each player from one or both teams on a soccer pitch.
 #' 
-#' @param df dataframe containing x,y-coordinates of player position in columns named \code{'x'} and \code{'y'}
+#' @param df dataframe containing x,y-coordinates of player position
 #' @param lengthPitch,widthPitch numeric, length and width of pitch in metres
-#' @param id_var character, the name of the column containing player identity. Defaults to \code{'id'}
-#' @param group_var character, the name of the column containing team identity. Optional, defaults to \code{'NULL'}
-#' @param fill1,fill2 character, fill colour of position points for team one (and team two if `group_var` provided)
-#' @param col1,col2 character, border colour of position points for team one (and team two if `group_var` provided)
+#' @param fill1,fill2 character, fill colour of position points (team 1, team 2 (if present))
+#' @param col1,col2 character, border colour of position points and labels (team 1, team 2 (if present))
 #' @param node_size numeric, size of position points
-#' @param label_size numeric, size of label names
 #' @param label boolean, draw labels or not
+#' @param label_size numeric, size of label names
 #' @param fillPitch pitch fill colour
 #' @param colPitch pitch line colour
-#' @param grass if \code{TRUE}, draws a more realistic looking pitch
 #' @param lwd pitch line width
-#' @param border size of border drawn around pitch perimeter (t,r,b,l)
+#' @param grass if \code{TRUE}, uses a more realistic pitch
+#' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
+#' @param title,subtitle optional, adds title and subtitle to plot
+#' @param x,y = name of variables containing x,y-coordinates
+#' @param id character, the name of the column containing player identity. Defaults to \code{'id'}
+#' @param team character, the name of the column containing team identity. Optional, defaults to \code{'NULL'}
 #' @examples
+#' # Tromso IL average player position
 #' data(tromso)
-#' # draw average player position of players
-#' p <- soccerPositionMap(tromso, lengthPitch = 105, widthPitch = 68, grass = TRUE)
-#' # draw arrow showing direction of play
-#' soccerDirection(p, "right", lengthPitch = 105, widthPitch = 68, grass = TRUE)
+#' soccerPositionMap(tromso, grass = TRUE)
 #' 
-#' @seealso \code{\link{soccerPitchBG}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc...
+#' # France average pass position
+#' data(statsbomb)
+#' statsbomb %>% 
+#'   filter(type.name == "Pass" & team.name == "France" & minute < 43) %>% 
+#'   soccerPositionMap(id = "player.name", x = "location.x", y = "location.y", 
+#'                     fill1 = "blue", grass = T,
+#'                     arrow = "r", 
+#'                     title = "France (vs Argentina, 30th June 2016)", 
+#'                     subtitle = "Average pass position (1' - 42')")
+#' 
+#' @seealso \code{\link{soccerPitch}}  for plotting a soccer pitch for the purpose of drawing over event data, average position, player trajectories, etc..
 #' @export
-soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, id_var = "id", group_var = NULL, x_var = "x", y_var = "y", fill1 = "red", col1 = "white", fill2 = "blue", col2 = "white", node_size = 6, label_size = 3, label = TRUE, fillPitch = "white", colPitch = "grey60", lwd = 0.5, grass = FALSE) {
+soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = "white", fill2 = "blue", col2 = "white", node_size = 6, label = TRUE, label_size = 3, fillPitch = "white", colPitch = "grey60", lwd = 0.5, grass = FALSE, arrow = c("none", "r", "l"), title = NULL, subtitle = NULL, x = "x", y = "y", id = "id", team = NULL) {
   
-  if(!is.null(group_var)) {
+  if(!is.null(team)) {
     # get average position for both teams
     pos <- df %>%
-      group_by_(group_var, id_var) %>%
-      summarise(x.mean = mean(!!sym(x_var)), y.mean = mean(!!sym(y_var))) %>% 
+      group_by_(team, id) %>%
+      summarise(x.mean = mean(!!sym(x)), y.mean = mean(!!sym(y))) %>% 
       ungroup() %>% 
-      mutate_(team = group_var, id = id_var) %>% 
+      mutate_(team = team, id = id) %>% 
       mutate(team = as.factor(team), id = as.factor(id))
     
-    bp <- soccerPitchBG(fillPitch = fillPitch, colPitch = colPitch, grass = grass) +
+    p <- soccerPitch(fillPitch = fillPitch, colPitch = colPitch, arrow = arrow, grass = grass, title = title, subtitle = subtitle) +
       geom_point(aes(x.mean, y.mean, group = team, fill = team, colour = team), data = pos, shape = 21, size = 6, stroke = 1.3) +
       scale_colour_manual(values = c(col1, col2)) +
       scale_fill_manual(values = c(fill1, fill2)) +
@@ -48,25 +58,29 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, id_var = "
   } else {
     # get average position for one team
     pos <- df %>%
-      group_by_(id_var) %>%
-      summarise(x.mean = mean(!!sym(x_var)), y.mean = mean(!!sym(y_var))) %>% 
+      group_by_(id) %>%
+      summarise(x.mean = mean(!!sym(x)), y.mean = mean(!!sym(y))) %>% 
       ungroup() %>% 
-      mutate_(id = id_var) %>% 
+      mutate_(id = id) %>% 
       mutate(id = as.factor(id))
     
-    bp <- soccerPitchBG(fillPitch = fillPitch, colPitch = colPitch, grass = grass) +
+    p <- soccerPitch(fillPitch = fillPitch, colPitch = colPitch, grass = grass, arrow = arrow, title = title, subtitle = subtitle) +
       geom_point(aes(x.mean, y.mean), data = pos, col = col1, fill = fill1, shape = 21, size = node_size, stroke = 1.3)
   }
   
+  # add labels
   if(label) {
-    if(!is.null(group_var)) {
-      bp <- bp +
+    if(!is.null(team)) {
+      p <- p +
         geom_text(aes(x.mean, y.mean, label = id, group = team, colour = team), data = pos, hjust=0.5, vjust=0.5, fontface = "bold", size = label_size)
     } else {
-      bp <- bp +
+      p <- p +
         geom_text(aes(x.mean, y.mean, label = id), data = pos, hjust=0.5, vjust=0.5, fontface = "bold", size = label_size)
     }
   }
   
-  return(bp)
+  # add arrow
+  
+  
+  return(p)
 }

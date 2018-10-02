@@ -9,20 +9,18 @@ License: GPL (>=3.0) Note: Use of the name 'soccermatics' was kindly permitted b
 Encoding: UTF-8
 LazyData: true
 Collate: 
-    'soccerFlipHoriz.R'
+    'soccerFlipDirection.R'
     'soccerPitchFG.R'
     'soccerHeatmap.R'
-    'soccerPitchBG.R'
-    'soccerSpokes.R'
-    'soccerFlow.R'
-    'soccerPassmap.R'
     'soccerPath.R'
+    'soccerPitch.R'
     'soccerPositionMap.R'
     'soccerResample.R'
     'soccerShotmap.R'
-    'soccerTransformSB.R'
+    'soccerSpokes.R'
     'soccerTransform.R'
     'soccerVelocity.R'
+    'statsbomb.R'
     'tromso.R'
     'tromso_extra.R'
 RoxygenNote: 6.0.1

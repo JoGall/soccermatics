@@ -1,22 +1,30 @@
 #' @import ggplot2
 #' @import dplyr
-#' @importFrom xts xts
 #' @importFrom zoo na.approx
 #' @importFrom ggplot2 fortify
+#' @importFrom plyr rbind.fill
+#' @importFrom xts xts
 NULL
 #' Resample the frequency of x,y,t- time series with linear interpolation of x,y-coordinates.
 #'
 #' @description Downsample or upsample dataframe containing x,y-coordinates and a time variable `t` with linear interpolation of x,y-coordinates and constant interpolation of all other variables.
 #' 
-#' @param dat = dataframe containing unnormalised x,y-coordinates named `x` and `y` and a time variable named `t`
+#' @param dat = dataframe containing x,y-coordinates with time variable
 #' @param r resampling rate in frames per second
+#' @param x,y,z = name of variables containing x,y(,z)-coordinates
+#' @param t = name of variable containing time data
 #' @return a dataframe
 #' @examples
 #' # resample tromso dataset from ~21 fps to 10 fps
 #' soccerResample(tromso)
 #' 
 #' @export
-soccerResample <- function(dat, r = 10) {
+soccerResample <- function(dat, r = 10, x = "x", y = "y", z = "z", t = "t") {
+  
+  dat$x <- dat[,x]
+  dat$y <- dat[,y]
+  if(length(dat[,z] > 0)) dat$z <- dat[,z]
+  dat$t <- dat[,t]
   
   # create new time index 
   time.index <- seq(min(dat$t), max(dat$t), by = as.difftime(1/r, units='secs'))
