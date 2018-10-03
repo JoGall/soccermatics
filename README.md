@@ -25,20 +25,9 @@ library(soccermatics)
 
 ---
 
-### Updates
-
-The package is constantly getting a makeover and may occassionally break. Should installation fail at any time, please install the last stable version (v0.8.4) from [this tarball](https://github.com/JoGall/soccermatics/blob/master/soccermatics_0.8.4.tar.gz) like so:
-
-```{r}
-install.packages("https://github.com/JoGall/soccermatics/blob/master/soccermatics_0.8.4.tar.gz", repo=NULL, type="source")
-```
-
----
-
 ### Examples
 
-Below are some sample visualisations produced by `soccermetrics`. See the [package manual pdf](https://github.com/JoGall/soccermatics/blob/master/soccermatics.pdf) or the individual help files for each function (e.g. `?soccerHeatmap`) for more information and example code.
-
+Below are some sample visualisations produced by `soccermetrics` with code snippets underneath. See the individual help files for each function (e.g. `?soccerHeatmap`) for more information.
 
 ##### Shotmaps (showing xG)
 
@@ -202,3 +191,15 @@ tromso %>%
              title = "Tromsø IL (vs. Strømsgodset, 3rd Nov 2013)", 
              subtitle = "Player paths (1')")
 ```
+
+---
+
+### Updates
+
+The package is constantly getting a makeover and may occassionally break. Should installation fail at any time, please install the last stable version (v0.8.4) from [this tarball](https://github.com/JoGall/soccermatics/blob/master/soccermatics_0.8.4.tar.gz) like so:
+
+```{r}
+install.packages("https://github.com/JoGall/soccermatics/blob/master/soccermatics_0.8.4.tar.gz", repo=NULL, type="source")
+```
+
+---
