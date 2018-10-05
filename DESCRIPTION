@@ -16,6 +16,7 @@ Collate:
     'soccerPitch.R'
     'soccerPositionMap.R'
     'soccerResample.R'
+    'soccerShortenName.R'
     'soccerShotmap.R'
     'soccerSpokes.R'
     'soccerTransform.R'

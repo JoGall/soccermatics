@@ -6,10 +6,10 @@
 \usage{
 soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, fill1 = "red",
   col1 = "white", fill2 = "blue", col2 = "white", node_size = 6,
-  label = TRUE, label_size = 3, fillPitch = "white",
-  colPitch = "grey60", lwd = 0.5, grass = FALSE, arrow = c("none", "r",
-  "l"), title = NULL, subtitle = NULL, x = "x", y = "y", id = "id",
-  team = NULL)
+  label = TRUE, label_size = 3, label_col = "black", repel = FALSE,
+  fillPitch = "white", colPitch = "grey60", lwd = 0.5, grass = FALSE,
+  arrow = c("none", "r", "l"), title = NULL, subtitle = NULL, x = "x",
+  y = "y", id = "id", team = NULL)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position}
@@ -22,9 +22,11 @@ soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, fill1 = "red",
 
 \item{node_size}{numeric, size of position points}
 
-\item{label}{boolean, draw labels or not}
+\item{label}{boolean, draw labels}
 
-\item{label_size}{numeric, size of label names}
+\item{label_size}{numeric, size of labels}
+
+\item{label_col}{colour of labels}
 
 \item{fillPitch}{pitch fill colour}
 
@@ -48,18 +50,19 @@ soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, fill1 = "red",
 Draws the average x,y-positions of each player from one or both teams on a soccer pitch.
 }
 \examples{
-# Tromso IL average player position
+# average player position; one team w/ labels as player numbers
 data(tromso)
 soccerPositionMap(tromso, grass = TRUE)
 
-# France average pass position
+# average pass position; two teams w/ labels as shortened, non-overlapping player names
 data(statsbomb)
+statsbomb$name <- soccerShortenName(statsbomb$player.name)
 statsbomb \%>\% 
-  filter(type.name == "Pass" & team.name == "France" & minute < 43) \%>\% 
-  soccerPositionMap(id = "player.name", x = "location.x", y = "location.y", 
-                    fill1 = "blue", grass = T,
-                    arrow = "r", 
-                    title = "France (vs Argentina, 30th June 2016)", 
+  filter(type.name == "Pass" & minute < 43) \%>\% 
+  soccerPositionMap(team = "team.name", id = "name", x = "location.x", y = "location.y", 
+                    fill1 = "blue", fill2 = "lightblue",
+                    arrow = "r", repel = T,
+                    title = "France vs Argentina, 30th June 2016", 
                     subtitle = "Average pass position (1' - 42')")
 
 }

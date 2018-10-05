@@ -89,7 +89,7 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
         geom_text_repel(data = pos, aes(x.mean, y.mean, label = id), segment.size = 0.2, max.iter = 1000, col = label_col, size = label_size, fontface = "bold")
       } else {
         p <- p +
-          geom_text(aes(x.mean, y.mean, label = id), data = pos, hjust=0.5, vjust=0.5, fontface = "bold", col = label_col, size = label_size, fontface = "bold")
+          geom_text(aes(x.mean, y.mean, label = id), data = pos, hjust=0.5, vjust=0.5, col = label_col, size = label_size, fontface = "bold")
       }
     }
   }
