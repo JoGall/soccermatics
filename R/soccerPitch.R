@@ -88,10 +88,10 @@ soccerPitch <- function(lengthPitch = 105, widthPitch = 68, fillPitch = "white",
   
   if(arrow[1] == "r") {
     p <- p + 
-      geom_segment(aes(x = 0, y = -3, xend = lengthPitch / 3, yend = -3), colour = arrow_col, size = 1.5, arrow = arrow(length = unit(0.2, "cm"), type="closed"), linejoin='mitre')
+      geom_segment(aes(x = 0, y = -2, xend = lengthPitch / 3, yend = -2), colour = arrow_col, size = 1.5, arrow = arrow(length = unit(0.2, "cm"), type="closed"), linejoin='mitre')
   } else if(arrow[1] == "l") {
     p <- p + 
-      geom_segment(aes(x = lengthPitch, y = -3, xend = lengthPitch / 3 * 2, yend = -3), colour = arrow_col, size = 1.5, arrow = arrow(length = unit(0.2, "cm"), type="closed"), linejoin='mitre')
+      geom_segment(aes(x = lengthPitch, y = -2, xend = lengthPitch / 3 * 2, yend = -2), colour = arrow_col, size = 1.5, arrow = arrow(length = unit(0.2, "cm"), type="closed"), linejoin='mitre')
   }
   
   # add title
