@@ -54,16 +54,29 @@ Draws the average x,y-positions of each player from one or both teams on a socce
 data(tromso)
 soccerPositionMap(tromso, grass = TRUE)
 
-# average pass position; two teams w/ labels as shortened, non-overlapping player names
+# average pass position; one team w/ labels as shortened, non-overlapping player names
 data(statsbomb)
 statsbomb$name <- soccerShortenName(statsbomb$player.name)
-statsbomb \%>\% 
-  filter(type.name == "Pass" & minute < 43) \%>\% 
-  soccerPositionMap(team = "team.name", id = "name", x = "location.x", y = "location.y", 
-                    fill1 = "blue", fill2 = "lightblue",
-                    arrow = "r", repel = T,
-                    title = "France vs Argentina, 30th June 2016", 
-                    subtitle = "Average pass position (1' - 42')")
+statsbomb \%>\%
+filter(type.name == "Pass" & team.name == "France" & minute < 43) \%>\%
+soccerPositionMap(id = "name", x = "location.x", y = "location.y",
+                  fill1 = "blue", label_col = "black",
+                  arrow = "r", repel = T,
+                  title = "France (vs Argentina, 30th June 2016)",
+                  subtitle = "Average pass position (1' - 42')")
+                 
+# average pass position; two teams w/ labels as shortened, non-overlapping player names (requires flipping one team in vertical plane for StatsBomb data) 
+lengthPitch <- 105
+widthPitch <- 68
+statsbomb \%>\%
+  filter(type.name == "Pass" & minute < 43) \%>\%
+  mutate(location.x = if_else(team.name == "Argentina", lengthPitch - location.x, location.x),
+        location.y = if_else(team.name == "Argentina", widthPitch - location.y, location.y)) \%>\% 
+ soccerPositionMap(team = "team.name", id = "name", x = "location.x", y = "location.y",
+                   fill1 = "blue", fill2 = "lightblue", label_col = "black",
+                   arrow = "r", repel = T,
+                   title = "France (vs Argentina, 30th June 2016)",
+                   subtitle = "Average pass position (1' - 42')")
 
 }
 \seealso{
