@@ -32,32 +32,41 @@ NULL
 #' data(statsbomb)
 #' statsbomb$name <- soccerShortenName(statsbomb$player.name)
 #' statsbomb %>%
-#' filter(type.name == "Pass" & team.name == "France" & minute < 43) %>%
-#' soccerPositionMap(id = "name", x = "location.x", y = "location.y",
+#'   filter(type.name == "Pass" & team.name == "France" & minute < 43) %>%
+#'   soccerPositionMap(id = "name", x = "location.x", y = "location.y",
 #'                   fill1 = "blue", label_col = "black",
 #'                   arrow = "r", repel = T,
 #'                   title = "France (vs Argentina, 30th June 2018)",
 #'                   subtitle = "Average pass position (1' - 42')")
 #'                  
-#' # average pass position; two teams w/ labels as shortened, non-overlapping player names (requires flipping one team in vertical plane for StatsBomb data) 
-#' lengthPitch <- 105
-#' widthPitch <- 68
+#' # average pass position; two teams w/ labels as shortened, non-overlapping player names (requires flipping one team in vertical plane for StatsBomb data)
 #' statsbomb %>%
 #'   filter(type.name == "Pass" & minute < 43) %>%
-#'   mutate(location.x = if_else(team.name == "Argentina", lengthPitch - location.x, location.x),
-#'         location.y = if_else(team.name == "Argentina", widthPitch - location.y, location.y)) %>% 
-#'  soccerPositionMap(team = "team.name", id = "name", x = "location.x", y = "location.y",
-#'                    fill1 = "blue", fill2 = "lightblue", label_col = "black",
-#'                    repel = T,
+#'   soccerPositionMap(team = "team.name", id = "name", x = "location.x", y = "location.y",
+#'                    fill1 = "lightblue", fill2 = "blue", label_col = "black",
+#'                    repel = T, teamToFlip = 2,
 #'                    title = "France vs Argentina, 30th June 2018",
 #'                    subtitle = "Average pass position (1' - 42')")
 #' 
 #' @seealso \code{\link{soccerPitch}}  for plotting a soccer pitch for the purpose of drawing over event data, average position, player trajectories, etc..
 #' @export
-soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = "white", fill2 = "blue", col2 = "white", node_size = 6, label = TRUE, label_size = 3, label_col = "black", repel = FALSE, fillPitch = "white", colPitch = "grey60", lwd = 0.5, grass = FALSE, arrow = c("none", "r", "l"), title = NULL, subtitle = NULL, x = "x", y = "y", id = "id", team = NULL) {
+soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = "white", fill2 = "blue", col2 = "white", node_size = 6, label = TRUE, label_size = 3, label_col = "black", repel = FALSE, fillPitch = "white", colPitch = "grey60", lwd = 0.5, grass = FALSE, arrow = c("none", "r", "l"), title = NULL, subtitle = NULL, x = "x", y = "y", id = "id", team = NULL, teamToFlip = 1) {
   
+  df$x <- df[,x]
+  df$y <- df[,y]
+  df$id <- df[,id]
+  df$team <- df[,team]
+
+  # if two teams...
   if(!is.null(team)) {
-    # get average position for both teams
+    
+    # flip coordinates of one team
+    team_to_flip <- unique(df$team.name)[teamToFlip]
+    df <- df %>% 
+      mutate(location.x = if_else(team == team_to_flip, lengthPitch - location.x, location.x),
+             location.y = if_else(team == team_to_flip, widthPitch - location.y, location.y))
+  
+    # get average positions
     pos <- df %>%
       group_by_(team, id) %>%
       summarise(x.mean = mean(!!sym(x)), y.mean = mean(!!sym(y))) %>% 
@@ -66,14 +75,16 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
       mutate(team = as.factor(team), id = as.factor(id)) %>% 
       as.data.frame()
     
+    # plot
     p <- soccerPitch(fillPitch = fillPitch, colPitch = colPitch, arrow = arrow, grass = grass, title = title, subtitle = subtitle) +
       geom_point(aes(x.mean, y.mean, group = team, fill = team, colour = team), data = pos, shape = 21, size = 6, stroke = 1.3) +
       scale_colour_manual(values = c(col1, col2)) +
       scale_fill_manual(values = c(fill1, fill2)) +
       guides(colour = FALSE, fill = FALSE)
     
+  # if one team...  
   } else {
-    # get average position for one team
+    # get average positions
     pos <- df %>%
       group_by_(id) %>%
       summarise(x.mean = mean(!!sym(x)), y.mean = mean(!!sym(y))) %>% 
@@ -82,11 +93,12 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
       mutate(id = as.factor(id)) %>% 
       as.data.frame()
     
+    # plot
     p <- soccerPitch(fillPitch = fillPitch, colPitch = colPitch, grass = grass, arrow = arrow, title = title, subtitle = subtitle) +
       geom_point(aes(x.mean, y.mean), data = pos, col = col1, fill = fill1, shape = 21, size = node_size, stroke = 1.3)
   }
   
-  # add labels
+  # add labels, preventing overlap if repel = TRUE
   if(label) {
     if(!is.null(team)) {
       if(repel) {
