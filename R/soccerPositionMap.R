@@ -39,10 +39,10 @@ NULL
 #'                   title = "France (vs Argentina, 30th June 2018)",
 #'                   subtitle = "Average pass position (1' - 42')")
 #'                  
-#' # average pass position; two teams w/ labels as shortened, non-overlapping player names (requires flipping one team in vertical plane for StatsBomb data)
+#' # average pass position; two teams w/ original names, non-overlapping player names (requires flipping one team in vertical plane for StatsBomb data)
 #' statsbomb %>%
 #'   filter(type.name == "Pass" & minute < 43) %>%
-#'   soccerPositionMap(team = "team.name", id = "name", x = "location.x", y = "location.y",
+#'   soccerPositionMap(team = "team.name", id = "player.name", x = "location.x", y = "location.y",
 #'                    fill1 = "lightblue", fill2 = "blue", label_col = "black",
 #'                    repel = T, teamToFlip = 2,
 #'                    title = "France vs Argentina, 30th June 2018",
