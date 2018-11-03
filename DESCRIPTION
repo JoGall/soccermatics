@@ -12,6 +12,8 @@ Collate:
     'soccerFlipDirection.R'
     'soccerPitchFG.R'
     'soccerHeatmap.R'
+    'soccerPitchBG.R'
+    'soccerPassmap.R'
     'soccerPath.R'
     'soccerPitch.R'
     'soccerPositionMap.R'

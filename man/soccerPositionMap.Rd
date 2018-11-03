@@ -9,7 +9,7 @@ soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, fill1 = "red",
   label = TRUE, label_size = 3, label_col = "black", repel = FALSE,
   fillPitch = "white", colPitch = "grey60", lwd = 0.5, grass = FALSE,
   arrow = c("none", "r", "l"), title = NULL, subtitle = NULL, x = "x",
-  y = "y", id = "id", team = NULL)
+  y = "y", id = "id", team = NULL, teamToFlip = 1)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position}
@@ -58,23 +58,19 @@ soccerPositionMap(tromso, grass = TRUE)
 data(statsbomb)
 statsbomb$name <- soccerShortenName(statsbomb$player.name)
 statsbomb \%>\%
-filter(type.name == "Pass" & team.name == "France" & minute < 43) \%>\%
-soccerPositionMap(id = "name", x = "location.x", y = "location.y",
+  filter(type.name == "Pass" & team.name == "France" & minute < 43) \%>\%
+  soccerPositionMap(id = "name", x = "location.x", y = "location.y",
                   fill1 = "blue", label_col = "black",
                   arrow = "r", repel = T,
                   title = "France (vs Argentina, 30th June 2018)",
                   subtitle = "Average pass position (1' - 42')")
                  
-# average pass position; two teams w/ labels as shortened, non-overlapping player names (requires flipping one team in vertical plane for StatsBomb data) 
-lengthPitch <- 105
-widthPitch <- 68
+# average pass position; two teams w/ original names, non-overlapping player names (requires flipping one team in vertical plane for StatsBomb data)
 statsbomb \%>\%
   filter(type.name == "Pass" & minute < 43) \%>\%
-  mutate(location.x = if_else(team.name == "Argentina", lengthPitch - location.x, location.x),
-        location.y = if_else(team.name == "Argentina", widthPitch - location.y, location.y)) \%>\% 
- soccerPositionMap(team = "team.name", id = "name", x = "location.x", y = "location.y",
-                   fill1 = "blue", fill2 = "lightblue", label_col = "black",
-                   repel = T,
+  soccerPositionMap(team = "team.name", id = "player.name", x = "location.x", y = "location.y",
+                   fill1 = "lightblue", fill2 = "blue", label_col = "black",
+                   repel = T, teamToFlip = 2,
                    title = "France vs Argentina, 30th June 2018",
                    subtitle = "Average pass position (1' - 42')")
 

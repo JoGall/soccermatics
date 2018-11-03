@@ -2,8 +2,10 @@
 
 export(soccerFlipDirection)
 export(soccerHeatmap)
+export(soccerPassmap)
 export(soccerPath)
 export(soccerPitch)
+export(soccerPitchBG)
 export(soccerPitchFG)
 export(soccerPositionMap)
 export(soccerResample)
