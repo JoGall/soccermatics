@@ -107,12 +107,11 @@ Average pass position (both teams):
 ```{r}
 statsbomb %>% 
   filter(type.name == "Pass" & minute < 43) %>% 
-  mutate(location.x = if_else(team.name == "Argentina", lengthPitch - location.x, location.x),
-         location.y = if_else(team.name == "Argentina", widthPitch - location.y, location.y)) %>% 
-  soccerPositionMap(id = "player.name", team = "team.name", x = "location.x", y = "location.y", 
-                    fill1 = "blue", fill2 = "white", col1 = "black", col2 = "black",
-                    title = "France vs. Argentina (30th June 2016)", 
-                    subtitle = "Average pass position (1' - 42')")
+  soccerPositionMap(id = "player.name", team = "team.name", x = "location.x", y = "location.y",
+    fill1 = "lightblue", fill2 = "blue", label_col = "black",
+    repel = T, teamToFlip = 2,
+    title = "France vs Argentina, 30th June 2018",
+    subtitle = "Average pass position (1' - 42')")
 ```
 
 
