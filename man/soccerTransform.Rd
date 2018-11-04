@@ -4,8 +4,8 @@
 \alias{soccerTransform}
 \title{Normalises x,y-coordinates to metres units for use with soccermatics functions}
 \usage{
-soccerTransform(dat, xMin, xMax, yMin, yMax, pitchLength = 105,
-  pitchWidth = 68, method = c("manual", "statsbomb"))
+soccerTransform(dat, xMin, xMax, yMin, yMax, lengthPitch = 105,
+  widthPitch = 68, method = c("manual", "statsbomb"))
 }
 \arguments{
 \item{dat}{dataframe containing unnormalised x,y-coordinates named `x` and `y`}
@@ -29,26 +29,26 @@ widthPitch <- 68
 # limits = [0 < x < 100, 0 < y < 100]
 # centre of pitch = [50,50]
 
-df <- data.frame(t = 1:12,
+opta_df <- data.frame(t = 1:12,
                  x = c(50,55,61,66,62,58,51,44,45,42,41,32),
                  y = c(50,48,47,40,42,45,49,51,59,75,88,100))
 
-df <- soccerTransform(df, 0, 100, 0, 100, lengthPitch, widthPitch)
+opta_df <- soccerTransform(opta_df, 0, 100, 0, 100, lengthPitch, widthPitch)
 
-soccerPath(df, lengthPitch = lengthPitch, widthPitch = widthPitch)
+soccerPath(opta_df, lengthPitch = lengthPitch, widthPitch = widthPitch)
 
 
 # Example 2. StrataBet-style --------------------------------------------------
 # limits = [0 < x < 420, -136 < y < 136]
 # centre of pitch = [210,0]
 
-df <- data.frame(t = 1:12,
+stratabet_df <- data.frame(t = 1:12,
                  x = c(210,222,201,192,178,170,143,122,104,91,75,60),
                  y = c(0,-5,-20,-12,-8,-2,4,8,13,20,30,45))
 
-df <- soccerTransform(df, 0, 420, -136, 136, lengthPitch, widthPitch)
+stratabet_df <- soccerTransform(stratabet_df, 0, 420, -136, 136, lengthPitch, widthPitch)
 
-soccerPath(df, lengthPitch = lengthPitch, widthPitch = widthPitch)
+soccerPath(stratabet_df, lengthPitch = lengthPitch, widthPitch = widthPitch)
 
 
 # Example 3. Other ------------------------------------------------------------
