@@ -5,9 +5,11 @@
 \title{Draw a passing network on a pitch from StatsBomb data}
 \usage{
 soccerPassmap(df, lengthPitch = 105, widthPitch = 68, minPass = 3,
-  fill = "red", col = "black", line_col = "black", line_alpha = 0.6,
-  grass = FALSE, arrow = c("none", "r", "l"), title = NULL, x = "x",
-  y = "y", id = "id")
+  minMinute = NULL, maxMinute = NULL, fill = "red", col = "black",
+  edge_col = "black", edge_alpha = 0.6, edge_max_width = 100,
+  label_size = 4, grass = FALSE, arrow = c("none", "r", "l"),
+  x = "location.x", y = "location.y", id = "player.id",
+  label = "player.name", shortNames = TRUE)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player passes}
@@ -18,19 +20,21 @@ soccerPassmap(df, lengthPitch = 105, widthPitch = 68, minPass = 3,
 
 \item{col}{character, border colour of nodes}
 
-\item{line_col}{colour of edge lines}
+\item{edge_col}{colour of edge lines}
 
-\item{line_alpha}{transparency of edge lines}
+\item{edge_alpha}{transparency of edge lines}
+
+\item{edge_max_width}{maximum width of edge lines}
 
 \item{grass}{if \code{TRUE}, uses a more realistic pitch}
 
 \item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
 
-\item{title}{optional, adds title to plot}
-
 \item{x, y}{= name of variables containing x,y-coordinates}
 
 \item{id}{character, the name of the column containing player identity. Defaults to \code{'id'}}
+
+\item{title}{optional, adds title to plot}
 }
 \description{
 Draw an undirected passing network of completed passes on pitch from StatsBomb data. Nodes are scaled by number of successful passes; edge width is scaled by number of successful passes between each node pair. Only passes made until first substition shown (ability to specify custom minutes will be added soon). Total number of passes attempted and percentage of completed passes shown. Compatability with other (non-StatsBomb) shot data will be added soon.
@@ -41,7 +45,7 @@ data(statsbomb)
 
 statsbomb \%>\% 
   filter(team.name == "France") \%>\% 
- soccerPassmap(x = "location.x", y = "location.y", id = "player.name",
+  soccerPassmap(x = "location.x", y = "location.y", id = "player.name",
                col = "blue", arrow = "r", minPass = 3, 
                title = "France (vs. Argentina, 2018-06-30")
 }

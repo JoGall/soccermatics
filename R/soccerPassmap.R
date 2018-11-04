@@ -2,6 +2,7 @@
 #' @import ggplot2
 #' @import dplyr
 #' @importFrom ggrepel geom_text_repel
+#' @importFrom forcats fct_explicit_na
 NULL
 #' Draw a passing network on a pitch from StatsBomb data
 #' 
@@ -11,8 +12,9 @@ NULL
 #' @param lengthPitch,widthPitch numeric, length and width of pitch in metres
 #' @param fill character, fill colour of nodes
 #' @param col character, border colour of nodes
-#' @param line_col colour of edge lines
-#' @param line_alpha transparency of edge lines
+#' @param edge_col colour of edge lines
+#' @param edge_alpha transparency of edge lines
+#' @param edge_max_width maximum width of edge lines
 #' @param grass if \code{TRUE}, uses a more realistic pitch
 #' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
 #' @param title optional, adds title to plot
@@ -24,29 +26,41 @@ NULL
 #' 
 #' statsbomb %>% 
 #'   filter(team.name == "France") %>% 
-#'  soccerPassmap(x = "location.x", y = "location.y", id = "player.name",
+#'   soccerPassmap(x = "location.x", y = "location.y", id = "player.name",
 #'                col = "blue", arrow = "r", minPass = 3, 
 #'                title = "France (vs. Argentina, 2018-06-30")
 #' @export
-soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, fill = "red", col = "black", line_col = "black", line_alpha = 0.6, grass = FALSE, arrow = c("none", "r", "l"), title = NULL, x = "x", y = "y", id = "id") {
+soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, minMinute = NULL, maxMinute = NULL, fill = "red", col = "black", edge_col = "black", edge_alpha = 0.6, edge_max_width = 100, label_size = 4, grass = FALSE, arrow = c("none", "r", "l"), x = "location.x", y = "location.y", id = "player.id", label = "player.name", shortNames = TRUE) {
   
   df$x <- df[,x]
   df$y <- df[,y]
   df$id <- df[,id]
+  df$label <- df[,label]
   
   # minute of first substition
-  first_sub_minute <- df %>% 
-    group_by(player.name) %>% 
-    dplyr::summarise(minute = min(minute)) %>% 
-    na.omit %>% filter(minute > 2) %>% 
-    summarise(minute = min(minute)) %>% 
-    .$minute
+  if(is.null(maxMinute)) {
+    maxMinute <- df %>% 
+      group_by(id) %>% 
+      dplyr::summarise(minute = min(minute)) %>% 
+      na.omit %>% 
+      filter(minute > 2) %>% 
+      summarise(minute = min(minute)) %>% 
+      .$minute
+  }
+  
+  if(is.null(minMinute)) {
+    minMinute <- 0
+  }
+  
+  # filter minutes
+  df <- df %>% 
+    filter(minute >= minMinute & minute <= maxMinute)
   
   # filter data for starting XI until first substitute
   dd <- df %>% 
     filter(minute < first_sub_minute)
   
-  # passing label
+  # passing labels
   passes <- df %>% 
     filter(type.name == "Pass") %>% 
     group_by(pass.outcome.name) %>% 
@@ -55,12 +69,11 @@ soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, f
     mutate(pass.outcome.name = forcats::fct_explicit_na(pass.outcome.name, "Complete"))
   pass_n <- sum(passes$n)
   pass_pc <- passes[passes$pass.outcome.name == "Complete",]$n / pass_n * 100
-  pass_label <- paste0("Passes: ", pass_n, " (", sprintf("%.1f", pass_pc), "%)")
   
   # get nodes and edges for plotting in ggplot
   nodes <- dd %>% 
     filter(type.name == "Pass") %>% 
-    group_by(player.name) %>% 
+    group_by(id, label) %>% 
     dplyr::summarise(x = mean(x, na.rm=T), y = mean(y, na.rm=T), events = n()) %>% 
     na.omit() %>% 
     as.data.frame()
@@ -74,12 +87,12 @@ soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, f
     na.omit()
   
   edges <- left_join(edgelist, 
-            nodes %>% select(player.name, x, y),
-            by = c("from" = "player.name"))
+            nodes %>% select(id, label, x, y),
+            by = c("from" = "label"))
   
   edges <- left_join(edges, 
-            nodes %>% select(player.name, xend = x, yend = y),
-            by = c("to" = "player.name"))
+            nodes %>% select(id, label, xend = x, yend = y),
+            by = c("to" = "label"))
   
   edges <- edges %>% 
     group_by(player1 = pmin(from, to), player2 = pmax(from, to)) %>% 
@@ -88,19 +101,21 @@ soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, f
   # filter minimum number of passes and rescale line width
   edges <- edges %>% 
     filter(n >= minPass) %>%
-    mutate(n = scales::rescale(n, c(1,100), c(minPass, 75)))
-  
+    mutate(n = scales::rescale(n, c(1,edge_max_width), c(minPass, 75)))
+
   # shorten player name
-  nodes$name <- soccerShortenName(nodes$player.name)
+  if(shortNames) {
+    nodes$label <- soccerShortenName(nodes$label)
+  }
   
   # plot network
   soccerPitchBG(lengthPitch, widthPitch, 
               arrow = arrow, grass = grass,
-              title = title, 
-              subtitle = paste0("1' - ", first_sub_minute, "'")) +
-    geom_segment(data = edges, aes(x, y, xend = xend, yend = yend, size = n), col = line_col, alpha = line_alpha) +
+              title = unique(df$team.name), 
+              subtitle = paste0(minMinute+1, "' - ", maxMinute, "', ", minPass, "+ passes shown")) +
+    geom_segment(data = edges, aes(x, y, xend = xend, yend = yend, size = n), col = edge_col, alpha = edge_alpha) +
     geom_point(data = nodes, aes(x, y, size = events), pch = 21, fill = fill, col = col) +
-    ggrepel::geom_label_repel(data = nodes, aes(x, y, label = name)) +
+    ggrepel::geom_label_repel(data = nodes, aes(x, y, label = label), size = label_size) +
     guides(size = F) +
-    annotate("text", 0, widthPitch - 2, label = pass_label, hjust = 0)
+    annotate("text", 104, 1, label = paste0("Passes: ", pass_n, "\nCompleted: ", sprintf("%.1f", pass_pc), "%"), hjust = 1, vjust = 0, size = label_size * 7/8)
 }
