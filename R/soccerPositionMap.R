@@ -69,7 +69,7 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
     # get average positions
     pos <- df %>%
       group_by_(team, id) %>%
-      summarise(x.mean = mean(!!sym(x)), y.mean = mean(!!sym(y))) %>% 
+      dplyr::summarise(x.mean = mean(!!sym(x)), y.mean = mean(!!sym(y))) %>% 
       ungroup() %>% 
       mutate_(team = team, id = id) %>% 
       mutate(team = as.factor(team), id = as.factor(id)) %>% 
@@ -87,7 +87,7 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
     # get average positions
     pos <- df %>%
       group_by_(id) %>%
-      summarise(x.mean = mean(!!sym(x)), y.mean = mean(!!sym(y))) %>% 
+      dplyr::summarise(x.mean = mean(!!sym(x)), y.mean = mean(!!sym(y))) %>% 
       ungroup() %>% 
       mutate_(id = id) %>% 
       mutate(id = as.factor(id)) %>% 
