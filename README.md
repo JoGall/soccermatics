@@ -53,6 +53,32 @@ statsbomb %>%
 ```
 
 
+##### Passing networks
+
+Default aesthetics:
+
+<img src="https://user-images.githubusercontent.com/17113779/47968043-4c81fb00-e05c-11e8-8f10-1d77d60fe177.png" width="500">
+
+```{r}
+statsbomb %>%
+  filter(team.name == "Argentina") %>%
+  soccerPassmap(fill = "lightblue", arrow = "r",
+                title = "Argentina (vs France, 30th June 2018)")
+```
+
+Grass background, non-transparent edges:
+
+<img src="https://user-images.githubusercontent.com/17113779/47968127-3e80aa00-e05d-11e8-92a0-77f15d82e7bb.png" width="500">
+
+```{r}
+statsbomb %>%
+  filter(team.name == "France") %>%
+  soccerPassmap(fill = "blue", minPass = 3,
+                edge_max_width = 30, edge_col = "grey40", edge_alpha = 1,
+                title = "France (vs Argentina, 30th June 2018)")
+```
+
+
 ##### Heatmaps
 
 Passing heatmap with approx 10x10m bins:
