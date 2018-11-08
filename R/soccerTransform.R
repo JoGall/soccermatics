@@ -56,16 +56,24 @@ NULL
 #' soccerPath(df, lengthPitch = lengthPitch, widthPitch = widthPitch)
 #' 
 #' @export
-soccerTransform <- function(dat, xMin, xMax, yMin, yMax, lengthPitch = 105, widthPitch = 68, method = c("manual", "statsbomb")) {
+soccerTransform <- function(dat, xMin, xMax, yMin, yMax, lengthPitch = 105, widthPitch = 68, method = c("manual", "statsbomb", "opta")) {
   
-  if(method == "statsbomb") {
+  if(method[1] == "statsbomb") {
     dat <- dat %>% 
       mutate_at(vars(contains('.x')), funs((. - 0) / diff(c(0, 120)) * lengthPitch)) %>% 
       mutate_at(vars(contains('.y')), funs(widthPitch - (. - 0)/diff(c(0, 80)) * widthPitch))
+    
+  } else if(method[1] == "opta") {
+    dat$x <- (dat$x - xMin) / diff(c(xMin,xMax)) * lengthPitch
+    dat$y <- (dat$y - yMin) / diff(c(yMin,yMax)) * widthPitch
+    dat$endX <- (dat$endX - xMin) / diff(c(xMin,xMax)) * lengthPitch
+    dat$endY <- (dat$endY - yMin) / diff(c(yMin,yMax)) * widthPitch
+    
   } else {
     dat$x <- (dat$x - xMin) / diff(c(xMin,xMax)) * lengthPitch
     dat$y <- (dat$y - yMin) / diff(c(yMin,yMax)) * widthPitch
   }
   
   return(dat)
+  
 }

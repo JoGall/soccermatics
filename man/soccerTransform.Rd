@@ -5,7 +5,7 @@
 \title{Normalises x,y-coordinates to metres units for use with soccermatics functions}
 \usage{
 soccerTransform(dat, xMin, xMax, yMin, yMax, lengthPitch = 105,
-  widthPitch = 68, method = c("manual", "statsbomb"))
+  widthPitch = 68, method = c("manual", "statsbomb", "opta"))
 }
 \arguments{
 \item{dat}{dataframe containing unnormalised x,y-coordinates named `x` and `y`}
