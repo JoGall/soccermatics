@@ -2,11 +2,11 @@
 % Please edit documentation in R/soccerPitchFG.R
 \name{soccerPitchFG}
 \alias{soccerPitchFG}
-\title{Helper function to add soccer pitch outlines to an existing ggplot object}
+\title{Helper function to draw soccer pitch outlines over an existing ggplot object}
 \usage{
 soccerPitchFG(plot, lengthPitch = 105, widthPitch = 68,
-  colPitch = "black", arrow = c("none", "r", "l"), arrow_col = "black",
-  lwd = 0.5, title = NULL, subtitle = NULL)
+  colPitch = "black", arrow = c("none", "r", "l"), title = NULL,
+  subtitle = NULL)
 }
 \arguments{
 \item{plot}{an existing ggplot object to add pitch lines to}
@@ -16,10 +16,6 @@ soccerPitchFG(plot, lengthPitch = 105, widthPitch = 68,
 \item{colPitch}{pitch fill and line colour}
 
 \item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
-
-\item{arrow_col}{colour of attack direction arrow}
-
-\item{lwd}{numeric, pitch line width}
 
 \item{title, subtitle}{optional, adds title and subtitle to plot}
 }

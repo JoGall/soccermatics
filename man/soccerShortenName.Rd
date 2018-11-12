@@ -2,15 +2,15 @@
 % Please edit documentation in R/soccerShortenName.R
 \name{soccerShortenName}
 \alias{soccerShortenName}
-\title{Extract shortened player names}
+\title{Extract player surname}
 \usage{
 soccerShortenName(names)
 }
 \arguments{
-\item{names}{vector of strings containing full player names}
+\item{names}{vector of strings containing full player name}
 }
 \description{
-Helper function to extract last name from full player names
+Helper function to extract last name (including common nobiliary particles) from full player names
 }
 \examples{
 attach(statsbomb)

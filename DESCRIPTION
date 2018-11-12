@@ -1,5 +1,5 @@
 Package: soccermatics
-Version: 0.9.0
+Version: 0.9.3
 Authors@R: person("Joe", "Gallagher", email = "joedgallagher@gmail.com", role = c("aut", "cre"))
 Title: Visualise tracking and event data from soccer matches
 Description: Provides tools to visualise x,y-coordinates of soccer players and event data (passes, shots). Uses ggplot to draw soccer pitch and overplot expected goal maps, pass maps, average player positions, player heatmaps, individual player paths, player flow fields, and more.
@@ -10,19 +10,21 @@ Encoding: UTF-8
 LazyData: true
 Collate: 
     'soccerFlipDirection.R'
-    'soccerPitchFG.R'
+    'soccerPitch.R'
     'soccerHeatmap.R'
-    'soccerPitchBG.R'
     'soccerPassmap.R'
     'soccerPath.R'
-    'soccerPitch.R'
+    'soccerPitchBG.R'
+    'soccerPitchFG.R'
+    'soccerShotmap.R'
+    'soccerPitchHalf.R'
     'soccerPositionMap.R'
     'soccerResample.R'
     'soccerShortenName.R'
-    'soccerShotmap.R'
     'soccerSpokes.R'
     'soccerTransform.R'
     'soccerVelocity.R'
+    'soccermatics-deprecated.R'
     'statsbomb.R'
     'tromso.R'
     'tromso_extra.R'

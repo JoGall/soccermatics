@@ -2,23 +2,28 @@
 % Please edit documentation in R/soccerPassmap.R
 \name{soccerPassmap}
 \alias{soccerPassmap}
-\title{Draw a passing network on a pitch from StatsBomb data}
+\title{Draw a passing network using StatsBomb data}
 \usage{
 soccerPassmap(df, lengthPitch = 105, widthPitch = 68, minPass = 3,
-  fill = "red", col = "black", edgeCol = "black", edgeAlpha = 0.6,
-  maxNodeSize = 30, maxEdgeSize = 30, labelSize = 4, grass = FALSE,
-  arrow = c("none", "r", "l"), title = NULL, x = "location.x",
-  y = "location.y", id = "player.id", label = "player.name",
-  shortNames = TRUE)
+  fill = "red", col = "black", edgeAlpha = 0.6, edgeCol = NULL,
+  label = TRUE, shortNames = TRUE, maxNodeSize = 30, maxEdgeSize = 30,
+  labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark",
+  "grey", "grass"), title = NULL)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player passes}
 
-\item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres}
+\item{lengthPitch, widthPitch}{numeric, length and width of pitch, in metres}
 
-\item{fill, col}{fill and (border) colour of nodes}
+\item{fill, col}{fill and border colour of nodes}
 
-\item{edgeCol, edgeAlpha}{colour and transparency of edge lines}
+\item{edgeAlpha}{transparency of edge lines, from \code{0} - \code{1}. Defaults to \code{0.6} so overlapping edges are visible.}
+
+\item{edgeCol}{colour of edge lines. Default is complementary to \code{theme} colours.}
+
+\item{label}{boolean, draw labels}
+
+\item{shortNames}{shorten player names to display last name as label}
 
 \item{maxNodeSize}{maximum size of nodes}
 
@@ -26,17 +31,11 @@ soccerPassmap(df, lengthPitch = 105, widthPitch = 68, minPass = 3,
 
 \item{labelSize}{size of player name labels}
 
-\item{grass}{if \code{TRUE}, uses a more realistic pitch}
-
 \item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
 
+\item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch}
+
 \item{title}{adds custom title to plot. Defaults to team name.}
-
-\item{x, y}{= name of variables containing x,y-coordinates. Defaults to \code{'location.x'},\code{'location.y'} for StatsBomb data}
-
-\item{id}{character, the name of the column containing unique player identity. Defaults to \code{'player.id'} for StatsBomb data}
-
-\item{label}{character, the name of the column containing player name for labels. Defaults to \code{'player.name'} for StatsBomb data}
 }
 \description{
 Draw an undirected passing network of completed passes on pitch from StatsBomb data. Nodes are scaled by number of successful passes; edge width is scaled by number of successful passes between each node pair. Only passes made until first substition shown (ability to specify custom minutes will be added soon). Total number of passes attempted and percentage of completed passes shown. Compatability with other (non-StatsBomb) shot data will be added soon.

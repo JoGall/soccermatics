@@ -1,4 +1,4 @@
-#' @include soccerPitchFG.R
+#' @include soccerPitch.R
 #' @import ggplot2
 #' @import dplyr
 NULL
@@ -9,27 +9,28 @@ NULL
 #' @param xBins,yBins integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.
 #' @param lengthPitch,widthPitch numeric, length and width of pitch in metres.
 #' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
-#' @param colPitch pitch line colour
 #' @param colLow,colHigh character, colours for the low and high ends of the heatmap gradient.
 #' @param title,subtitle optional, adds title and subtitle to plot
 #' @param x,y = name of variables containing x,y-coordinates
 #' @return a ggplot object of a heatmap on a soccer pitch.
 #' @details uses \code{ggplot2::geom_bin2d} to map 2D bin counts
 #' @examples
-#' # Heatmap of Tromso IL #9's position
+#' # Heatmap of Tromso IL #8 position w/ ~5x5m bins (pitchLength / 5 = 21, pitchWidth / 5 = 13.6) 
 #' data(tromso)
-#' soccerHeatmap(subset(tromso, id == 8), xBins = 10)
+#' tromso %>% 
+#'   filter(id == 8) %>% 
+#'   soccerHeatmap(xBins = 10)
 #' 
-#' # Heatmap of France defensive pressure locations w/ ~5x5m bins (pitchLength / 5 = 21, pitchWidth / 5 = 13.6) 
+#' # Heatmap of France w/ 6x3 zones
 #' statsbomb %>%
 #'   filter(type.name == "Pressure" & team.name == "France") %>% 
-#'   soccerHeatmap(x = "location.x", y = "location.y", xBins = 21, yBins = 14,
-#'                title = "France (vs Argentina, 30th June 2016)", 
-#'                subtitle = "Defensive pressure heatmap")
-#' 
-#' @seealso \code{\link{soccerPitch}} for a background soccer pitch for the purpose of drawing position maps, player trajectories, etc..
+#'   soccerHeatmap(x = "location.x", y = "location.y", xBins = 6, yBins = 3,
+#'                 arrow = "r", 
+#'                 title = "France (vs Argentina, 30th June 2016)", 
+#'                 subtitle = "Defensive pressure heatmap")
+#'
 #' @export
-soccerHeatmap <- function(df, lengthPitch = 105, widthPitch = 68, xBins = 10, yBins = NULL, arrow = c("none", "r", "l"), colPitch = "black", colLow = "white", colHigh = "red", title = NULL, subtitle = NULL, x = "x", y = "y") {
+soccerHeatmap <- function(df, lengthPitch = 105, widthPitch = 68, xBins = 10, yBins = NULL, arrow = c("none", "r", "l"), colLow = "white", colHigh = "red", title = NULL, subtitle = NULL, x = "x", y = "y") {
   
   # rename variables
   df$x <- df[,x]
@@ -45,12 +46,15 @@ soccerHeatmap <- function(df, lengthPitch = 105, widthPitch = 68, xBins = 10, yB
   x.range <- seq(0, lengthPitch, length.out = xBins+1)
   y.range <- seq(0, widthPitch, length.out = yBins+1)
   
-  # plot
-  p <- ggplot() +
+  # plot heatmap on blank pitch lines
+  p <- soccerPitch(lengthPitch, widthPitch, arrow = arrow, title = title, subtitle = subtitle, theme = "blank") +
     geom_bin2d(data = df, aes(x, y), binwidth = c(diff(x.range)[1], diff(y.range)[1])) +
     scale_fill_gradient(low = colLow, high = colHigh) +
     guides(fill=FALSE)
   
-  soccerPitchFG(p, lengthPitch = lengthPitch, widthPitch = widthPitch, colPitch = colPitch, arrow = arrow, title = title, subtitle = subtitle)
+  # redraw pitch lines  
+  p <- soccerPitchFG(p)
 
+  return(p)
+  
 }

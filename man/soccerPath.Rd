@@ -4,13 +4,13 @@
 \alias{soccerPath}
 \title{Draw a path of player trajectory on a soccer pitch.}
 \usage{
-soccerPath(dat, lengthPitch = 105, widthPitch = 68, col = "black",
-  arrow = c("none", "r", "l"), fillPitch = "white", colPitch = "grey60",
-  grass = FALSE, lwd = 1, title = NULL, subtitle = NULL,
-  legend = TRUE, x = "x", y = "y", id = NULL, plot = NULL)
+soccerPath(df, lengthPitch = 105, widthPitch = 68, col = "black",
+  arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"),
+  lwd = 1, title = NULL, subtitle = NULL, legend = FALSE, x = "x",
+  y = "y", id = NULL, plot = NULL)
 }
 \arguments{
-\item{dat}{dataframe containing x,y-coordinates of player position}
+\item{df}{dataframe containing x,y-coordinates of player position}
 
 \item{lengthPitch, widthPitch}{length and width of pitch in metres}
 
@@ -18,9 +18,7 @@ soccerPath(dat, lengthPitch = 105, widthPitch = 68, col = "black",
 
 \item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
 
-\item{fillPitch, colPitch}{pitch background and line colour}
-
-\item{grass}{if \code{TRUE}, uses a more realistic pitch}
+\item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch}
 
 \item{lwd}{player path thickness}
 
@@ -30,7 +28,7 @@ soccerPath(dat, lengthPitch = 105, widthPitch = 68, col = "black",
 
 \item{x, y}{= name of variables containing x,y-coordinates}
 
-\item{id}{character, the name of the column containing player identity (only required if \code{'dat'} contains multiple players)}
+\item{id}{character, the name of the column containing player identity (only required if \code{'df'} contains multiple players)}
 
 \item{plot}{plot to add path to, if desired}
 }
