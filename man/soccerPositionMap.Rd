@@ -5,76 +5,73 @@
 \title{Plot average player position}
 \usage{
 soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, fill1 = "red",
-  col1 = "white", fill2 = "blue", col2 = "white", node_size = 6,
-  label = TRUE, label_size = 3, label_col = "black", repel = FALSE,
-  fillPitch = "white", colPitch = "grey60", lwd = 0.5, grass = FALSE,
-  arrow = c("none", "r", "l"), title = NULL, subtitle = NULL, x = "x",
-  y = "y", id = "id", team = NULL, teamToFlip = 1)
+  col1 = NULL, fill2 = "blue", col2 = NULL, labelCol = "black",
+  homeTeam = NULL, label = c("name", "number", "none"), labelBox = TRUE,
+  shortNames = TRUE, nodeSize = 5, labelSize = 4, arrow = c("none", "r",
+  "l"), theme = c("light", "dark", "grey", "grass"), title = NULL,
+  subtitle = NULL, source = c("manual", "statsbomb"), x = "x", y = "y",
+  id = "id", name = NULL, team = NULL)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position}
 
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres}
 
-\item{fill1, fill2}{character, fill colour of position points (team 1, team 2 (if present))}
+\item{fill1, fill2}{character, fill colour of position points of team 1, team 2 (team 2 \code{NULL} by default)}
 
-\item{col1, col2}{character, border colour of position points and labels (team 1, team 2 (if present))}
+\item{col1, col2}{character, border colour of position points of team 1, team 2 (team 2 \code{NULL} by default)}
 
-\item{node_size}{numeric, size of position points}
+\item{labelCol}{character, label text colour}
 
-\item{label}{boolean, draw labels}
+\item{homeTeam}{if \code{df} contains two teams, the name of the home team to be displayed on the left hand side of the pitch. If \code{NULL}, infers home team as the team of the first event in \code{df}.}
 
-\item{label_size}{numeric, size of labels}
+\item{label}{type of label to draw, player names (\code{name}), jersey numbers (\code{number}), or \code{none}}
 
-\item{label_col}{colour of labels}
+\item{labelBox}{add box around label text}
 
-\item{fillPitch}{pitch fill colour}
+\item{shortNames}{shorten player names to display last name as label}
 
-\item{colPitch}{pitch line colour}
+\item{nodeSize}{numeric, size of position points}
 
-\item{lwd}{pitch line width}
-
-\item{grass}{if \code{TRUE}, uses a more realistic pitch}
+\item{labelSize}{numeric, size of labels}
 
 \item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
 
+\item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch}
+
 \item{title, subtitle}{optional, adds title and subtitle to plot}
 
-\item{x, y}{= name of variables containing x,y-coordinates}
+\item{source}{if \code{statsbomb}, uses StatsBomb definitions of required variable names (i.e. `location.x`, `location.y`, `player.id`, `team.name`). If \code{manual}, respects variable names defined in function arguments \code{x}, \code{y}, \code{id}, \code{name}, and \code{team}.}
 
-\item{id}{character, the name of the column containing player identity. Defaults to \code{'id'}}
-
-\item{team}{character, the name of the column containing team identity. Optional, defaults to \code{'NULL'}}
+\item{x, y, id, name, team}{names of variables containing x,y-coordinates, unique player ids, player names, and team names. If \code{team} remains NULL, function expects only one team.}
 }
 \description{
 Draws the average x,y-positions of each player from one or both teams on a soccer pitch.
 }
 \examples{
-# average player position; one team w/ labels as player numbers
+# average player position for one team w/ jersey numbers
 data(tromso)
-soccerPositionMap(tromso, grass = TRUE)
+tromso \%>\% 
+  soccerPositionMap(label = "number",
+                    labelCol = "white", nodeSize = 8, arrow = "r", theme = "grass",
+                    title = "Tromso IL (vs. Stromsgodset, 3rd Nov 2013)", 
+                    subtitle = "Average player position (1' - 16')")
 
-# average pass position; one team w/ labels as shortened, non-overlapping player names
+# average pass position for one team w/ player name labelled as text
 data(statsbomb)
-statsbomb$name <- soccerShortenName(statsbomb$player.name)
 statsbomb \%>\%
-  filter(type.name == "Pass" & team.name == "France" & minute < 43) \%>\%
-  soccerPositionMap(id = "name", x = "location.x", y = "location.y",
-                  fill1 = "blue", label_col = "black",
-                  arrow = "r", repel = T,
-                  title = "France (vs Argentina, 30th June 2018)",
-                  subtitle = "Average pass position (1' - 42')")
+  filter(type.name == "Pass" & team.name == "France" & period == 1) \%>\%
+  soccerPositionMap(source = "statsbomb",
+                    fill1 = "blue", arrow = "r", labelBox = F, theme = "grey", labelCol = "white",
+                    title = "France (vs Argentina, 30th June 2018)",
+                    subtitle = "Average pass position (1' - 45')")
                  
-# average pass position; two teams w/ original names, non-overlapping player names (requires flipping one team in vertical plane for StatsBomb data)
+# average pass position for two teams w/ player name labelled as text in boxes
 statsbomb \%>\%
-  filter(type.name == "Pass" & minute < 43) \%>\%
-  soccerPositionMap(team = "team.name", id = "player.name", x = "location.x", y = "location.y",
-                   fill1 = "lightblue", fill2 = "blue", label_col = "black",
-                   repel = T, teamToFlip = 2,
-                   title = "France vs Argentina, 30th June 2018",
-                   subtitle = "Average pass position (1' - 42')")
+  filter(type.name == "Pass" & period == 1) \%>\%
+  soccerPositionMap(source = "statsbomb",
+                    fill1 = "lightblue", fill2 = "blue",
+                    title = "Argentina vs France, 30th June 2018",
+                    subtitle = "Average pass position (1' - 45')")
 
-}
-\seealso{
-\code{\link{soccerPitch}}  for plotting a soccer pitch for the purpose of drawing over event data, average position, player trajectories, etc..
 }

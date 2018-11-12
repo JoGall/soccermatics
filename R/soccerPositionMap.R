@@ -1,83 +1,111 @@
-#' @include soccerPitchFG.R
+#' @include soccerPitch.R
 #' @import ggplot2
 #' @import dplyr
-#' @importFrom ggrepel geom_text_repel
+#' @importFrom ggrepel geom_text_repel geom_label_repel
 NULL
 #' Plot average player position
 #' @description Draws the average x,y-positions of each player from one or both teams on a soccer pitch.
 #' 
 #' @param df dataframe containing x,y-coordinates of player position
 #' @param lengthPitch,widthPitch numeric, length and width of pitch in metres
-#' @param fill1,fill2 character, fill colour of position points (team 1, team 2 (if present))
-#' @param col1,col2 character, border colour of position points and labels (team 1, team 2 (if present))
-#' @param node_size numeric, size of position points
-#' @param label boolean, draw labels
-#' @param label_size numeric, size of labels
-#' @param label_col colour of labels
-#' @param fillPitch pitch fill colour
-#' @param colPitch pitch line colour
-#' @param lwd pitch line width
-#' @param grass if \code{TRUE}, uses a more realistic pitch
+#' @param fill1,fill2 character, fill colour of position points of team 1, team 2 (team 2 \code{NULL} by default)
+#' @param col1,col2 character, border colour of position points of team 1, team 2 (team 2 \code{NULL} by default)
+#' @param labelCol character, label text colour
+#' @param homeTeam if \code{df} contains two teams, the name of the home team to be displayed on the left hand side of the pitch. If \code{NULL}, infers home team as the team of the first event in \code{df}.
+#' @param label type of label to draw, player names (\code{name}), jersey numbers (\code{number}), or \code{none}
+#' @param labelBox add box around label text
+#' @param shortNames shorten player names to display last name as label
+#' @param nodeSize numeric, size of position points
+#' @param labelSize numeric, size of labels
 #' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
+#' @param theme draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch
 #' @param title,subtitle optional, adds title and subtitle to plot
-#' @param x,y = name of variables containing x,y-coordinates
-#' @param id character, the name of the column containing player identity. Defaults to \code{'id'}
-#' @param team character, the name of the column containing team identity. Optional, defaults to \code{'NULL'}
+#' @param source if \code{statsbomb}, uses StatsBomb definitions of required variable names (i.e. `location.x`, `location.y`, `player.id`, `team.name`). If \code{manual}, respects variable names defined in function arguments \code{x}, \code{y}, \code{id}, \code{name}, and \code{team}.
+#' @param x,y,id,name,team names of variables containing x,y-coordinates, unique player ids, player names, and team names. If \code{team} remains NULL, function expects only one team.
 #' @examples
-#' # average player position; one team w/ labels as player numbers
+#' # average player position for one team w/ jersey numbers
 #' data(tromso)
-#' soccerPositionMap(tromso, grass = TRUE)
+#' tromso %>% 
+#'   soccerPositionMap(label = "number",
+#'                     labelCol = "white", nodeSize = 8, arrow = "r", theme = "grass",
+#'                     title = "Tromso IL (vs. Stromsgodset, 3rd Nov 2013)", 
+#'                     subtitle = "Average player position (1' - 16')")
 #' 
-#' # average pass position; one team w/ labels as shortened, non-overlapping player names
+#' # average pass position for one team w/ player name labelled as text
 #' data(statsbomb)
-#' statsbomb$name <- soccerShortenName(statsbomb$player.name)
 #' statsbomb %>%
-#'   filter(type.name == "Pass" & team.name == "France" & minute < 43) %>%
-#'   soccerPositionMap(id = "name", x = "location.x", y = "location.y",
-#'                   fill1 = "blue", label_col = "black",
-#'                   arrow = "r", repel = T,
-#'                   title = "France (vs Argentina, 30th June 2018)",
-#'                   subtitle = "Average pass position (1' - 42')")
+#'   filter(type.name == "Pass" & team.name == "France" & period == 1) %>%
+#'   soccerPositionMap(source = "statsbomb",
+#'                     fill1 = "blue", arrow = "r", labelBox = F, theme = "grey", labelCol = "white",
+#'                     title = "France (vs Argentina, 30th June 2018)",
+#'                     subtitle = "Average pass position (1' - 45')")
 #'                  
-#' # average pass position; two teams w/ original names, non-overlapping player names (requires flipping one team in vertical plane for StatsBomb data)
+#' # average pass position for two teams w/ player name labelled as text in boxes
 #' statsbomb %>%
-#'   filter(type.name == "Pass" & minute < 43) %>%
-#'   soccerPositionMap(team = "team.name", id = "player.name", x = "location.x", y = "location.y",
-#'                    fill1 = "lightblue", fill2 = "blue", label_col = "black",
-#'                    repel = T, teamToFlip = 2,
-#'                    title = "France vs Argentina, 30th June 2018",
-#'                    subtitle = "Average pass position (1' - 42')")
+#'   filter(type.name == "Pass" & period == 1) %>%
+#'   soccerPositionMap(source = "statsbomb",
+#'                     fill1 = "lightblue", fill2 = "blue",
+#'                     title = "Argentina vs France, 30th June 2018",
+#'                     subtitle = "Average pass position (1' - 45')")
 #' 
-#' @seealso \code{\link{soccerPitch}}  for plotting a soccer pitch for the purpose of drawing over event data, average position, player trajectories, etc..
 #' @export
-soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = "white", fill2 = "blue", col2 = "white", node_size = 6, label = TRUE, label_size = 3, label_col = "black", repel = FALSE, fillPitch = "white", colPitch = "grey60", lwd = 0.5, grass = FALSE, arrow = c("none", "r", "l"), title = NULL, subtitle = NULL, x = "x", y = "y", id = "id", team = NULL, teamToFlip = 1) {
+soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = NULL, fill2 = "blue", col2 = NULL, labelCol = "black", homeTeam = NULL, label = c("name", "number", "none"), labelBox = TRUE, shortNames = TRUE, nodeSize = 5, labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL, source = c("manual", "statsbomb"), x = "x", y = "y", id = "id", name = NULL, team = NULL) {
+  
+  # define colours by theme
+  if(theme[1] == "grass") {
+    colText <- "white"
+  } else if(theme[1] == "light") {
+    colText <- "black"
+  } else if(theme[1] %in% c("grey", "gray")) {
+    colText <- "black"
+  } else {
+    colText <- "white"
+  }
+  if(is.null(col1)) col1 <- fill1
+  if(is.null(col2)) col2 <- fill2
+  
+  # set variable names
+  if(source[1] == "statsbomb") {
+    x <- "location.x"
+    y <- "location.y"
+    id <- "player.id"
+    team <- "team.name"
+    name <- "player.name"
+  }
   
   df$x <- df[,x]
   df$y <- df[,y]
   df$id <- df[,id]
-  df$team <- df[,team]
-
-  # if two teams...
-  if(!is.null(team)) {
+  if(is.null(name)) name <- id
+  df$name <- df[,name]
+  if(!is.null(team)) df$team <- df[,team]
+  
+  # shorten player name
+  if(!is.null(name) & shortNames == TRUE) {
+    df$name <- soccerShortenName(df$name)
+  }
+  
+  # if two teams in df...
+  if(length(unique(df$team)) > 1) {
     
-    # flip coordinates of one team
-    team_to_flip <- unique(df$team.name)[teamToFlip]
+    # home team taken as first team in df if unspecified
+    if(is.null(homeTeam)) homeTeam <- df[,team][1]
+    
+    # flip x,y-coordinates of home team
     df <- df %>% 
-      mutate(location.x = if_else(team == team_to_flip, lengthPitch - location.x, location.x),
-             location.y = if_else(team == team_to_flip, widthPitch - location.y, location.y))
+      soccerFlipDirection(teamToFlip = homeTeam, periodToFlip = 1:2, x = "x", y = "y", team = "team")
   
     # get average positions
     pos <- df %>%
-      group_by_(team, id) %>%
-      dplyr::summarise(x.mean = mean(!!sym(x)), y.mean = mean(!!sym(y))) %>% 
-      ungroup() %>% 
-      mutate_(team = team, id = id) %>% 
-      mutate(team = as.factor(team), id = as.factor(id)) %>% 
+      group_by(team, id, name) %>%
+      dplyr::summarise(x.mean = mean(x), y.mean = mean(y)) %>% 
+      # ungroup() %>% 
+      # mutate(team = as.factor(team), id = as.factor(id)) %>% 
       as.data.frame()
     
     # plot
-    p <- soccerPitch(fillPitch = fillPitch, colPitch = colPitch, arrow = arrow, grass = grass, title = title, subtitle = subtitle) +
-      geom_point(aes(x.mean, y.mean, group = team, fill = team, colour = team), data = pos, shape = 21, size = 6, stroke = 1.3) +
+    p <- soccerPitch(theme = theme[1], title = title, subtitle = subtitle) +
+      geom_point(data = pos, aes(x.mean, y.mean, group = team, fill = team, colour = team), shape = 21, size = 6, stroke = 1.3) +
       scale_colour_manual(values = c(col1, col2)) +
       scale_fill_manual(values = c(fill1, fill2)) +
       guides(colour = FALSE, fill = FALSE)
@@ -86,38 +114,32 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
   } else {
     # get average positions
     pos <- df %>%
-      group_by_(id) %>%
-      dplyr::summarise(x.mean = mean(!!sym(x)), y.mean = mean(!!sym(y))) %>% 
-      ungroup() %>% 
-      mutate_(id = id) %>% 
-      mutate(id = as.factor(id)) %>% 
+      group_by(id, name) %>%
+      dplyr::summarise(x.mean = mean(x), y.mean = mean(y)) %>% 
+      # ungroup() %>% 
+      # mutate(id = as.factor(id)) %>% 
       as.data.frame()
     
     # plot
-    p <- soccerPitch(fillPitch = fillPitch, colPitch = colPitch, grass = grass, arrow = arrow, title = title, subtitle = subtitle) +
-      geom_point(aes(x.mean, y.mean), data = pos, col = col1, fill = fill1, shape = 21, size = node_size, stroke = 1.3)
+    p <- soccerPitch(arrow = arrow, theme = theme[1], title = title, subtitle = subtitle) +
+      geom_point(data = pos, aes(x.mean, y.mean), col = col1, fill = fill1, shape = 21, size = nodeSize, stroke = 1.3)
   }
   
-  # add labels, preventing overlap if repel = TRUE
-  if(label) {
-    if(!is.null(team)) {
-      if(repel) {
-        p <- p +
-        geom_text_repel(data = pos, aes(x.mean, y.mean, label = id), segment.size = 0.2, max.iter = 1000, col = label_col, size = label_size, fontface = "bold")
-      } else {
-        p <- p +
-          geom_text(aes(x.mean, y.mean, label = id, group = team, colour = team), data = pos, hjust=0.5, vjust=0.5, col = label_col, size = label_size, fontface = "bold")
-      }
+  # add non-overlapping names as labels
+  if(label[1] == "name") {
+    if(labelBox) {
+      p <- p +
+        geom_label_repel(data = pos, aes(x.mean, y.mean, label = name), segment.colour = colText, segment.size = 0.3, max.iter = 1000, size = labelSize, fontface = "bold")
     } else {
-      if(repel) {
-        p <- p +
-        geom_text_repel(data = pos, aes(x.mean, y.mean, label = id), segment.size = 0.2, max.iter = 1000, col = label_col, size = label_size, fontface = "bold")
-      } else {
-        p <- p +
-          geom_text(aes(x.mean, y.mean, label = id), data = pos, hjust=0.5, vjust=0.5, col = label_col, size = label_size, fontface = "bold")
-      }
+      p <- p +
+        geom_text_repel(data = pos, aes(x.mean, y.mean, label = name), col = labelCol, segment.colour = colText, segment.size = 0.3, max.iter = 1000, size = labelSize, fontface = "bold")
     }
+  # add jersey numbers directly to points
+  } else if(label[1] == "number") {
+      p <- p +
+        geom_text(data = pos, aes(x.mean, y.mean, label = id), col = labelCol, fontface = "bold")
   }
   
   return(p)
+  
 }
