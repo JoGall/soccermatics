@@ -21,7 +21,7 @@ a dataframe
 Normalises x,y-coordinates from between any arbitrary bounds to metre units bounded by [0 < x < pitchLength, 0 < y < pitchWidth]
 }
 \examples{
-# Three examples with true pitch dimesions (in metres):
+# Three examples with true pitch dimensions (in metres):
 lengthPitch <- 101
 widthPitch <- 68
 

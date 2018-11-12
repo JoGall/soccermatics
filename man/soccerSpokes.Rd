@@ -54,3 +54,4 @@ soccerHeatmap(id8, xBins = 5) \%>\%
 \seealso{
 \code{\link{soccerPitch}} for drawing a heatmap of player position, \code{\link{soccerHeatmap}} for drawing a heatmap of player position
 }
+\keyword{internal}

@@ -7,7 +7,7 @@
 soccerVelocity(dat)
 }
 \arguments{
-\item{dat}{= dataframe containing unnormalised x,y-coordinates `x` and `y`, time variable `t`, and identifier `id`}
+\item{dat}{dataframe containing unnormalised x,y-coordinates `x` and `y`, time variable `t`, and identifier `id`}
 }
 \value{
 a dataframe

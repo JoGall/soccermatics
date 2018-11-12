@@ -4,7 +4,7 @@ NULL
 #'
 #' @description Compute instantaneous distance moved (in metres), speed (in metres per second), and direction (in radians) between subsequent frames in a dataframe of x,y-coordinates.
 #' 
-#' @param dat = dataframe containing unnormalised x,y-coordinates `x` and `y`, time variable `t`, and identifier `id`
+#' @param dat dataframe containing unnormalised x,y-coordinates `x` and `y`, time variable `t`, and identifier `id`
 #' @return a dataframe
 #' @examples
 #' # calculate distance, speed, and direction for tromso dataset

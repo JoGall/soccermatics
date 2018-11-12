@@ -9,7 +9,7 @@ NULL
 #' @return a dataframe
 #' 
 #' @examples
-#' # Three examples with true pitch dimesions (in metres):
+#' # Three examples with true pitch dimensions (in metres):
 #' lengthPitch <- 101
 #' widthPitch <- 68
 #' 

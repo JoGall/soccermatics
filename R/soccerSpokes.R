@@ -15,7 +15,6 @@ NULL
 #' @param minLength numeric, ratio between size of shortest arrow and longest arrow depending on number of events.
 #' @param legend if \code{TRUE}, adds legend for arrow thickness and transparency
 #' @param x,y,angle = name of variables containing x,y-coordinates and angular data
-
 #' @return a ggplot object
 #' @examples
 #' data(tromso_extra)
@@ -35,6 +34,7 @@ NULL
 #'   soccerSpokes(id8, xBins = 5, angleBins = 8, lwd = 1)
 #' 
 #' @seealso \code{\link{soccerPitch}} for drawing a heatmap of player position, \code{\link{soccerHeatmap}} for drawing a heatmap of player position
+#' @keywords internal
 #' @export
 soccerSpokes <- function(plot, df, lengthPitch = 105, widthPitch = 68, xBins, yBins = NULL, angleBins = 16, lwd = 0.5, minLength = 0.6, minAlpha = 0.4, legend = TRUE, x = "x", y = "y", angle = "angle") {
   
