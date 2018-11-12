@@ -2,39 +2,39 @@
 % Please edit documentation in R/soccerShotmap.R
 \name{soccerShotmap}
 \alias{soccerShotmap}
-\title{Draw a shotmap on a half pitch from StatsBomb data}
+\title{Draw an individual, team, or two team shotmap using StatsBomb data}
 \usage{
-soccerShotmap(dat, lengthPitch = 105, widthPitch = 68,
-  colGoal = "skyblue", colMiss = "grey60", alpha = 0.8, legend = FALSE,
-  theme = c("light", "dark", "grass"), lwd = 0.5)
+soccerShotmap(df, lengthPitch = 105, widthPitch = 68, homeTeam = NULL,
+  theme = c("light", "dark", "grey", "grass"), title = NULL,
+  subtitle = NULL)
 }
 \arguments{
-\item{lengthPitch, widthPitch}{length and width of pitch in metres}
+\item{lengthPitch, widthPitch}{length and width of pitch, in metres}
 
-\item{colGoal, colMiss}{colour of points representing scored and missed shots}
+\item{homeTeam}{if \code{df} contains two teams, the name of the home team to be displayed on the left hand side of the pitch. If \code{NULL}, infers home team as the team of the first event in \code{df}.}
 
-\item{alpha}{transparency of points}
+\item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch with appropriate point colours}
 
-\item{legend}{boolean, include legend or not}
-
-\item{lwd}{numeric, pitch line width}
-
-\item{fillPitch, colPitch}{pitch background and line colour}
-
-\item{grass}{if \code{TRUE}, uses a more realistic pitch}
+\item{title, subtitle}{optional, adds title and subtitle to half pitch plot. Title defaults to scoreline and team identity when two teams are defined in \code{df}.}
 }
 \value{
 a ggplot object
 }
 \description{
-Draw a shotmap on a half pitch from StatsBomb data. Compatability with other (non-StatsBomb) shot data will be added soon.
+If \code{df} contains two teams, draws a shotmap of each team at either end of a full pitch. If \code{df} contains one or more players from a single team, draws a vertical half pitch. Currently only works with StatsBomb data but compatability with other (non-StatsBomb) shot data will be added soon.
 }
 \examples{
 data(statsbomb)
 
-# shot map of France vs. Argentina (2018-06-30)
+# shot map of two teams on full pitch
+statsbomb \%>\%
+  soccerShotmap(theme = "gray")
+
+# shot map of one player on half pitch
 statsbomb \%>\% 
-  filter(team.name == "France") \%>\% 
-  soccerShotmap()
+  filter(player.name == "Antoine Griezmann") \%>\% 
+  soccerShotmap(theme = "grass",
+                title = "Antoine Griezmann", 
+                subtitle = "vs. Argentina, World Cup 2018")
 
 }
