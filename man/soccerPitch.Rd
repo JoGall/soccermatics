@@ -2,26 +2,22 @@
 % Please edit documentation in R/soccerPitch.R
 \name{soccerPitch}
 \alias{soccerPitch}
-\title{Plot a soccer pitch ggplot object}
+\title{Plot a full soccer pitch}
 \usage{
-soccerPitch(lengthPitch = 105, widthPitch = 68, fillPitch = "white",
-  colPitch = "grey60", grass = FALSE, arrow = c("none", "r", "l"),
-  arrow_col = "default", lwd = 0.5, title = NULL, subtitle = NULL)
+soccerPitch(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r",
+  "l"), title = NULL, subtitle = NULL, theme = c("light", "dark", "grey",
+  "grass"))
 }
 \arguments{
 \item{lengthPitch, widthPitch}{length and width of pitch in metres}
 
-\item{fillPitch, colPitch}{pitch fill and line colour}
-
-\item{grass}{if \code{TRUE}, uses a more realistic pitch}
-
 \item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
 
-\item{arrow_col}{colour of attack direction arrow}
-
-\item{lwd}{numeric, pitch line width}
-
 \item{title, subtitle}{optional, adds title and subtitle to plot}
+
+\item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch}
+
+\item{fillPitch, colPitch}{pitch fill and line colour}
 }
 \value{
 a ggplot object
@@ -30,14 +26,13 @@ a ggplot object
 Draws a soccer pitch as a ggplot object for the purpose of adding layers such as player positions, player trajectories, etc..
 }
 \examples{
-# get x,y-coords of player #8 during first 10 minutes
-data(tromso)
-dd <- subset(tromso, id == 9)[1:1200,]
-# draw player path on pitch
-soccerPitch(grass = TRUE) + 
-  geom_path(data = dd, aes(x, y))
+# custom plot of France defensive pressure events vs. Argentina
+data(statsbomb)
+soccerPitch(arrow = "r", theme = "grass", 
+              title = "France (vs. Argentina)", 
+              subtitle = "Pressure events") + 
+  geom_point(data = filter(statsbomb, team.name == "France" & type.name == "Pressure"), 
+             aes(x = location.x, y = location.y), 
+             col = "blue", alpha = 0.5)
 
-}
-\seealso{
-\code{\link{soccerPitchFG}} for adding soccer pitch lines to an existing ggplot object
 }
