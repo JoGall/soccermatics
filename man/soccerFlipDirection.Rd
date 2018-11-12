@@ -4,17 +4,18 @@
 \alias{soccerFlipDirection}
 \title{Flips x,y-coordinates horizontally in one half to account for changing sides at half-time}
 \usage{
-soccerFlipDirection(dat, pitchLength = 105, pitchWidth = 68,
-  period = "period", periodToFlip = 1, x = "x", y = "y")
+soccerFlipDirection(df, lengthPitch = 105, widthPitch = 68,
+  teamToFlip = NULL, periodToFlip = 1, period = "period", team = "team",
+  x = "x", y = "y")
 }
 \arguments{
-\item{dat}{= dataframe containing unnormalised x,y-coordinates}
+\item{df}{= dataframe containing unnormalised x,y-coordinates}
 
-\item{pitchLength, pitchWidth}{= length, width of pitch in metres}
-
-\item{period}{= name of variable containing period labels}
+\item{lengthPitch, widthPitch}{= length, width of pitch in metres}
 
 \item{periodToFlip}{= identity of period to flip}
+
+\item{period}{= name of variable containing period labels}
 
 \item{x, y}{= name of variables containing x,y-coordinates}
 }
@@ -31,6 +32,6 @@ half-time.
 # fake period data for tromso dataset, and flip direction of '2nd half'
 tromso \%>\% 
   mutate(period = if_else(t > as.POSIXct("2013-11-07 21:14:00 GMT"), 1, 2))
-  soccerFlipDirection(pitchLength = 120, pitchWidth = 80, periodToFlip = 2)
+  soccerFlipDirection(lengthPitch = 120, widthPitch = 80, periodToFlip = 2)
 
 }
