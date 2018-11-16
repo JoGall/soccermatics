@@ -26,7 +26,7 @@ NULL
 #' # average player position for one team w/ jersey numbers
 #' data(tromso)
 #' tromso %>% 
-#'   soccerPositionMap(label = "number",
+#'   soccerPositionMap(label = "number", name = "id",
 #'                     labelCol = "white", nodeSize = 8, arrow = "r", theme = "grass",
 #'                     title = "Tromso IL (vs. Stromsgodset, 3rd Nov 2013)", 
 #'                     subtitle = "Average player position (1' - 16')")
@@ -49,7 +49,7 @@ NULL
 #'                     subtitle = "Average pass position (1' - 45')")
 #' 
 #' @export
-soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = NULL, fill2 = "blue", col2 = NULL, labelCol = "black", homeTeam = NULL, label = c("name", "number", "none"), labelBox = TRUE, shortNames = TRUE, nodeSize = 5, labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL, source = c("manual", "statsbomb"), x = "x", y = "y", id = "id", name = NULL, team = NULL) {
+soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = NULL, fill2 = "blue", col2 = NULL, labelCol = "black", homeTeam = NULL, flipTeam = NULL, label = c("name", "number", "none"), labelBox = TRUE, shortNames = TRUE, nodeSize = 5, labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL, source = c("manual", "statsbomb"), x = "x", y = "y", id = "id", name = NULL, team = NULL) {
   
   # define colours by theme
   if(theme[1] == "grass") {
@@ -92,9 +92,11 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
     if(is.null(homeTeam)) homeTeam <- df[,team][1]
     
     # flip x,y-coordinates of home team
-    df <- df %>% 
-      soccerFlipDirection(teamToFlip = homeTeam, periodToFlip = 1:2, x = "x", y = "y", team = "team")
-  
+    if(flipTeam) {
+      df <- df %>% 
+        soccerFlipDirection(teamToFlip = homeTeam, periodToFlip = 1:2, x = "x", y = "y", team = "team")
+    }
+    
     # get average positions
     pos <- df %>%
       group_by(team, id, name) %>%
@@ -137,7 +139,7 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
   # add jersey numbers directly to points
   } else if(label[1] == "number") {
       p <- p +
-        geom_text(data = pos, aes(x.mean, y.mean, label = id), col = labelCol, fontface = "bold")
+        geom_text(data = pos, aes(x.mean, y.mean, label = name), col = labelCol, fontface = "bold")
   }
   
   return(p)
