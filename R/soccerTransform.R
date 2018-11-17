@@ -60,8 +60,8 @@ soccerTransform <- function(dat, xMin, xMax, yMin, yMax, lengthPitch = 105, widt
   
   if(method[1] == "statsbomb") {
     dat <- dat %>% 
-      mutate_at(vars(contains('.x')), funs((. - 0) / diff(c(0, 120)) * lengthPitch)) %>% 
-      mutate_at(vars(contains('.y')), funs(widthPitch - (. - 0)/diff(c(0, 80)) * widthPitch))
+      mutate_at(vars(contains('.x')), funs((. - 1) / diff(c(1, 120)) * lengthPitch)) %>% 
+      mutate_at(vars(contains('.y')), funs(widthPitch - (. - 1)/diff(c(1, 80)) * widthPitch))
     
   } else if(method[1] == "opta") {
     dat$x <- (dat$x - xMin) / diff(c(xMin,xMax)) * lengthPitch
