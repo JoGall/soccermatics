@@ -6,11 +6,11 @@
 \usage{
 soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, fill1 = "red",
   col1 = NULL, fill2 = "blue", col2 = NULL, labelCol = "black",
-  homeTeam = NULL, label = c("name", "number", "none"), labelBox = TRUE,
-  shortNames = TRUE, nodeSize = 5, labelSize = 4, arrow = c("none", "r",
-  "l"), theme = c("light", "dark", "grey", "grass"), title = NULL,
-  subtitle = NULL, source = c("manual", "statsbomb"), x = "x", y = "y",
-  id = "id", name = NULL, team = NULL)
+  homeTeam = NULL, flipTeam = NULL, label = c("name", "number", "none"),
+  labelBox = TRUE, shortNames = TRUE, nodeSize = 5, labelSize = 4,
+  arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"),
+  title = NULL, subtitle = NULL, source = c("manual", "statsbomb"),
+  x = "x", y = "y", id = "id", name = NULL, team = NULL)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position}
@@ -52,7 +52,7 @@ Draws the average x,y-positions of each player from one or both teams on a socce
 # average player position for one team w/ jersey numbers
 data(tromso)
 tromso \%>\% 
-  soccerPositionMap(label = "number",
+  soccerPositionMap(label = "number", name = "id",
                     labelCol = "white", nodeSize = 8, arrow = "r", theme = "grass",
                     title = "Tromso IL (vs. Stromsgodset, 3rd Nov 2013)", 
                     subtitle = "Average player position (1' - 16')")

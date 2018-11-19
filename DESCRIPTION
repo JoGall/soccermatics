@@ -25,6 +25,7 @@ Collate:
     'soccerTransform.R'
     'soccerVelocity.R'
     'soccermatics-deprecated.R'
+    'soccerxGTimeline.R'
     'statsbomb.R'
     'tromso.R'
     'tromso_extra.R'
