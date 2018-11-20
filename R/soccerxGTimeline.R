@@ -7,6 +7,7 @@ NULL
 #' 
 #' @param dat a dataframe containing StatsBomb data from one full match
 #' @param homeCol,awayCol colours of the home and away team, respectively
+#' @param labels include scoreline and goalscorer labels for goals
 #' @param y_buffer vertical space to add at the top of the y-axis (a quick and dirty way to ensure text annotations are not cropped).
 #' @return a ggplot object
 #' @examples
@@ -17,7 +18,7 @@ NULL
 #'   soccerXGTimeline(homeCol = "blue", awayCol = "lightblue", y_buffer = 0.4)
 #' 
 #' @export
-soccerxGTimeline <- function(dat, homeCol = NULL, awayCol = NULL, y_buffer = 0.3) {
+soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", labels = TRUE, y_buffer = 0.3) {
   
   # preprocess data
   dat <- dat %>% 
@@ -86,23 +87,23 @@ soccerxGTimeline <- function(dat, homeCol = NULL, awayCol = NULL, y_buffer = 0.3
                    label)))
   
   # plot
-  y_lim <- max(shots$xg) + y_buffer
+  y_lim <- ifelse(labels, max(shots$xg) + y_buffer, max(shots$xg) + 0.2)
+  
   title_a <- paste0(home_team, " ", max(goals$hg), " (", sprintf("%.1f", max(shots[shots$team.name == home_team,]$xg), 1), ")")
   title_b <- paste0(away_team, " ", max(goals$ag), " (", sprintf("%.1f", max(shots[shots$team.name == away_team,]$xg), 1), ")")
   
   shots$team.name <- factor(shots$team.name, levels = c(home_team, away_team))
   goals$team.name <- factor(goals$team.name, levels = c(home_team, away_team))
   
-  ggplot() +
-    geom_step(data = shots, aes(t, xg, group = team.name, colour = team.name), lwd = 1) +
-    geom_point(data = goals, aes(t, xg, group = team.name, colour = team.name), size = 3) +
-    geom_text(data = goals, aes(t, xg + (y_lim/30), group = team.name, colour = team.name, label = label), angle = 90, hjust = 0) +
+  p <- ggplot() +
     geom_vline(xintercept = ht_t, linetype = "longdash", col = "grey70") +
     geom_vline(xintercept = ft_t, linetype = "longdash", col = "grey70") +
-    annotate("text", ht_t - 20, y_lim - 0.003, label = "HT", hjust = 1, vjust = 1, col = "grey70") +
-    annotate("text", ft_t - 20, y_lim - 0.003, label = "FT", hjust = 1, vjust = 1, col = "grey70") +
-    scale_x_continuous(breaks = c(seq(0, 45*60, 15*60), ht_t + seq(0, 45*60, 15*60)), labels = c("0'","15'","30'","","45'","60'","75'","90'"), limits = c(0, ft_t+60), expand = c(0, 0)) +
+    annotate("text", ht_t - 30, y_lim - 0.02, label = "HT", hjust = 1, vjust = 1, col = "grey70") +
+    annotate("text", ft_t - 30, y_lim - 0.02, label = "FT", hjust = 1, vjust = 1, col = "grey70") +
+    geom_step(data = shots, aes(t, xg, group = team.name, colour = team.name), lwd = 1) +
+    geom_point(data = goals, aes(t, xg, group = team.name, colour = team.name), size = 3) +
     scale_y_continuous(limits = c(0, y_lim), expand = c(0,0)) +
+    scale_x_continuous(breaks = c(seq(0, 45*60, 15*60), ht_t + seq(0, 45*60, 15*60)), labels = c("0'","15'","30'","","45'","60'","75'","90'"), limits = c(0, ft_t+60), expand = c(0, 0)) +
     scale_color_manual(breaks = c(home_team, away_team), values = c(homeCol, awayCol)) +
     guides(col = FALSE) +
     labs(title = title_a,
@@ -113,5 +114,12 @@ soccerxGTimeline <- function(dat, homeCol = NULL, awayCol = NULL, y_buffer = 0.3
           axis.title.x = element_blank(),
           plot.title = element_text(size = 16, face = 'bold', colour = homeCol),
           plot.subtitle = element_text(size = 16, face = 'bold', colour = awayCol))
+  
+  if(labels) {
+    p <- p +
+      geom_text(data = goals, aes(t, xg + (y_lim/30), group = team.name, colour = team.name, label = label), angle = 90, hjust = 0) 
+  }
+  
+  return(p)
   
 }
