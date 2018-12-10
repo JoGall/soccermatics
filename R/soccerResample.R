@@ -19,7 +19,7 @@ NULL
 #' soccerResample(tromso)
 #' 
 #' @export
-soccerResample <- function(dat, r = 10, x = "x", y = "y", z = "z", t = "t") {
+soccerResample <- function(dat, r = 10, x = "x", y = "y", z = NULL, t = "t") {
   
   dat$x <- dat[,x]
   dat$y <- dat[,y]
