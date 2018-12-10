@@ -27,6 +27,6 @@ data(statsbomb)
 
 # xG timeline of France vs. Argentina
 statsbomb \%>\%
-  soccerXGTimeline(homeCol = "blue", awayCol = "lightblue", y_buffer = 0.4)
+  soccerxGTimeline(homeCol = "blue", awayCol = "lightblue", y_buffer = 0.4)
 
 }
