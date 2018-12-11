@@ -249,4 +249,3 @@ soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", labels = TR
   return(p)
   
 }
->>>>>>> 0422db6c0f592d8dee1068568de07c150ed828f8
