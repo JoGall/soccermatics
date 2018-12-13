@@ -1,3 +1,4 @@
+#' @import dplyr
 NULL
 #' Normalises x,y-coordinates to metres units for use with soccermatics functions
 #'

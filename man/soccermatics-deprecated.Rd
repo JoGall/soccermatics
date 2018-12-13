@@ -32,8 +32,10 @@ The functions listed below are deprecated and will be defunct in
   available at \code{help("soccermatics-deprecated")}.
 }
 \examples{
-# custom plot of France defensive pressure events vs. Argentina
+library(ggplot2)
 data(statsbomb)
+
+# custom plot of France defensive pressure events vs. Argentina
 soccerPitchBG(arrow = "r", theme = "grass", 
               title = "France (vs. Argentina)", 
               subtitle = "Pressure events") + 

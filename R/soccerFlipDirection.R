@@ -1,4 +1,5 @@
 #' @import ggplot2
+#' @import dplyr
 #' @importFrom ggforce geom_arc geom_circle
 NULL
 #' Flips x,y-coordinates horizontally in one half to account for changing sides at half-time
@@ -15,18 +16,29 @@ NULL
 #' @param x,y = name of variables containing x,y-coordinates
 #' @return a dataframe
 #' @examples
-#' # fake period data for tromso dataset, and flip direction of '2nd half'
-#' tromso %>% 
-#'   mutate(period = if_else(t > as.POSIXct("2013-11-07 21:14:00 GMT"), 1, 2))
-#'   soccerFlipDirection(lengthPitch = 120, widthPitch = 80, periodToFlip = 2)
+#' library(dplyr)
 #' 
+#' # flip x,y-coords of France in both halves of statsbomb data
+#' data(statsbomb)
+#' statsbomb %>% 
+#'   soccerFlipDirection(lengthPitch = 105, widthPitch = 68, teamToFlip = "France", team = "team.name", x = "location.x", y = "location.y")
+#'   
+#' # flip x,y-coords in 2nd half of Tromso, based on a dummy period variable
+#' data(tromso)
+#' tromso %>% 
+#'   mutate(period = if_else(t > as.POSIXct("2013-11-07 21:14:00 GMT"), 1, 2)) %>% 
+#'   soccerFlipDirection(lengthPitch = 105, widthPitch = 68, periodToFlip = 2)
+#'   
 #' @export
-soccerFlipDirection <- function(df, lengthPitch = 105, widthPitch = 68, teamToFlip = NULL, periodToFlip = 1, period = "period", team = "team", x = "x", y = "y") {
+soccerFlipDirection <- function(df, lengthPitch = 105, widthPitch = 68, teamToFlip = NULL, periodToFlip = 1:2, period = "period", team = "team", x = "x", y = "y") {
 
-  if(is.null(teamToFlip)) teamToFlip <- unique(df[,team])[1]
-  
-  df[,x] <- ifelse(df[,team] == teamToFlip & df[,period] %in% periodToFlip, lengthPitch - df[,x], df[,x])
-  df[,y] <- ifelse(df[,team] == teamToFlip & df[,period] %in% periodToFlip, widthPitch - df[,y], df[,y])
+  if(is.null(teamToFlip)) {
+    df[,x] <- ifelse(df[,period] %in% periodToFlip, lengthPitch - df[,x], df[,x])
+    df[,y] <- ifelse(df[,period] %in% periodToFlip, widthPitch - df[,y], df[,y])    
+  } else {
+    df[,x] <- ifelse(df[,team] == teamToFlip & df[,period] %in% periodToFlip, lengthPitch - df[,x], df[,x])
+    df[,y] <- ifelse(df[,team] == teamToFlip & df[,period] %in% periodToFlip, widthPitch - df[,y], df[,y])
+  }
   
   return(df)
 }

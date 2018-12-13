@@ -23,6 +23,7 @@ a ggplot object
 Draw a timeline showing cumulative expected goals (xG, excluding penalties and own goals) by two teams over the course of a match, as well as plotting the scoreline and goalscorer at goal events. Currently only works with StatsBomb data but compatability with other (non-StatsBomb) shot data will be added soon.
 }
 \examples{
+library(dplyr)
 data(statsbomb)
 
 # xG timeline of France vs. Argentina

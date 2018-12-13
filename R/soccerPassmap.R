@@ -25,9 +25,9 @@ NULL
 #' @examples
 #' # France vs. Argentina, minimum of three passes
 #' library(dplyr)
-#' library(soccermatics)
 #' 
 #' # Argentina pass map until first substituton with transparent edges
+#' data(statsbomb)
 #' statsbomb %>% 
 #'   filter(team.name == "Argentina") %>% 
 #'   soccerPassmap(fill = "lightblue", arrow = "r",
@@ -79,7 +79,7 @@ soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, f
     group_by(pass.outcome.name) %>% 
     tally() %>% 
     filter(!pass.outcome.name %in% c("Injury Clearance", "Unknown")) %>% 
-    mutate(pass.outcome.name = forcats::fct_explicit_na(pass.outcome.name, "Complete"))
+    mutate(pass.outcome.name = fct_explicit_na(pass.outcome.name, "Complete"))
   pass_n <- sum(passes$n)
   pass_pc <- passes[passes$pass.outcome.name == "Complete",]$n / pass_n * 100
   
@@ -109,7 +109,7 @@ soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, f
   
   # edges based only on completed passes
   edgelist <- df %>% 
-    mutate(pass.outcome.name = forcats::fct_explicit_na(pass.outcome.name, "Complete")) %>%
+    mutate(pass.outcome.name = fct_explicit_na(pass.outcome.name, "Complete")) %>%
     filter(type.name == "Pass" & pass.outcome.name == "Complete") %>% 
     select(from = player.name, to = pass.recipient.name) %>% 
     group_by(from, to) %>% 
@@ -131,12 +131,12 @@ soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, f
   
   # filter minimum number of passes and rescale line width
   nodes <- nodes %>% 
-    mutate(events = scales::rescale(events, c(2, maxNodeSize), c(1, 200)))
+    mutate(events = rescale(events, c(2, maxNodeSize), c(1, 200)))
 
   # rescale node size
   edges <- edges %>% 
     filter(n >= minPass) %>%
-    mutate(n = scales::rescale(n, c(1, maxEdgeSize), c(minPass, 75)))
+    mutate(n = rescale(n, c(1, maxEdgeSize), c(minPass, 75)))
   
   
   # shorten player name
@@ -165,7 +165,7 @@ soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, f
   # add labels
   if(label) {
     p <- p +
-      ggrepel::geom_label_repel(data = nodes, aes(x, y, label = name), size = labelSize)
+      geom_label_repel(data = nodes, aes(x, y, label = name), size = labelSize)
   }
   
   return(p)

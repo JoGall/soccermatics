@@ -6,11 +6,11 @@
 \usage{
 soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, fill1 = "red",
   col1 = NULL, fill2 = "blue", col2 = NULL, labelCol = "black",
-  homeTeam = NULL, flipTeam = NULL, label = c("name", "number", "none"),
-  labelBox = TRUE, shortNames = TRUE, nodeSize = 5, labelSize = 4,
-  arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"),
-  title = NULL, subtitle = NULL, source = c("manual", "statsbomb"),
-  x = "x", y = "y", id = "id", name = NULL, team = NULL)
+  homeTeam = NULL, flipAwayTeam = TRUE, label = c("name", "number",
+  "none"), labelBox = TRUE, shortNames = TRUE, nodeSize = 5,
+  labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark",
+  "grey", "grass"), title = NULL, subtitle = NULL, source = c("manual",
+  "statsbomb"), x = "x", y = "y", id = "id", name = NULL, team = NULL)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position}
@@ -23,7 +23,9 @@ soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, fill1 = "red",
 
 \item{labelCol}{character, label text colour}
 
-\item{homeTeam}{if \code{df} contains two teams, the name of the home team to be displayed on the left hand side of the pitch. If \code{NULL}, infers home team as the team of the first event in \code{df}.}
+\item{homeTeam}{if \code{df} contains two teams, the name of the home team to be displayed on the left hand side of the pitch (i.e. attacking from left to right). If \code{NULL}, infers home team as the team of the first event in \code{df}.}
+
+\item{flipAwayTeam}{flip x,y-coordinates of away team so attacking from right to left}
 
 \item{label}{type of label to draw, player names (\code{name}), jersey numbers (\code{number}), or \code{none}}
 
@@ -49,6 +51,8 @@ soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, fill1 = "red",
 Draws the average x,y-positions of each player from one or both teams on a soccer pitch.
 }
 \examples{
+library(dplyr)
+
 # average player position for one team w/ jersey numbers
 data(tromso)
 tromso \%>\% 

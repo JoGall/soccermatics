@@ -15,6 +15,8 @@ NULL
 #' @return a ggplot object of a heatmap on a soccer pitch.
 #' @details uses \code{ggplot2::geom_bin2d} to map 2D bin counts
 #' @examples
+#' library(dplyr)
+#' 
 #' # Heatmap of Tromso IL #8 position w/ ~5x5m bins (pitchLength / 5 = 21, pitchWidth / 5 = 13.6) 
 #' data(tromso)
 #' tromso %>% 
@@ -22,6 +24,7 @@ NULL
 #'   soccerHeatmap(xBins = 10)
 #' 
 #' # Heatmap of France w/ 6x3 zones
+#' data(statsbomb)
 #' statsbomb %>%
 #'   filter(type.name == "Pressure" & team.name == "France") %>% 
 #'   soccerHeatmap(x = "location.x", y = "location.y", xBins = 6, yBins = 3,

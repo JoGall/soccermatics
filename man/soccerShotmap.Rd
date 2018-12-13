@@ -24,6 +24,7 @@ a ggplot object
 If \code{df} contains two teams, draws a shotmap of each team at either end of a full pitch. If \code{df} contains one or more players from a single team, draws a vertical half pitch. Currently only works with StatsBomb data but compatability with other (non-StatsBomb) shot data will be added soon.
 }
 \examples{
+library(dplyr)
 data(statsbomb)
 
 # shot map of two teams on full pitch

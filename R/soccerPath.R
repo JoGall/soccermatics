@@ -18,24 +18,28 @@ NULL
 #' @param plot plot to add path to, if desired
 #' @return a ggplot object
 #' @examples
+#' library(dplyr)
 #' data(tromso)
+#' 
 #' # draw path of Tromso #8 over first 3 minutes (1800 frames)
-#' subset(tromso, id == 8)[1:1800,] %>%
-#'   soccerPath(col = "red", grass = TRUE, arrow = "r")
+#' tromso %>% 
+#'   filter(id == 8) %>% 
+#'   top_n(1800) %>%
+#'   soccerPath(col = "red", theme = "grass", arrow = "r")
 #'   
 #' # draw path of all Tromso players over first minute (600 frames)
 #' tromso %>%
-#'   dplyr::group_by(id) %>%
-#'   dplyr::slice(1:1200) %>%
-#'   soccerPath(id = "id")
+#'   group_by(id) %>%
+#'   slice(1:1200) %>%
+#'   soccerPath(id = "id", theme = "light")
 #' 
 #' @export
 soccerPath <- function(df, lengthPitch = 105, widthPitch = 68, col = "black", arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), lwd = 1, title = NULL, subtitle = NULL, legend = FALSE, x = "x", y = "y", id = NULL, plot = NULL) {
   
   if(is.null(id)) {
+    # one player
     if(missing(plot)) {
-      # one player
-      p <- soccerPitchBG(lengthPitch, widthPitch, arrow = arrow, theme = theme[1], title = title, subtitle = subtitle) + 
+      p <- soccerPitch(lengthPitch, widthPitch, arrow = arrow, theme = theme[1], title = title, subtitle = subtitle) + 
         geom_path(data = df, aes(x, y), col = col, lwd = lwd)
     } else {
       p <- plot +
@@ -44,7 +48,7 @@ soccerPath <- function(df, lengthPitch = 105, widthPitch = 68, col = "black", ar
   } else {
     # multiple players
     if(missing(plot)) {
-      p <- soccerPitchBG(lengthPitch, widthPitch, arrow = arrow, theme = theme[1], title = title, subtitle = subtitle) + 
+      p <- soccerPitch(lengthPitch, widthPitch, arrow = arrow, theme = theme[1], title = title, subtitle = subtitle) + 
         geom_path(data = df, aes_string("x", "y", group = id, colour = id), lwd = lwd) +
         scale_colour_brewer(type = "seq", palette = "Paired", labels = 1:12)
     } else {

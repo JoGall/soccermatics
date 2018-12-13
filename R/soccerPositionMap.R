@@ -11,7 +11,8 @@ NULL
 #' @param fill1,fill2 character, fill colour of position points of team 1, team 2 (team 2 \code{NULL} by default)
 #' @param col1,col2 character, border colour of position points of team 1, team 2 (team 2 \code{NULL} by default)
 #' @param labelCol character, label text colour
-#' @param homeTeam if \code{df} contains two teams, the name of the home team to be displayed on the left hand side of the pitch. If \code{NULL}, infers home team as the team of the first event in \code{df}.
+#' @param homeTeam if \code{df} contains two teams, the name of the home team to be displayed on the left hand side of the pitch (i.e. attacking from left to right). If \code{NULL}, infers home team as the team of the first event in \code{df}.
+#' @param flipAwayTeam flip x,y-coordinates of away team so attacking from right to left
 #' @param label type of label to draw, player names (\code{name}), jersey numbers (\code{number}), or \code{none}
 #' @param labelBox add box around label text
 #' @param shortNames shorten player names to display last name as label
@@ -23,6 +24,8 @@ NULL
 #' @param source if \code{statsbomb}, uses StatsBomb definitions of required variable names (i.e. `location.x`, `location.y`, `player.id`, `team.name`). If \code{manual}, respects variable names defined in function arguments \code{x}, \code{y}, \code{id}, \code{name}, and \code{team}.
 #' @param x,y,id,name,team names of variables containing x,y-coordinates, unique player ids, player names, and team names. If \code{team} remains NULL, function expects only one team.
 #' @examples
+#' library(dplyr)
+#' 
 #' # average player position for one team w/ jersey numbers
 #' data(tromso)
 #' tromso %>% 
@@ -49,7 +52,7 @@ NULL
 #'                     subtitle = "Average pass position (1' - 45')")
 #' 
 #' @export
-soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = NULL, fill2 = "blue", col2 = NULL, labelCol = "black", homeTeam = NULL, flipTeam = NULL, label = c("name", "number", "none"), labelBox = TRUE, shortNames = TRUE, nodeSize = 5, labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL, source = c("manual", "statsbomb"), x = "x", y = "y", id = "id", name = NULL, team = NULL) {
+soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = NULL, fill2 = "blue", col2 = NULL, labelCol = "black", homeTeam = NULL, flipAwayTeam = TRUE, label = c("name", "number", "none"), labelBox = TRUE, shortNames = TRUE, nodeSize = 5, labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL, source = c("manual", "statsbomb"), x = "x", y = "y", id = "id", name = NULL, team = NULL) {
   
   # define colours by theme
   if(theme[1] == "grass") {
@@ -78,23 +81,24 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
   df$id <- df[,id]
   if(is.null(name)) name <- id
   df$name <- df[,name]
-  if(!is.null(team)) df$team <- df[,team]
+  if(!is.null(team)) team <- "Team A" 
+  df$team <- team
   
   # shorten player name
   if(!is.null(name) & shortNames == TRUE) {
     df$name <- soccerShortenName(df$name)
   }
   
-  # if two teams in df...
+  # if two teams in df
   if(length(unique(df$team)) > 1) {
     
     # home team taken as first team in df if unspecified
     if(is.null(homeTeam)) homeTeam <- df[,team][1]
     
     # flip x,y-coordinates of home team
-    if(flipTeam) {
+    if(flipAwayTeam) {
       df <- df %>% 
-        soccerFlipDirection(teamToFlip = homeTeam, periodToFlip = 1:2, x = "x", y = "y", team = "team")
+        soccerFlipDirection(teamToFlip = homeTeam, periodToFlip = 1:2, x = x, y = y, team = team)
     }
     
     # get average positions
@@ -112,7 +116,7 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
       scale_fill_manual(values = c(fill1, fill2)) +
       guides(colour = FALSE, fill = FALSE)
     
-  # if one team...  
+  # if one team
   } else {
     # get average positions
     pos <- df %>%

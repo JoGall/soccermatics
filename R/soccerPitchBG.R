@@ -13,8 +13,10 @@ NULL
 #' @param theme draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch
 #' @return a ggplot object
 #' @examples
-#' # custom plot of France defensive pressure events vs. Argentina
+#' library(ggplot2)
 #' data(statsbomb)
+#' 
+#' # custom plot of France defensive pressure events vs. Argentina
 #' soccerPitchBG(arrow = "r", theme = "grass", 
 #'               title = "France (vs. Argentina)", 
 #'               subtitle = "Pressure events") + 
@@ -118,22 +120,22 @@ soccerPitchBG <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none", 
   theme_buffer <- ifelse(theme[1] == "light", 0, 4)
   if(!is.null(title) & !is.null(subtitle)) {
     p <- p +
-      cowplot::draw_text(title, 
+      draw_text(title, 
                          x = 0, y = widthPitch + 9, hjust = 0, vjust = 1,
                          size = 15, fontface = 'bold', col = colText) +
-      cowplot::draw_text(subtitle, 
+      draw_text(subtitle, 
                          x = 0, y = widthPitch + 4.5, hjust = 0, vjust = 1,
                          size = 13, col = colText) +
       theme(plot.margin = unit(c(-0.525,-0.9,-0.7,-0.9), "cm"))
   } else if(!is.null(title) & is.null(subtitle)) {
     p <- p +
-      cowplot::draw_text(title, 
+      draw_text(title, 
                          x = 0, y = widthPitch + 4.5, hjust = 0, vjust = 1,
                          size = 15, fontface = 'bold', col = colText) +
       theme(plot.margin = unit(c(-0.9,-0.9,-0.7,-0.9), "cm"))
   } else if(is.null(title) & !is.null(subtitle)) {
     p <- p +
-      cowplot::draw_text(subtitle, 
+      draw_text(subtitle, 
                          x = 0, y = widthPitch + 4.5, hjust = 0, vjust = 1,
                          size = 13, col = colText) +
       theme(plot.margin = unit(c(-0.9,-0.9,-0.7,-0.9), "cm"))

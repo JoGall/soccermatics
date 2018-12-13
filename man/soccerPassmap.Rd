@@ -43,9 +43,9 @@ Draw an undirected passing network of completed passes on pitch from StatsBomb d
 \examples{
 # France vs. Argentina, minimum of three passes
 library(dplyr)
-library(soccermatics)
 
 # Argentina pass map until first substituton with transparent edges
+data(statsbomb)
 statsbomb \%>\% 
   filter(team.name == "Argentina") \%>\% 
   soccerPassmap(fill = "lightblue", arrow = "r",

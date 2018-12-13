@@ -13,6 +13,7 @@ NULL
 #' @param title,subtitle optional, adds title and subtitle to half pitch plot. Title defaults to scoreline and team identity when two teams are defined in \code{df}.
 #' @return a ggplot object
 #' @examples
+#' library(dplyr)
 #' data(statsbomb)
 #' 
 #' # shot map of two teams on full pitch
@@ -118,11 +119,11 @@ soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NUL
     
     # add labels
     p <- p +
-      cowplot::draw_text(paste0(xg_totals$team.name[1], "  ", goals$g[1]), x = lengthPitch / 2 - 1, y = widthPitch + 5, hjust = 1, vjust = 1, size = 15, fontface = 'bold', colour = colText) +
-      cowplot::draw_text(":", x = lengthPitch / 2, y = widthPitch + 5, hjust = 0.5, vjust = 1, size = 15, fontface = 'bold', colour = colText) +
-      cowplot::draw_text(paste0(goals$g[2], "  ", xg_totals$team.name[2]), x = lengthPitch / 2 + 1, y = widthPitch + 5, hjust = 0, vjust = 1, size = 15, fontface = 'bold', colour = colText) +
-      cowplot::draw_text(xg1, x = lengthPitch / 2 - 1, y = widthPitch - 5, hjust = 1, vjust = 0, size = 15, colour = colText) +
-      cowplot::draw_text(xg2, x = lengthPitch / 2 + 1, y = widthPitch - 5, hjust = 0, vjust = 0, size = 15, colour = colText) +
+      draw_text(paste0(xg_totals$team.name[1], "  ", goals$g[1]), x = lengthPitch / 2 - 1, y = widthPitch + 5, hjust = 1, vjust = 1, size = 15, fontface = 'bold', colour = colText) +
+      draw_text(":", x = lengthPitch / 2, y = widthPitch + 5, hjust = 0.5, vjust = 1, size = 15, fontface = 'bold', colour = colText) +
+      draw_text(paste0(goals$g[2], "  ", xg_totals$team.name[2]), x = lengthPitch / 2 + 1, y = widthPitch + 5, hjust = 0, vjust = 1, size = 15, fontface = 'bold', colour = colText) +
+      draw_text(xg1, x = lengthPitch / 2 - 1, y = widthPitch - 5, hjust = 1, vjust = 0, size = 15, colour = colText) +
+      draw_text(xg2, x = lengthPitch / 2 + 1, y = widthPitch - 5, hjust = 0, vjust = 0, size = 15, colour = colText) +
       theme(plot.margin = unit(c(-0.9,-0.9,-0.7,-0.9), "cm"))
     
     # half pitch if one team

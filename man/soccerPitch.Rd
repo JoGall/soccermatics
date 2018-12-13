@@ -26,11 +26,13 @@ a ggplot object
 Draws a soccer pitch as a ggplot object for the purpose of adding layers such as player positions, player trajectories, etc..
 }
 \examples{
-# custom plot of France defensive pressure events vs. Argentina
+library(ggplot2)
 data(statsbomb)
+
+# custom plot of France defensive pressure events vs. Argentina
 soccerPitch(arrow = "r", theme = "grass", 
-              title = "France (vs. Argentina)", 
-              subtitle = "Pressure events") + 
+            title = "France (vs. Argentina)", 
+            subtitle = "Pressure events") + 
   geom_point(data = filter(statsbomb, team.name == "France" & type.name == "Pressure"), 
              aes(x = location.x, y = location.y), 
              col = "blue", alpha = 0.5)

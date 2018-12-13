@@ -39,15 +39,19 @@ a ggplot object
 Draws a path connecting consecutive x,y-coordinates of a player on a soccer pitch.
 }
 \examples{
+library(dplyr)
 data(tromso)
+
 # draw path of Tromso #8 over first 3 minutes (1800 frames)
-subset(tromso, id == 8)[1:1800,] \%>\%
-  soccerPath(col = "red", grass = TRUE, arrow = "r")
+tromso \%>\% 
+  filter(id == 8) \%>\% 
+  top_n(1800) \%>\%
+  soccerPath(col = "red", theme = "grass", arrow = "r")
   
 # draw path of all Tromso players over first minute (600 frames)
 tromso \%>\%
-  dplyr::group_by(id) \%>\%
-  dplyr::slice(1:1200) \%>\%
-  soccerPath(id = "id")
+  group_by(id) \%>\%
+  slice(1:1200) \%>\%
+  soccerPath(id = "id", theme = "light")
 
 }

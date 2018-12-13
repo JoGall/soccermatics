@@ -86,22 +86,22 @@ soccerPitchHalf <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none"
   theme_buffer <- ifelse(theme[1] == "light", 0, 4)
   if(!is.null(title) & !is.null(subtitle)) {
     p <- p +
-      cowplot::draw_text(title, 
+      draw_text(title, 
                          x = widthPitch/2, y = lengthPitch + 10, hjust = 0.5, vjust = 1,
                          size = 15, fontface = 'bold', col = colText) +
-      cowplot::draw_text(subtitle, 
+      draw_text(subtitle, 
                          x = widthPitch/2, y = lengthPitch + 6.5, hjust = 0.5, vjust = 1,
                          size = 13, col = colText) +
       theme(plot.margin = unit(c(-0.7,-1.4,-0.7,-1.4), "cm"))
   } else if(!is.null(title) & is.null(subtitle)) {
     p <- p +
-      cowplot::draw_text(title, 
+      draw_text(title, 
                          x = widthPitch/2, y = lengthPitch + 6.5, hjust = 0.5, vjust = 1,
                          size = 15, fontface = 'bold', col = colText) +
       theme(plot.margin = unit(c(-1.2,-1.4,-0.7,-1.4), "cm"))
   } else if(is.null(title) & !is.null(subtitle)) {
     p <- p +
-      cowplot::draw_text(subtitle, 
+      draw_text(subtitle, 
                          x = widthPitch/2, y = lengthPitch + 6.5, hjust = 0.5, vjust = 1,
                          size = 13, col = colText) +
       theme(plot.margin = unit(c(-1.2,-1.4,-0.7,-1.4), "cm"))

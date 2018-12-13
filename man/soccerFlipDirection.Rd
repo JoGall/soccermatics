@@ -5,8 +5,8 @@
 \title{Flips x,y-coordinates horizontally in one half to account for changing sides at half-time}
 \usage{
 soccerFlipDirection(df, lengthPitch = 105, widthPitch = 68,
-  teamToFlip = NULL, periodToFlip = 1, period = "period", team = "team",
-  x = "x", y = "y")
+  teamToFlip = NULL, periodToFlip = 1:2, period = "period",
+  team = "team", x = "x", y = "y")
 }
 \arguments{
 \item{df}{= dataframe containing unnormalised x,y-coordinates}
@@ -29,9 +29,17 @@ i.e. teams attack in the same direction all game despite changing sides at
 half-time.
 }
 \examples{
-# fake period data for tromso dataset, and flip direction of '2nd half'
-tromso \%>\% 
-  mutate(period = if_else(t > as.POSIXct("2013-11-07 21:14:00 GMT"), 1, 2))
-  soccerFlipDirection(lengthPitch = 120, widthPitch = 80, periodToFlip = 2)
+library(dplyr)
 
+# flip x,y-coords of France in both halves of statsbomb data
+data(statsbomb)
+statsbomb \%>\% 
+  soccerFlipDirection(lengthPitch = 105, widthPitch = 68, teamToFlip = "France", team = "team.name", x = "location.x", y = "location.y")
+  
+# flip x,y-coords in 2nd half of Tromso, based on a dummy period variable
+data(tromso)
+tromso \%>\% 
+  mutate(period = if_else(t > as.POSIXct("2013-11-07 21:14:00 GMT"), 1, 2)) \%>\% 
+  soccerFlipDirection(lengthPitch = 105, widthPitch = 68, periodToFlip = 2)
+  
 }
