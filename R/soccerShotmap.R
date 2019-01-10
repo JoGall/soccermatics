@@ -9,6 +9,7 @@ NULL
 #' 
 #' @param lengthPitch,widthPitch length and width of pitch, in metres
 #' @param homeTeam if \code{df} contains two teams, the name of the home team to be displayed on the left hand side of the pitch. If \code{NULL}, infers home team as the team of the first event in \code{df}.
+#' @param adj adjust xG using conditional probability to account for multiple shots per possession
 #' @param n_players number of highest xG players to display
 #' @param size_lim minimum and maximum size of points, \code{c(min, max)}
 #' @param theme draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch with appropriate point colours
@@ -30,7 +31,7 @@ NULL
 #'                 subtitle = "vs. Argentina, World Cup 2018")
 #' 
 #' @export
-soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NULL, n_players = 0, size_lim = c(2,15), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL) {
+soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NULL, adj = TRUE, n_players = 0, size_lim = c(2,15), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL) {
   
   # define colours by theme
   if(theme[1] == "grass") {
@@ -82,6 +83,18 @@ soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NUL
     og_totals <- df %>%
       group_by(team.name) %>%
       dplyr::summarise(og = length(type.name[type.name == "Own Goal For"]))
+
+    # adjust xG using conditional probability when there are multiple shots in a single possession
+    if(adj) {
+      df <- df %>%
+        filter(type.name == "Shot" & penalty == 0) %>%
+        group_by(team.name, possession) %>%
+        mutate(xg_cond = (1 - prod(1 - xg))) %>%
+        mutate(xg_adj = xg_cond * (xg / sum(xg))) %>%
+        ungroup() %>%
+        select(-xg, -xg_cond) %>%
+        rename(xg = xg_adj)
+    }
 
     # expected goals
     xg_totals <- df %>%
@@ -170,6 +183,18 @@ soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NUL
     pen_totals <- df %>%
       filter(type.name == "Shot") %>%
       dplyr::summarise(pen = length(shot.outcome[penalty == 1 & shot.outcome == 1]))
+
+    # adjust xG using conditional probability when multiple shots in a single possession
+    if(adj) {
+      df <- df %>%
+        filter(type.name == "Shot" & penalty == 0) %>%
+        group_by(team.name, possession) %>%
+        mutate(xg_cond = (1 - prod(1 - xg))) %>%
+        mutate(xg_adj = xg_cond * (xg / sum(xg))) %>%
+        ungroup() %>%
+        select(-xg, -xg_cond) %>%
+        rename(xg = xg_adj)
+    }
     
     # expected goals
     xg <- df %>%

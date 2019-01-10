@@ -8,6 +8,7 @@ NULL
 #' 
 #' @param dat a dataframe containing StatsBomb data from one full match
 #' @param homeCol,awayCol colours of the home and away team, respectively
+#' @param adj adjust xG using conditional probability to account for multiple shots per possession
 #' @param labels include scoreline and goalscorer labels for goals
 #' @param y_buffer vertical space to add at the top of the y-axis (a quick and dirty way to ensure text annotations are not cropped).
 #' @return a ggplot object
@@ -16,11 +17,24 @@ NULL
 #' data(statsbomb)
 #' 
 #' # xG timeline of France vs. Argentina
+#' # w/ goalscorer labels, adjusted xG data
 #' statsbomb %>%
 #'   soccerxGTimeline(homeCol = "blue", awayCol = "lightblue", y_buffer = 0.4)
 #' 
+#' # no goalscorer labels, raw xG data
+#' statsbomb %>%
+#'   soccerxGTimeline(homeCol = "blue", awayCol = "lightblue", adj = F)
+#' 
 #' @export
-soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", labels = TRUE, y_buffer = 0.3) {
+soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", adj = TRUE, labels = TRUE, y_buffer = 0.3) {
+  
+  # set variable names
+  home_team <- dat$team.name[1]
+  away_team <- dat[dat$team.name != home_team,]$team.name %>% unique
+  ht_t <- dat[dat$type.name == "Half End",]$t[1] #HT in seconds
+  et_first <- ht_t - (45 * 60) #1H stoppage time
+  dat[dat$period == 2,]$t <- dat[dat$period == 2,]$t + et_first #add 1H stoppage time to 2H
+  ft_t <- dat[dat$type.name == "Half End",]$t[4] # FT in seconds
   
   # preprocess data
   dat <- dat %>% 
@@ -30,36 +44,45 @@ soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", labels = TR
                       if_else(type.name == "Shot", "Open", "NA")))) %>% 
     mutate(outcome = if_else(type == "OG", 1,
                        if_else(shot.outcome.name == "Goal", 1, 0)))
-    
-  # set variable names
-  home_team <- dat$team.name[1]
-  away_team <- dat[dat$team.name != home_team,]$team.name %>% unique
-  ht_t <- dat[dat$type.name == "Half End",]$t[1] #HT in seconds
-  et_first <- ht_t - (45 * 60) #1H stoppage time
-  dat[dat$period == 2,]$t <- dat[dat$period == 2,]$t + et_first #add 1H stoppage time to 2H
-  ft_t <- dat[dat$type.name == "Half End",]$t[4] # FT in seconds
+    filter(!is.na(type)) %>% 
+    mutate(xg = shot.statsbomb_xg,
+           xg = if_else(type %in% c("Pen", "OG"), 0, xg))
+  
+  # adjust xG using conditional probability when there are multiple shots in a single possession
+  if(adj) {
+    xg <- dat %>%
+      filter(type == "Open") %>%
+      group_by(team.name, possession) %>%
+      mutate(xg_total = (1 - prod(1 - xg))) %>%
+      mutate(xg_adj = xg_total * (xg / sum(xg))) %>%
+      ungroup() %>%
+      select(id, xg_adj)
+      
+    dat <- left_join(dat, xg, by = "id") %>% 
+      mutate(xg_adj = replace_na(xg_adj, 0)) %>%
+      select(-xg) %>% 
+      rename(xg = xg_adj)
+  }
   
   # compute cumulative xG (non-penalty, non-OG goals only)
   shots <- dat %>% 
-    filter(!is.na(type)) %>% 
-    mutate(shot.statsbomb_xg = if_else(type %in% c("Pen", "OG"), 0, shot.statsbomb_xg)) %>% 
     group_by(team.name) %>%
-    mutate(xg = cumsum(shot.statsbomb_xg)) %>% 
+    mutate(xg = cumsum(xg)) %>% 
     ungroup() %>% 
     select(team.name, xg, t, id)
-  # dummy first row at KO for plotting
+  # dummy first row at KO for start of geom_line
   shots_start <- shots %>% 
     group_by(team.name) %>% 
     summarise(xg = 0,
               t = 0,
               id = NA)
-  # dummy final row at FT for plotting
+  # dummy final row at FT for end of geom_line
   shots_end <- shots %>% 
     group_by(team.name) %>% 
     summarise(xg = max(xg),
               t = ft_t,
               id = NA)
-  # join
+  # join shots data
   shots <- rbind(shots, shots_start, shots_end)
   
   # get goals
@@ -72,31 +95,28 @@ soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", labels = TR
                      shots %>% select(id, xg),
                      by = "id")
   
-  # make labels
-  # get scoreline
+  
+  # set plotting options and labels
+  # score and goalscorer labels
   goals <- goals %>% 
     mutate(hg = if_else(team.name == home_team, 1, 0),
            ag = if_else(team.name != home_team, 1, 0)) %>%
     mutate(hg = cumsum(hg),
-           ag = cumsum(ag))
-  
-  # add parentheses for pen or OG
-  goals <- goals %>% 
+           ag = cumsum(ag)) %>% 
     mutate(name = soccermatics::soccerShortenName(player.name)) %>%
     mutate(label = paste0(hg, "-", ag, " ", name)) %>% 
     mutate(label = if_else(type == "Pen", paste0(label, " (P)"),
                    if_else(type == "OG", paste0(label, " (OG)"),
                    label)))
-  
-  # plot
+
   y_lim <- ifelse(labels, max(shots$xg) + y_buffer, max(shots$xg) + 0.2)
-  
   title_a <- paste0(home_team, " ", max(goals$hg), " (", sprintf("%.1f", max(shots[shots$team.name == home_team,]$xg), 1), ")")
   title_b <- paste0(away_team, " ", max(goals$ag), " (", sprintf("%.1f", max(shots[shots$team.name == away_team,]$xg), 1), ")")
   
   shots$team.name <- factor(shots$team.name, levels = c(home_team, away_team))
   goals$team.name <- factor(goals$team.name, levels = c(home_team, away_team))
   
+  # plot
   p <- ggplot() +
     geom_vline(xintercept = ht_t, linetype = "longdash", col = "grey70") +
     geom_vline(xintercept = ft_t, linetype = "longdash", col = "grey70") +
