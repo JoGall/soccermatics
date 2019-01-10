@@ -5,13 +5,17 @@
 \title{Draw an individual, team, or two team shotmap using StatsBomb data}
 \usage{
 soccerShotmap(df, lengthPitch = 105, widthPitch = 68, homeTeam = NULL,
-  theme = c("light", "dark", "grey", "grass"), title = NULL,
-  subtitle = NULL)
+  n_players = 0, size_lim = c(2, 15), theme = c("light", "dark", "grey",
+  "grass"), title = NULL, subtitle = NULL)
 }
 \arguments{
 \item{lengthPitch, widthPitch}{length and width of pitch, in metres}
 
 \item{homeTeam}{if \code{df} contains two teams, the name of the home team to be displayed on the left hand side of the pitch. If \code{NULL}, infers home team as the team of the first event in \code{df}.}
+
+\item{n_players}{number of highest xG players to display}
+
+\item{size_lim}{minimum and maximum size of points, \code{c(min, max)}}
 
 \item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch with appropriate point colours}
 
