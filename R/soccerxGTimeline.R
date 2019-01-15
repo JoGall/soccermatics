@@ -1,6 +1,7 @@
 #' @include soccerShortenName.R
 #' @import ggplot2
 #' @import dplyr
+#' @importFrom tidyr replace_na
 NULL
 #' Draw a timeline showing cumulative expected goals (xG) over the course of a match using StatsBomb data.
 #'
@@ -28,6 +29,15 @@ NULL
 #' @export
 soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", adj = TRUE, labels = TRUE, y_buffer = 0.3) {
   
+  # preprocess data
+  dat <- dat %>% 
+    mutate(t = minute * 60 + second) %>% 
+    mutate(type = if_else(type.name == "Own Goal For", "OG",
+                          if_else(shot.type.name == "Penalty", "Pen", 
+                                  if_else(type.name == "Shot", "Open", "NA")))) %>% 
+    mutate(outcome = if_else(type == "OG", 1,
+                             if_else(shot.outcome.name == "Goal", 1, 0)))
+  
   # set variable names
   home_team <- dat$team.name[1]
   away_team <- dat[dat$team.name != home_team,]$team.name %>% unique
@@ -36,14 +46,8 @@ soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", adj = TRUE,
   dat[dat$period == 2,]$t <- dat[dat$period == 2,]$t + et_first #add 1H stoppage time to 2H
   ft_t <- dat[dat$type.name == "Half End",]$t[4] # FT in seconds
   
-  # preprocess data
+  # shot types
   dat <- dat %>% 
-    mutate(t = minute * 60 + second) %>% 
-    mutate(type = if_else(type.name == "Own Goal For", "OG",
-                    if_else(shot.type.name == "Penalty", "Pen", 
-                      if_else(type.name == "Shot", "Open", "NA")))) %>% 
-    mutate(outcome = if_else(type == "OG", 1,
-                       if_else(shot.outcome.name == "Goal", 1, 0)))
     filter(!is.na(type)) %>% 
     mutate(xg = shot.statsbomb_xg,
            xg = if_else(type %in% c("Pen", "OG"), 0, xg))

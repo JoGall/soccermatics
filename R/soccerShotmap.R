@@ -61,7 +61,7 @@ soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NUL
 
     # flip x,y-coordinates of home team and factorise variables
     df <- df %>%
-      soccerFlipDirection(teamToFlip = homeTeam, periodToFlip = 1:2, x = "location.x", y = "location.y", team = "team.name") %>%
+      soccerFlipDirection(teamToFlip = homeTeam, x = "location.x", y = "location.y", team = "team.name") %>%
       mutate(shot.outcome = as.factor(if_else(shot.outcome.name == "Goal", 1, 0)),
              penalty = as.factor(if_else(shot.type.name == "Penalty", 1, 0)),
              team.name = factor(team.name, levels = c(homeTeam, awayTeam))) %>%
