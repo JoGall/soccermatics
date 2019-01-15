@@ -32,12 +32,17 @@ NULL
 #' @export
 soccerFlipDirection <- function(df, lengthPitch = 105, widthPitch = 68, teamToFlip = NULL, periodToFlip = 1:2, period = "period", team = "team", x = "x", y = "y") {
 
+  # flip all x,y-coordinates in df
   if(is.null(teamToFlip)) {
-    df[,x] <- ifelse(df[,period] %in% periodToFlip, lengthPitch - df[,x], df[,x])
-    df[,y] <- ifelse(df[,period] %in% periodToFlip, widthPitch - df[,y], df[,y])    
+    df <- df %>%
+      mutate(!!x := if_else(!!sym(period) %in% periodToFlip, lengthPitch - !!sym(x), !!sym(x)),
+            !!y := if_else(!!sym(period) %in% periodToFlip, widthPitch - !!sym(y), !!sym(y)))
+    
+  # flip x,y-coords of only one team
   } else {
-    df[,x] <- ifelse(df[,team] == teamToFlip & df[,period] %in% periodToFlip, lengthPitch - df[,x], df[,x])
-    df[,y] <- ifelse(df[,team] == teamToFlip & df[,period] %in% periodToFlip, widthPitch - df[,y], df[,y])
+    df <- df %>%
+      mutate(!!x := if_else(!!sym(team) == teamToFlip & !!sym(period) %in% periodToFlip, lengthPitch - !!sym(x), !!sym(x)),
+             !!y := if_else(!!sym(team) == teamToFlip & !!sym(period) %in% periodToFlip, widthPitch - !!sym(y), !!sym(y)))
   }
   
   return(df)
