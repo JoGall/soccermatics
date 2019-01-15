@@ -5,19 +5,23 @@
 \title{Flips x,y-coordinates horizontally in one half to account for changing sides at half-time}
 \usage{
 soccerFlipDirection(df, lengthPitch = 105, widthPitch = 68,
-  teamToFlip = NULL, periodToFlip = 1:2, period = "period",
-  team = "team", x = "x", y = "y")
+  teamToFlip = NULL, periodToFlip = 1:2, team = "team",
+  period = "period", x = "x", y = "y")
 }
 \arguments{
 \item{df}{= dataframe containing unnormalised x,y-coordinates}
 
 \item{lengthPitch, widthPitch}{= length, width of pitch in metres}
 
-\item{periodToFlip}{= identity of period to flip}
+\item{teamToFlip}{= character, name of team to flip. If \code{NULL}, all x,y-coordinates in \code{df} will be flipped}
 
-\item{period}{= name of variable containing period labels}
+\item{periodToFlip}{= integer, period(s) to flip}
 
-\item{x, y}{= name of variables containing x,y-coordinates}
+\item{team}{= character, name of variables containing x,y-coordinates}
+
+\item{period}{= character, name of variable containing period labels}
+
+\item{x, y}{= character, name of variables containing x,y-coordinates}
 }
 \value{
 a dataframe
