@@ -11,9 +11,11 @@ NULL
 #' 
 #' @param df = dataframe containing unnormalised x,y-coordinates
 #' @param lengthPitch,widthPitch = length, width of pitch in metres
-#' @param period = name of variable containing period labels
-#' @param periodToFlip = identity of period to flip
-#' @param x,y = name of variables containing x,y-coordinates
+#' @param teamToFlip = character, name of team to flip. If \code{NULL}, all x,y-coordinates in \code{df} will be flipped
+#' @param periodToFlip = integer, period(s) to flip
+#' @param team = character, name of variables containing x,y-coordinates
+#' @param period = character, name of variable containing period labels
+#' @param x,y = character, name of variables containing x,y-coordinates
 #' @return a dataframe
 #' @examples
 #' library(dplyr)
@@ -30,14 +32,19 @@ NULL
 #'   soccerFlipDirection(lengthPitch = 105, widthPitch = 68, periodToFlip = 2)
 #'   
 #' @export
-soccerFlipDirection <- function(df, lengthPitch = 105, widthPitch = 68, teamToFlip = NULL, periodToFlip = 1:2, period = "period", team = "team", x = "x", y = "y") {
+soccerFlipDirection <- function(df, lengthPitch = 105, widthPitch = 68, teamToFlip = NULL, periodToFlip = 1:2, team = "team", period = "period", x = "x", y = "y") {
 
+  # flip all x,y-coordinates in df
   if(is.null(teamToFlip)) {
-    df[,x] <- ifelse(df[,period] %in% periodToFlip, lengthPitch - df[,x], df[,x])
-    df[,y] <- ifelse(df[,period] %in% periodToFlip, widthPitch - df[,y], df[,y])    
+    df <- df %>%
+      mutate(!!x := if_else(!!sym(period) %in% periodToFlip, lengthPitch - !!sym(x), !!sym(x)),
+             !!y := if_else(!!sym(period) %in% periodToFlip, widthPitch - !!sym(y), !!sym(y)))
+    
+  # flip x,y-coords of only one team
   } else {
-    df[,x] <- ifelse(df[,team] == teamToFlip & df[,period] %in% periodToFlip, lengthPitch - df[,x], df[,x])
-    df[,y] <- ifelse(df[,team] == teamToFlip & df[,period] %in% periodToFlip, widthPitch - df[,y], df[,y])
+    df <- df %>%
+      mutate(!!x := if_else(!!sym(team) == teamToFlip & !!sym(period) %in% periodToFlip, lengthPitch - !!sym(x), !!sym(x)),
+             !!y := if_else(!!sym(team) == teamToFlip & !!sym(period) %in% periodToFlip, widthPitch - !!sym(y), !!sym(y)))
   }
   
   return(df)

@@ -4,13 +4,15 @@
 \alias{soccerxGTimeline}
 \title{Draw a timeline showing cumulative expected goals (xG) over the course of a match using StatsBomb data.}
 \usage{
-soccerxGTimeline(dat, homeCol = "red", awayCol = "blue", labels = TRUE,
-  y_buffer = 0.3)
+soccerxGTimeline(dat, homeCol = "red", awayCol = "blue", adj = TRUE,
+  labels = TRUE, y_buffer = 0.3)
 }
 \arguments{
 \item{dat}{a dataframe containing StatsBomb data from one full match}
 
 \item{homeCol, awayCol}{colours of the home and away team, respectively}
+
+\item{adj}{adjust xG using conditional probability to account for multiple shots per possession}
 
 \item{labels}{include scoreline and goalscorer labels for goals}
 
@@ -27,7 +29,12 @@ library(dplyr)
 data(statsbomb)
 
 # xG timeline of France vs. Argentina
+# w/ goalscorer labels, adjusted xG data
 statsbomb \%>\%
   soccerxGTimeline(homeCol = "blue", awayCol = "lightblue", y_buffer = 0.4)
+
+# no goalscorer labels, raw xG data
+statsbomb \%>\%
+  soccerxGTimeline(homeCol = "blue", awayCol = "lightblue", adj = F)
 
 }
