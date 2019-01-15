@@ -38,7 +38,7 @@ soccerFlipDirection <- function(df, lengthPitch = 105, widthPitch = 68, teamToFl
   if(is.null(teamToFlip)) {
     df <- df %>%
       mutate(!!x := if_else(!!sym(period) %in% periodToFlip, lengthPitch - !!sym(x), !!sym(x)),
-            !!y := if_else(!!sym(period) %in% periodToFlip, widthPitch - !!sym(y), !!sym(y)))
+             !!y := if_else(!!sym(period) %in% periodToFlip, widthPitch - !!sym(y), !!sym(y)))
     
   # flip x,y-coords of only one team
   } else {
