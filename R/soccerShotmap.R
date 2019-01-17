@@ -208,7 +208,7 @@ soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NUL
       mutate(size = scales::rescale(xg, size_lim, c(0, 1))) %>%
       arrange(as.numeric(shot.outcome), size)
     
-    p <- soccerPitchHalf(lengthPitch, widthPitch, theme = theme[1]) +
+    p <- soccerPitchHalf(lengthPitch, widthPitch, theme = theme[1], title = title, subtitle = subtitle) +
       geom_point(data = df, aes(x = location.y, y = location.x, size = size, colour = shot.outcome), alpha = 0.7) +
       scale_size_identity() +
       scale_colour_manual(name = "Outcome", breaks = c(0,1), values = c(colMiss, colGoal)) +
