@@ -81,8 +81,8 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
   df$id <- df[,id]
   if(is.null(name)) name <- id
   df$name <- df[,name]
-  if(!is.null(team)) team <- "Team A" 
-  df$team <- team
+  if(is.null(team)) team <- "Team A"
+  df$team <- df[,team]
   
   # shorten player name
   if(!is.null(name) & shortNames == TRUE) {
@@ -98,15 +98,15 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
     # flip x,y-coordinates of home team
     if(flipAwayTeam) {
       df <- df %>% 
-        soccerFlipDirection(teamToFlip = homeTeam, periodToFlip = 1:2, x = x, y = y, team = team)
+        soccerFlipDirection(teamToFlip = homeTeam, periodToFlip = 1:2)
     }
     
     # get average positions
     pos <- df %>%
       group_by(team, id, name) %>%
       dplyr::summarise(x.mean = mean(x), y.mean = mean(y)) %>% 
-      # ungroup() %>% 
-      # mutate(team = as.factor(team), id = as.factor(id)) %>% 
+      ungroup() %>%
+      mutate(team = as.factor(team), id = as.factor(id)) %>%
       as.data.frame()
     
     # plot
