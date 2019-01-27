@@ -145,7 +145,7 @@ soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NUL
     # top xG by player
     if(n_players > 0) {
       top_xgs <- df %>%
-        group_by(player.name, team.name, position.name) %>%
+        group_by(player.name, team.name) %>%
         summarise(xg = sum(xg, na.rm=T)) %>%
         ungroup() %>%
         mutate(name = soccerShortenName(player.name)) %>%
