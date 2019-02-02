@@ -36,8 +36,8 @@ soccerPitchFG <- function(plot, lengthPitch = 105, widthPitch = 68, colPitch = "
     geom_circle(aes(x0 = 11, y0 = widthPitch / 2, r = 0.25), fill = colPitch, col = colPitch, lwd = lwd) +
     geom_circle(aes(x0 = lengthPitch - 11, y0 = widthPitch / 2, r = 0.25), fill = colPitch, col = colPitch, lwd = lwd) +
     # penalty arcs
-    geom_arc(aes(x0= 11, y0 = widthPitch / 2, r = 9.15, start = 0.65, end = 2.49), col = colPitch, lwd = lwd) +
-    geom_arc(aes(x0 = lengthPitch - 11, y0 = widthPitch / 2, r = 9.15, start = 3.79, end = 5.63), col = colPitch, lwd = lwd) +
+    geom_arc(aes(x0= 11, y0 = widthPitch/2, r = 9.15, start = pi/2 + 0.9259284, end = pi/2 - 0.9259284), col = colPitch, lwd = lwd) +
+    geom_arc(aes(x0 = lengthPitch - 11, y0 = widthPitch/2, r = 9.15, start = pi/2*3 - 0.9259284, end = pi/2*3 + 0.9259284), col = colPitch, lwd = lwd) +
     # six yard boxes
     geom_rect(aes(xmin = 0, xmax = 5.5, ymin = (widthPitch / 2) - 9.16, ymax = (widthPitch / 2) + 9.16), fill = "NA", col = colPitch, lwd = lwd) +
     geom_rect(aes(xmin = lengthPitch - 5.5, xmax = lengthPitch, ymin = (widthPitch / 2) - 9.16, ymax = (widthPitch / 2) + 9.16), fill = "NA", col = colPitch, lwd = lwd) +
