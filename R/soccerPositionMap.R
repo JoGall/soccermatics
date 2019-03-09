@@ -82,7 +82,7 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
   if(is.null(name)) name <- id
   df$name <- df[,name]
   if(is.null(team)) team <- "Team A"
-  df$team <- df[,team]
+  df$team <- team
   
   # shorten player name
   if(!is.null(name) & shortNames == TRUE) {
