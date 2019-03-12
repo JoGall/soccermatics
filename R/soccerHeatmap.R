@@ -1,12 +1,14 @@
 #' @include soccerPitch.R
 #' @import ggplot2
 #' @import dplyr
+#' @importFrom MASS kde2d
 NULL
 #' Draw a heatmap on a soccer pitch.
 #' @description Draws a heatmap showing player position frequency in each area of the pitch and adds soccer pitch outlines.
 #' 
 #' @param df dataframe containing x,y-coordinates of player position
 #' @param xBins,yBins integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.
+#' @param kde use kernel density estimates for a smoother heatmap
 #' @param lengthPitch,widthPitch numeric, length and width of pitch in metres.
 #' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
 #' @param colLow,colHigh character, colours for the low and high ends of the heatmap gradient.
@@ -33,31 +35,46 @@ NULL
 #'                 subtitle = "Defensive pressure heatmap")
 #'
 #' @export
-soccerHeatmap <- function(df, lengthPitch = 105, widthPitch = 68, xBins = 10, yBins = NULL, arrow = c("none", "r", "l"), colLow = "white", colHigh = "red", title = NULL, subtitle = NULL, x = "x", y = "y") {
+soccerHeatmap <- function(df, lengthPitch = 105, widthPitch = 68, xBins = 10, yBins = NULL, kde = FALSE, arrow = c("none", "r", "l"), colLow = "white", colHigh = "red", title = NULL, subtitle = NULL, x = "x", y = "y") {
   
   # rename variables
   df$x <- df[,x]
   df$y <- df[,y]
   
-  # check value for vertical bins and match to horizontal bins if NULL
-  if(is.null(yBins)) yBins <- xBins
+  # zonal heatmap
+  if(!kde) {
+    # check value for vertical bins and match to horizontal bins if NULL
+    if(is.null(yBins)) yBins <- xBins
+    
+    # filter invalid values outside pitch limits
+    df <- df[df$x > 0 & df$x < lengthPitch & df$y > 0 & df$y < widthPitch,]
+    
+    # define bin ranges
+    x.range <- seq(0, lengthPitch, length.out = xBins+1)
+    y.range <- seq(0, widthPitch, length.out = yBins+1)
+    
+    # plot heatmap on blank pitch lines
+    p <- soccerPitch(lengthPitch, widthPitch, arrow = arrow, title = title, subtitle = subtitle, theme = "blank") +
+      geom_bin2d(data = df, aes(x, y), binwidth = c(diff(x.range)[1], diff(y.range)[1])) +
+      scale_fill_gradient(low = colLow, high = colHigh) +
+      guides(fill=FALSE)
+    
+    # redraw pitch lines  
+    p <- soccerPitchFG(p, title = !is.null(subtitle), subtitle = !is.null(title))
+    
+  # kernel density estimate heatmap
+  } else {
+    dens <- kde2d(df$x, df$y, n=200, lims=c(c(0.25, lengthPitch-0.25), c(0.25, widthPitch-0.25)))
+    dens_df <- data.frame(expand.grid(x = dens$x, y = dens$y), z = as.vector(dens$z))
+    
+    p <- soccerPitch(lengthPitch, widthPitch, arrow = arrow, title = title, subtitle = subtitle, theme = "light") +
+      geom_tile(data = dens_df, aes(x = x, y = y, fill = z)) +
+      scale_fill_distiller(palette="Spectral", na.value="white") +
+      guides(fill = FALSE)
+    
+    p <- soccerPitchFG(p, title = !is.null(subtitle), subtitle = !is.null(title))
+  }
   
-  # filter invalid values outside pitch limits
-  df <- df[df$x > 0 & df$x < lengthPitch & df$y > 0 & df$y < widthPitch,]
-  
-  # define bin ranges
-  x.range <- seq(0, lengthPitch, length.out = xBins+1)
-  y.range <- seq(0, widthPitch, length.out = yBins+1)
-  
-  # plot heatmap on blank pitch lines
-  p <- soccerPitch(lengthPitch, widthPitch, arrow = arrow, title = title, subtitle = subtitle, theme = "blank") +
-    geom_bin2d(data = df, aes(x, y), binwidth = c(diff(x.range)[1], diff(y.range)[1])) +
-    scale_fill_gradient(low = colLow, high = colHigh) +
-    guides(fill=FALSE)
-  
-  # redraw pitch lines  
-  p <- soccerPitchFG(p)
-
   return(p)
   
 }

@@ -5,8 +5,9 @@
 \title{Draw a heatmap on a soccer pitch.}
 \usage{
 soccerHeatmap(df, lengthPitch = 105, widthPitch = 68, xBins = 10,
-  yBins = NULL, arrow = c("none", "r", "l"), colLow = "white",
-  colHigh = "red", title = NULL, subtitle = NULL, x = "x", y = "y")
+  yBins = NULL, kde = FALSE, arrow = c("none", "r", "l"),
+  colLow = "white", colHigh = "red", title = NULL, subtitle = NULL,
+  x = "x", y = "y")
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position}
@@ -14,6 +15,8 @@ soccerHeatmap(df, lengthPitch = 105, widthPitch = 68, xBins = 10,
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres.}
 
 \item{xBins, yBins}{integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.}
+
+\item{kde}{use kernel density estimates for a smoother heatmap}
 
 \item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
 

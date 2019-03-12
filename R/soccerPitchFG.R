@@ -15,7 +15,7 @@ NULL
 #' 
 #' @seealso \code{\link{soccerPitch}} for plotting a soccer pitch for the purpose of drawing over event data, average position, player trajectories, etc..
 #' @export
-soccerPitchFG <- function(plot, lengthPitch = 105, widthPitch = 68, colPitch = "black", arrow = c("none", "r", "l"), title = NULL, subtitle = NULL) {
+soccerPitchFG <- function(plot, lengthPitch = 105, widthPitch = 68, colPitch = "black", arrow = c("none", "r", "l"), title = FALSE, subtitle = FALSE) {
   
   lwd <- 0.5
   
@@ -49,38 +49,17 @@ soccerPitchFG <- function(plot, lengthPitch = 105, widthPitch = 68, colPitch = "
           axis.text = element_blank(),
           axis.title = element_blank())
   
-  # add arrow
-  if(arrow[1] == "r") {
-    p <- p + 
-      geom_segment(aes(x = 0, y = -2, xend = lengthPitch / 3, yend = -2), colour = "black", size = 1.5, arrow = arrow(length = unit(0.2, "cm"), type="closed"), linejoin='mitre')
-  } else if(arrow[1] == "l") {
-    p <- p + 
-      geom_segment(aes(x = lengthPitch, y = -2, xend = lengthPitch / 3 * 2, yend = -2), colour = "black", size = 1.5, arrow = arrow(length = unit(0.2, "cm"), type="closed"), linejoin='mitre')
-  }
-  
   # add title and/or subtitle
-  if(!is.null(title) & !is.null(subtitle)) {
+  if(title & subtitle) {
     p <- p +
-      cowplot::draw_text(title, 
-                         x = 0, y = widthPitch + 9, hjust = 0, vjust = 1,
-                         size = 15, fontface = 'bold', col = colText) +
-      cowplot::draw_text(subtitle, 
-                         x = 0, y = widthPitch + 4.5, hjust = 0, vjust = 1,
-                         size = 13, col = colText) +
       theme(plot.margin = unit(c(-0.525,-0.9,-0.7,-0.9), "cm"))
-  } else if(!is.null(title) & is.null(subtitle)) {
+  } else if(title & !subtitle) {
     p <- p +
-      cowplot::draw_text(title, 
-                         x = 0, y = widthPitch + 4.5, hjust = 0, vjust = 1,
-                         size = 15, fontface = 'bold', col = colText) +
       theme(plot.margin = unit(c(-0.9,-0.9,-0.7,-0.9), "cm"))
-  } else if(is.null(title) & !is.null(subtitle)) {
+  } else if(!title & subtitle) {
     p <- p +
-      cowplot::draw_text(subtitle, 
-                         x = 0, y = widthPitch + 4.5, hjust = 0, vjust = 1,
-                         size = 13, col = colText) +
       theme(plot.margin = unit(c(-0.9,-0.9,-0.7,-0.9), "cm"))
-  } else if(is.null(title) & is.null(subtitle)){
+  } else if(!title & !subtitle) {
     p <- p +
       theme(plot.margin = unit(c(-1.2,-0.9,-0.7,-0.9), "cm"))
   }
