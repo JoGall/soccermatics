@@ -5,7 +5,7 @@ soccermatics provides tools to visualise spatial tracking and event data from fo
 
 Many more functions are planned - see [To Do List](https://github.com/JoGall/soccermatics/issues/8), suggestions and/or help welcomed!
 
-The sample x,y-coordinate data in `tromso` and `tromso_extra` were made available by [Pettersen et al. (2014)](http://home.ifi.uio.no/paalh/dataset/alfheim/), whilst the event data in `statsbomb` is taken from the World Cup 2018 data made public by StatsBomb.
+The sample x,y-coordinate tracking data in `tromso` and `tromso_extra` were made available by [Pettersen et al. (2014)](http://home.ifi.uio.no/paalh/dataset/alfheim/), whilst the event data in `statsbomb` is taken from the World Cup 2018 data [made public by StatsBomb](https://github.com/statsbomb/open-data).
 
 Use of the name `soccermatics` kindly permitted by the eponymous book's author, [David Sumpter](https://www.bloomsbury.com/uk/soccermatics-9781472924124/).
 
@@ -29,7 +29,7 @@ library(soccermatics)
 
 Below are some sample visualisations produced by `soccermetrics` with code snippets underneath. See the individual help files for each function (e.g. `?soccerHeatmap`) for more information.
 
-##### Shotmaps (showing xG)
+#### Shotmaps (showing xG)
 
 Dark theme:
 
@@ -53,7 +53,7 @@ statsbomb %>%
 ```
 
 
-##### Passing networks
+#### Passing networks
 
 Default aesthetics:
 
@@ -79,7 +79,7 @@ statsbomb %>%
 ```
 
 
-##### Heatmaps
+#### Heatmaps
 
 Passing heatmap with approx 10x10m bins:
 
@@ -109,7 +109,7 @@ statsbomb %>%
 Player position heatmaps also possible using TRACAB-style x,y-location data.
 
 
-##### Average position
+#### Average position
 
 Average pass position:
 
@@ -151,7 +151,7 @@ tromso_extra[1:11,] %>%
 ```
 
 
-##### Custom plots
+#### Custom plots
 
 Inbuilt functions for many of these will be added soon.
 
@@ -190,7 +190,7 @@ soccerPitch(arrow = "r",
 ```
 
 
-##### Player paths
+#### Player paths
 
 Path of a single player:
 
@@ -215,16 +215,6 @@ tromso %>%
   soccerPath(id = "id", arrow = "r", 
              title = "Tromsø IL (vs. Strømsgodset, 3rd Nov 2013)", 
              subtitle = "Player paths (1')")
-```
-
----
-
-### Updates
-
-The package is constantly getting a makeover and may occassionally break. Should installation fail at any time, please install the last stable version (v0.8.4) from [this tarball](https://github.com/JoGall/soccermatics/blob/master/soccermatics_0.8.4.tar.gz) like so:
-
-```{r}
-install.packages("https://github.com/JoGall/soccermatics/blob/master/soccermatics_0.8.4.tar.gz", repo=NULL, type="source")
 ```
 
 ---
