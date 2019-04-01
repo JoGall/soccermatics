@@ -1,13 +1,13 @@
 soccermatics
 =====
 
-soccermatics provides tools to visualise spatial tracking and event data from football (soccer) matches. There are currently functions to visualise shot maps (with xG), average positions, heatmaps, and individual player trajectories. There are also helper functions to smooth, interpolate, and prepare TRACAB-style x,y-coordinate data for plotting and calculating further metrics.
+soccermatics provides tools to visualise spatial tracking and event data from football (soccer) matches. There are currently functions to visualise shot maps (with xG), average positions, heatmaps, and individual player trajectories. There are also helper functions to smooth, interpolate, and prepare x,y-coordinate tracking data for plotting and calculating further metrics.
 
-Many more functions are planned - see [To Do List](https://github.com/JoGall/soccermatics/issues/8), suggestions and/or help welcomed!
+Many more functions are planned - see [To Do List](https://github.com/JoGall/soccermatics/issues/8) - suggestions and/or help welcomed!
 
 The sample x,y-coordinate tracking data in `tromso` and `tromso_extra` were made available by [Pettersen et al. (2014)](http://home.ifi.uio.no/paalh/dataset/alfheim/), whilst the event data in `statsbomb` is taken from the World Cup 2018 data [made public by StatsBomb](https://github.com/statsbomb/open-data).
 
-Use of the name `soccermatics` kindly permitted by the eponymous book's author, [David Sumpter](https://www.bloomsbury.com/uk/soccermatics-9781472924124/).
+Use of the name soccermatics kindly permitted by the eponymous book's author, [David Sumpter](https://www.bloomsbury.com/uk/soccermatics-9781472924124/).
 
 soccermatics is built on R v3.4.2.
 
