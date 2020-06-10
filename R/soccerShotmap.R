@@ -52,6 +52,9 @@ soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NUL
     colText <- "white"
   }
   
+  # ensure input is dataframe
+  df <- as.data.frame(df)
+  
   # full pitch shotmap for two teams
   if(length(unique(df$team.name)) > 1) {
 

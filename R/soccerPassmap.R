@@ -59,6 +59,9 @@ soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, f
     if(is.null(edgeCol)) edgeCol <- "white"
   }
   
+  # ensure input is dataframe
+  df <- as.data.frame(df)
+  
   # set variable names
   x <- "location.x"
   y <- "location.y"

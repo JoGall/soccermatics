@@ -36,6 +36,9 @@ NULL
 #' @export
 soccerPath <- function(df, lengthPitch = 105, widthPitch = 68, col = "black", arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), lwd = 1, title = NULL, subtitle = NULL, legend = FALSE, x = "x", y = "y", id = NULL, plot = NULL) {
   
+  # ensure input is dataframe
+  df <- as.data.frame(df)
+  
   if(is.null(id)) {
     # one player
     if(missing(plot)) {

@@ -67,6 +67,9 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
   if(is.null(col1)) col1 <- fill1
   if(is.null(col2)) col2 <- fill2
   
+  # ensure input is dataframe
+  df <- as.data.frame(df)
+  
   # set variable names
   if(source[1] == "statsbomb") {
     x <- "location.x"

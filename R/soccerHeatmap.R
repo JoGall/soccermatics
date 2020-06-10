@@ -19,13 +19,13 @@ NULL
 #' @examples
 #' library(dplyr)
 #' 
-#' # Heatmap of Tromso IL #8 position w/ ~5x5m bins (pitchLength / 5 = 21, pitchWidth / 5 = 13.6) 
+#' # Heatmap w/ ~5x5m bins (pitchLength / 5 = 21, pitchWidth / 5 = 13.6)
 #' data(tromso)
 #' tromso %>% 
 #'   filter(id == 8) %>% 
 #'   soccerHeatmap(xBins = 10)
 #' 
-#' # Heatmap of France w/ 6x3 zones
+#' # Heatmap w/ 6x3 zones
 #' data(statsbomb)
 #' statsbomb %>%
 #'   filter(type.name == "Pressure" & team.name == "France") %>% 
@@ -34,8 +34,18 @@ NULL
 #'                 title = "France (vs Argentina, 30th June 2016)", 
 #'                 subtitle = "Defensive pressure heatmap")
 #'
+#' # Kernel density estimate heatmap
+#' statsbomb %>%
+#'   filter(type.name %in% c("Duel", "Interception", "Clearance", "Block") & player.name == "Samuel Yves Umtiti") %>%
+#'   soccerHeatmap(kde = T, x = "location.x", y = "location.y", arrow = "r",
+#'                 title = "Umtiti (vs Argentina, 30th June 2016)",
+#'                 subtitle = "Defensive actions heatmap")
+#'                 
 #' @export
 soccerHeatmap <- function(df, lengthPitch = 105, widthPitch = 68, xBins = 10, yBins = NULL, kde = FALSE, arrow = c("none", "r", "l"), colLow = "white", colHigh = "red", title = NULL, subtitle = NULL, x = "x", y = "y") {
+  
+  # ensure input is dataframe
+  df <- as.data.frame(df)
   
   # rename variables
   df$x <- df[,x]
