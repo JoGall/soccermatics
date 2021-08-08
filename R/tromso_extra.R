@@ -8,9 +8,4 @@
 #' @references Pettersen et al. (2014) Proceedings of the International Conference on Multimedia Systems (MMSys)
 #' (\href{http://home.ifi.uio.no/paalh/publications/files/mmsys2014-dataset.pdf}{pdf})
 #' @usage data(tromso_extra)
-#' @examples
-#' data(tromso_extra)
-#' # draw flow field showing mean direction of player #8's movement
-#' soccerFlow(subset(tromso_extra, id == 8), bins = 5, grass = TRUE)
-#' 
 NULL

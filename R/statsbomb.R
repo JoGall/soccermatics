@@ -7,12 +7,4 @@
 #' @source \href{http://home.ifi.uio.no/paalh/dataset/alfheim/}{ZXY Sport Tracking}
 #' @references \href{https://github.com/statsbomb/open-data}{StatsBomb Open Data}
 #' @usage data(statsbomb)
-#' @examples
-#' data(statsbomb)
-#' 
-#' # heatmap of France defensive pressure vs. Argentina (2018-06-30)
-#' statsbomb %>% 
-#'   filter(type.name == "Pressure" & team.name == "France") %>% 
-#'   soccerHeatmap(x = "location.x", y = "location.y")
-#' 
 NULL
