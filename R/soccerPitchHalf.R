@@ -1,6 +1,8 @@
 #' @include soccerPitch.R
 #' @include soccerShotmap.R
 #' @import ggplot2
+#' @import dplyr
+#' @importFrom magrittr "%>%"
 #' @importFrom ggforce geom_arc geom_circle
 #' @importFrom cowplot draw_text
 NULL
@@ -9,13 +11,34 @@ NULL
 #' @description Adds soccer pitch outlines (with transparent fill) to an existing ggplot object (e.g. heatmaps, passing maps, etc..)
 #' 
 #' @param lengthPitch,widthPitch length and width of pitch in metres
-#' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
-#' @param theme draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch
-#' @param title,subtitle optional, adds title and subtitle to plot
+#' @param arrow adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'}); \code{'none'} by default
+#' @param theme palette of pitch background and lines, either \code{light} (default), \code{dark}, \code{grey}, or \code{grass}; 
+#' @param title,subtitle adds title and subtitle to plot; NULL by default
+#' @param data a default dataset for plotting in subsequent layers; NULL by default
 #' @return a ggplot object
-#' @seealso \code{\link{soccerShotmap}} for plotting a shotmap on a half pitch or \code{\link{soccerPitch}} for drawing a full size soccer pitch
+#' @seealso \code{\link{soccerShotmap}} for plotting a shotmap on a half pitch for a single player or \code{\link{soccerPitch}} for drawing a full size soccer pitch
+#' @examples
+#' library(ggplot2)
+#' library(dplyr)
+#' data(statsbomb)
+#' 
+#' # normalise data, get non-penalty shots for France, 
+#' # add boolean variable 'goal' for plotting
+#' my_df <- statsbomb %>%
+#'   soccerTransform(method = 'statsbomb') %>% 
+#'   filter(team.name == "France" &
+#'          type.name == "Shot" &
+#'          shot.type.name != 'penalty') %>%
+#'   mutate(goal = as.factor(if_else(shot.outcome.name == "Goal", 1, 0)))
+#'   
+#' soccerPitchHalf(data = my_df, theme = 'light') +
+#'   geom_point(aes(x = location.y, y = location.x,
+#'                  size = shot.statsbomb_xg, colour = goal),
+#'              alpha = 0.7)
+#'             
 #' @export
-soccerPitchHalf <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL) {
+soccerPitchHalf <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL, data = NULL) {
+  start<-end<-NULL
   
   # define colours by theme
   if(theme[1] == "grass") {
@@ -37,11 +60,11 @@ soccerPitchHalf <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none"
     arrowCol <- "white"
     colText <- "black"
   } else {
-    fill1 <- "#1C1F26"
-    fill2 <- "#1C1F26"
-    colPitch <- "white"
-    arrowCol <- "white"
-    colText <- "white"
+    fill1 <- "#1a1e2c"
+    fill2 <- "#1a1e2c"
+    colPitch <- "#F0F0F0"
+    arrowCol <- "#F0F0F0"
+    colText <- "#F0F0F0"
   }
   lwd <- 0.5
   
@@ -53,7 +76,7 @@ soccerPitchHalf <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none"
   boxes <- data.frame(start = lines * 0:12 - border[4], end = lines * 1:13 - border[2])[seq(2, 12, 2),]
   
   # draw pitch
-  p <- ggplot() +
+  p <- ggplot(data) +
     # background
     geom_rect(aes(xmin = -border[4], xmax = widthPitch + border[2], ymin = lengthPitch/2 - border[3], ymax = lengthPitch + border[1]), fill = fill1) +
     # mowed pitch lines
