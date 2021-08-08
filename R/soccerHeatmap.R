@@ -1,19 +1,20 @@
 #' @include soccerPitch.R
 #' @import ggplot2
 #' @import dplyr
+#' @importFrom magrittr "%>%"
 #' @importFrom MASS kde2d
 NULL
-#' Draw a heatmap on a soccer pitch.
+#' Draw a heatmap on a soccer pitch using any event or tracking data.
 #' @description Draws a heatmap showing player position frequency in each area of the pitch and adds soccer pitch outlines.
 #' 
 #' @param df dataframe containing x,y-coordinates of player position
 #' @param xBins,yBins integer, the number of horizontal (length-wise) and vertical (width-wise) bins the soccer pitch is to be divided up into. If no value for \code{yBins} is provided, it will take the value of \code{xBins}.
-#' @param kde use kernel density estimates for a smoother heatmap
+#' @param kde use kernel density estimates for a smoother heatmap; FALSE by default
 #' @param lengthPitch,widthPitch numeric, length and width of pitch in metres.
-#' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
-#' @param colLow,colHigh character, colours for the low and high ends of the heatmap gradient.
-#' @param title,subtitle optional, adds title and subtitle to plot
-#' @param x,y = name of variables containing x,y-coordinates
+#' @param arrow adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'}); \code{'none'} by default
+#' @param colLow,colHigh character, colours for the low and high ends of the heatmap gradient; white and red respectively by default
+#' @param title,subtitle adds title and subtitle to plot; NULL by default
+#' @param x,y name of variables containing x,y-coordinates
 #' @return a ggplot object of a heatmap on a soccer pitch.
 #' @details uses \code{ggplot2::geom_bin2d} to map 2D bin counts
 #' @examples
@@ -25,24 +26,28 @@ NULL
 #'   filter(id == 8) %>% 
 #'   soccerHeatmap(xBins = 10)
 #' 
-#' # Heatmap w/ 6x3 zones
+#' # team pressure heatmap w/ 6x3 zones
 #' data(statsbomb)
 #' statsbomb %>%
+#'   soccerTransform(method='statsbomb') %>% 
 #'   filter(type.name == "Pressure" & team.name == "France") %>% 
-#'   soccerHeatmap(x = "location.x", y = "location.y", xBins = 6, yBins = 3,
-#'                 arrow = "r", 
+#'   soccerHeatmap(x = "location.x", y = "location.y",
+#'                 xBins = 6, yBins = 3, arrow = "r", 
 #'                 title = "France (vs Argentina, 30th June 2016)", 
 #'                 subtitle = "Defensive pressure heatmap")
 #'
-#' # Kernel density estimate heatmap
+#' # player defensive action kernel density estimate heatmap
 #' statsbomb %>%
-#'   filter(type.name %in% c("Duel", "Interception", "Clearance", "Block") & player.name == "Samuel Yves Umtiti") %>%
-#'   soccerHeatmap(kde = T, x = "location.x", y = "location.y", arrow = "r",
+#'   filter(type.name %in% c("Duel", "Interception", "Clearance", "Block") &
+#'          player.name == "Samuel Yves Umtiti") %>%
+#'   soccerHeatmap(x = "location.x", y = "location.y",
+#'                 kde = TRUE, arrow = "r",
 #'                 title = "Umtiti (vs Argentina, 30th June 2016)",
 #'                 subtitle = "Defensive actions heatmap")
 #'                 
 #' @export
 soccerHeatmap <- function(df, lengthPitch = 105, widthPitch = 68, xBins = 10, yBins = NULL, kde = FALSE, arrow = c("none", "r", "l"), colLow = "white", colHigh = "red", title = NULL, subtitle = NULL, x = "x", y = "y") {
+  z <- NULL
   
   # ensure input is dataframe
   df <- as.data.frame(df)
@@ -67,7 +72,7 @@ soccerHeatmap <- function(df, lengthPitch = 105, widthPitch = 68, xBins = 10, yB
     p <- soccerPitch(lengthPitch, widthPitch, arrow = arrow, title = title, subtitle = subtitle, theme = "blank") +
       geom_bin2d(data = df, aes(x, y), binwidth = c(diff(x.range)[1], diff(y.range)[1])) +
       scale_fill_gradient(low = colLow, high = colHigh) +
-      guides(fill=FALSE)
+      guides(fill="none")
     
     # redraw pitch lines  
     p <- soccerPitchFG(p, title = !is.null(subtitle), subtitle = !is.null(title))
@@ -80,7 +85,7 @@ soccerHeatmap <- function(df, lengthPitch = 105, widthPitch = 68, xBins = 10, yB
     p <- soccerPitch(lengthPitch, widthPitch, arrow = arrow, title = title, subtitle = subtitle, theme = "light") +
       geom_tile(data = dens_df, aes(x = x, y = y, fill = z)) +
       scale_fill_distiller(palette="Spectral", na.value="white") +
-      guides(fill = FALSE)
+      guides(fill="none")
     
     p <- soccerPitchFG(p, title = !is.null(subtitle), subtitle = !is.null(title))
   }
