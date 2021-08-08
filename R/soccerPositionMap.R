@@ -1,12 +1,13 @@
 #' @include soccerPitch.R
 #' @import ggplot2
 #' @import dplyr
+#' @importFrom magrittr "%>%"
 #' @importFrom ggrepel geom_text_repel geom_label_repel
 NULL
-#' Plot average player position
+#' Plot average player position using any event or tracking data
 #' @description Draws the average x,y-positions of each player from one or both teams on a soccer pitch.
 #' 
-#' @param df dataframe containing x,y-coordinates of player position
+#' @param df a dataframe containing x,y-coordinates of player position and a player identifier variable
 #' @param lengthPitch,widthPitch numeric, length and width of pitch in metres
 #' @param fill1,fill2 character, fill colour of position points of team 1, team 2 (team 2 \code{NULL} by default)
 #' @param col1,col2 character, border colour of position points of team 1, team 2 (team 2 \code{NULL} by default)
@@ -18,11 +19,11 @@ NULL
 #' @param shortNames shorten player names to display last name as label
 #' @param nodeSize numeric, size of position points
 #' @param labelSize numeric, size of labels
-#' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
+#' @param arrow optional, adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'})
 #' @param theme draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch
 #' @param title,subtitle optional, adds title and subtitle to plot
-#' @param source if \code{statsbomb}, uses StatsBomb definitions of required variable names (i.e. `location.x`, `location.y`, `player.id`, `team.name`). If \code{manual}, respects variable names defined in function arguments \code{x}, \code{y}, \code{id}, \code{name}, and \code{team}.
-#' @param x,y,id,name,team names of variables containing x,y-coordinates, unique player ids, player names, and team names. If \code{team} remains NULL, function expects only one team.
+#' @param source if \code{statsbomb}, uses StatsBomb definitions of required variable names (i.e. `location.x`, `location.y`, `player.id`, `team.name`); if \code{manual} (default), respects variable names defined in function arguments \code{x}, \code{y}, \code{id}, \code{name}, and \code{team}.
+#' @param x,y,id,name,team names of variables containing x,y-coordinates, unique player ids, player names, and team names, respectively; \code{name} and \code{team} NULL by default
 #' @examples
 #' library(dplyr)
 #' 
@@ -39,7 +40,8 @@ NULL
 #' statsbomb %>%
 #'   filter(type.name == "Pass" & team.name == "France" & period == 1) %>%
 #'   soccerPositionMap(source = "statsbomb",
-#'                     fill1 = "blue", arrow = "r", labelBox = F, theme = "grey", labelCol = "white",
+#'                     fill1 = "blue", arrow = "r", theme = "grey",
+#'                     labelBox = FALSE, labelCol = "white",
 #'                     title = "France (vs Argentina, 30th June 2018)",
 #'                     subtitle = "Average pass position (1' - 45')")
 #'                  
@@ -53,6 +55,7 @@ NULL
 #' 
 #' @export
 soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = NULL, fill2 = "blue", col2 = NULL, labelCol = "black", homeTeam = NULL, flipAwayTeam = TRUE, label = c("name", "number", "none"), labelBox = TRUE, shortNames = TRUE, nodeSize = 5, labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL, source = c("manual", "statsbomb"), x = "x", y = "y", id = "id", name = NULL, team = NULL) {
+  x.mean<-y.mean<-NULL
   
   # define colours by theme
   if(theme[1] == "grass") {
@@ -117,7 +120,7 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
       geom_point(data = pos, aes(x.mean, y.mean, group = team, fill = team, colour = team), shape = 21, size = 6, stroke = 1.3) +
       scale_colour_manual(values = c(col1, col2)) +
       scale_fill_manual(values = c(fill1, fill2)) +
-      guides(colour = FALSE, fill = FALSE)
+      guides(colour="none", fill="none")
     
   # if one team
   } else {

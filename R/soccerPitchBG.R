@@ -1,4 +1,6 @@
 #' @import ggplot2
+#' @importFrom dplyr filter
+#' @importFrom magrittr "%>%"
 #' @importFrom ggforce geom_arc geom_circle
 #' @importFrom cowplot draw_text
 NULL
@@ -8,28 +10,18 @@ NULL
 #' 
 #' @param lengthPitch,widthPitch length and width of pitch in metres
 #' @param fillPitch,colPitch pitch fill and line colour
-#' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
-#' @param title,subtitle optional, adds title and subtitle to plot
-#' @param theme draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch
+#' @param arrow adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'}); \code{'none'} by default
+#' @param title,subtitle adds title and subtitle to plot; NULL by default
+#' @param theme palette of pitch background and lines, either \code{light} (default), \code{dark}, \code{grey}, or \code{grass}
+#' @param data a default dataset for plotting in subsequent layers; NULL by default
 #' @return a ggplot object
-#' @examples
-#' library(ggplot2)
-#' data(statsbomb)
-#' 
-#' # custom plot of France defensive pressure events vs. Argentina
-#' soccerPitchBG(arrow = "r", theme = "grass", 
-#'               title = "France (vs. Argentina)", 
-#'               subtitle = "Pressure events") + 
-#'   geom_point(data = filter(statsbomb, team.name == "France" & type.name == "Pressure"), 
-#'              aes(x = location.x, y = location.y), 
-#'              col = "blue", alpha = 0.5)
 #' @seealso \code{\link{soccermatics-deprecated}}
 #' @keywords internal
 #' @rdname soccermatics-deprecated
 #' @export
-soccerPitchBG <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r", "l"), title = NULL, subtitle = NULL, theme = c("light", "dark", "grey", "grass")) {
-
+soccerPitchBG <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r", "l"), title = NULL, subtitle = NULL, theme = c("light", "dark", "grey", "grass"), data = NULL) {
   .Deprecated("soccerPitch")
+  start<-end<-NULL
   
   # define colours by theme
   if(theme[1] == "grass") {
@@ -73,7 +65,7 @@ soccerPitchBG <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none", 
   boxes <- data.frame(start = lines * 0:12 - border[4], end = lines * 1:13 - border[2])[seq(2, 12, 2),]
   
   # draw pitch
-  p <- ggplot() +
+  p <- ggplot(data) +
     # background
     geom_rect(aes(xmin = -border[4], xmax = lengthPitch + border[2], ymin = -border[3], ymax = widthPitch + border[1]), fill = fill1) +
     # mowed pitch lines

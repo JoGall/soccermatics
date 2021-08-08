@@ -1,21 +1,23 @@
 #' @include soccerPitchFG.R
 #' @import ggplot2
+#' @import dplyr
+#' @importFrom magrittr "%>%"
 #' @importFrom ggforce geom_arc geom_circle
 NULL
 #' Helper function to draw soccer pitch outlines over an existing ggplot object
 #'
 #' @description Adds soccer pitch outlines (with transparent fill) to an existing ggplot object (e.g. heatmaps, passing maps, etc..)
 #' 
-#' @param plot an existing ggplot object to add pitch lines to
+#' @param plot an existing ggplot object to add pitch lines layer to
 #' @param lengthPitch,widthPitch length and width of pitch in metres
-#' @param colPitch pitch fill and line colour
-#' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
-#' @param title,subtitle optional, adds title and subtitle to plot
+#' @param colPitch colour of pitch markings
+#' @param arrow adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'}); \code{'none'} by default
+#' @param title,subtitle adds title and subtitle to plot; NULL by default
 #' @return a ggplot object
 #' 
-#' @seealso \code{\link{soccerPitch}} for plotting a soccer pitch for the purpose of drawing over event data, average position, player trajectories, etc..
+#' @seealso \code{\link{soccerPitch}} for plotting a soccer pitch as background layer
 #' @export
-soccerPitchFG <- function(plot, lengthPitch = 105, widthPitch = 68, colPitch = "black", arrow = c("none", "r", "l"), title = FALSE, subtitle = FALSE) {
+soccerPitchFG <- function(plot, lengthPitch = 105, widthPitch = 68, colPitch = "black", arrow = c("none", "r", "l"), title = NULL, subtitle = NULL) {
   
   lwd <- 0.5
   

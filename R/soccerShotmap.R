@@ -1,12 +1,15 @@
 #' @include soccerPitch.R
 #' @include soccerPitchHalf.R
 #' @import ggplot2
+#' @import dplyr
+#' @importFrom magrittr "%>%"
 #' @importFrom cowplot draw_text
 NULL
 #' Draw an individual, team, or two team shotmap using StatsBomb data
 #'
 #' @description If \code{df} contains two teams, draws a shotmap of each team at either end of a full pitch. If \code{df} contains one or more players from a single team, draws a vertical half pitch. Currently only works with StatsBomb data but compatability with other (non-StatsBomb) shot data will be added soon.
 #' 
+#' @param df dataframe containing x,y-coordinates of player passes
 #' @param lengthPitch,widthPitch length and width of pitch, in metres
 #' @param homeTeam if \code{df} contains two teams, the name of the home team to be displayed on the left hand side of the pitch. If \code{NULL}, infers home team as the team of the first event in \code{df}.
 #' @param adj adjust xG using conditional probability to account for multiple shots per possession
@@ -16,7 +19,6 @@ NULL
 #' @param title,subtitle optional, adds title and subtitle to half pitch plot. Title defaults to scoreline and team identity when two teams are defined in \code{df}.
 #' @return a ggplot object
 #' @examples
-#' library(dplyr)
 #' data(statsbomb)
 #' 
 #' # shot map of two teams on full pitch
@@ -25,13 +27,14 @@ NULL
 #' 
 #' # shot map of one player on half pitch
 #' statsbomb %>% 
-#'   filter(player.name == "Antoine Griezmann") %>% 
+#'   dplyr::filter(player.name == "Antoine Griezmann") %>% 
 #'   soccerShotmap(theme = "grass",
 #'                 title = "Antoine Griezmann", 
 #'                 subtitle = "vs. Argentina, World Cup 2018")
 #' 
 #' @export
-soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NULL, adj = TRUE, n_players = 0, size_lim = c(2,15), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL) {
+soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NULL, adj = TRUE, n_players = 0, size_lim = c(2,15), title = NULL, subtitle = NULL, theme = c("light", "dark", "grey", "grass")) {
+  shot.type.name<-team.name<-shot.statsbomb_xg<-type.name<-shot.outcome<-penalty<-possession<-xg_cond<-xg_adj<-size<-location.x<-location.y<-player.name<-name<-rowid<-x<-y<-label<-hjust<-.<-position_name<-shot.outcome.name<-position.name<-NULL
   
   # define colours by theme
   if(theme[1] == "grass") {
@@ -137,7 +140,7 @@ soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NUL
       geom_point(data = df, aes(x = location.x, y = location.y, size = size, colour = shot.outcome), alpha = 0.8) +
       scale_size_identity() +
       scale_colour_manual(name = "Outcome", breaks = c(0,1), values = c(colMiss, colGoal)) +
-      guides(colour = FALSE, size = FALSE)
+      guides(colour="none", size="none")
 
     # add labels
     p <- p +
@@ -156,7 +159,7 @@ soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NUL
         ungroup() %>%
         mutate(name = soccerShortenName(player.name)) %>%
         arrange(-xg) %>%
-        head(n_players) %>%
+        utils::head(n_players) %>%
         group_by(team.name) %>%
         mutate(rowid = 1:n()) %>%
         ungroup() %>%
@@ -218,7 +221,7 @@ soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NUL
       geom_point(data = df, aes(x = location.y, y = location.x, size = size, colour = shot.outcome), alpha = 0.7) +
       scale_size_identity() +
       scale_colour_manual(name = "Outcome", breaks = c(0,1), values = c(colMiss, colGoal)) +
-      guides(colour = FALSE, size = FALSE)
+      guides(colour="none", size="none")
     
     # top xG by player
     if(n_players > 0) {
@@ -228,7 +231,7 @@ soccerShotmap <- function(df, lengthPitch = 105, widthPitch = 68, homeTeam = NUL
         ungroup() %>%
         mutate(name = soccerShortenName(player.name)) %>%
         arrange(-xg) %>%
-        head(n_players) %>%
+        slice(1:n_players) %>%
         arrange(xg) %>%
         mutate(rowid = 1:n()) %>%
         mutate(label = sprintf("%s %s", sprintf("%.2f", xg), name),
