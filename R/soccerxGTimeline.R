@@ -1,13 +1,14 @@
 #' @include soccerShortenName.R
 #' @import ggplot2
 #' @import dplyr
+#' @importFrom magrittr "%>%"
 #' @importFrom tidyr replace_na
 NULL
 #' Draw a timeline showing cumulative expected goals (xG) over the course of a match using StatsBomb data.
 #'
 #' @description Draw a timeline showing cumulative expected goals (xG, excluding penalties and own goals) by two teams over the course of a match, as well as plotting the scoreline and goalscorer at goal events. Currently only works with StatsBomb data but compatability with other (non-StatsBomb) shot data will be added soon.
 #' 
-#' @param dat a dataframe containing StatsBomb data from one full match
+#' @param df a dataframe containing StatsBomb data from one full match
 #' @param homeCol,awayCol colours of the home and away team, respectively
 #' @param adj adjust xG using conditional probability to account for multiple shots per possession
 #' @param labels include scoreline and goalscorer labels for goals
@@ -24,13 +25,17 @@ NULL
 #' 
 #' # no goalscorer labels, raw xG data
 #' statsbomb %>%
-#'   soccerxGTimeline(homeCol = "blue", awayCol = "lightblue", adj = F)
+#'   soccerxGTimeline(homeCol = "blue", awayCol = "lightblue", adj = FALSE)
 #' 
 #' @export
-soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", adj = TRUE, labels = TRUE, y_buffer = 0.3) {
+soccerxGTimeline <- function(df, homeCol = "red", awayCol = "blue", adj = TRUE, labels = TRUE, y_buffer = 0.3) {
+  minute<-second<-type.name<-shot.type.name<-type<-shot.outcome.name<-shot.statsbomb_xg<-team.name<-possession<-xg_total<-xg_adj<-outcome<-player.name<-hg<-ag<-name<-label<-NULL
+  
+  # ensure input is dataframe
+  df <- as.data.frame(df)
   
   # preprocess data
-  dat <- dat %>% 
+  df <- df %>% 
     mutate(t = minute * 60 + second) %>% 
     mutate(type = if_else(type.name == "Own Goal For", "OG",
                           if_else(shot.type.name == "Penalty", "Pen", 
@@ -39,22 +44,22 @@ soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", adj = TRUE,
                              if_else(shot.outcome.name == "Goal", 1, 0)))
   
   # set variable names
-  home_team <- dat$team.name[1]
-  away_team <- dat[dat$team.name != home_team,]$team.name %>% unique
-  ht_t <- dat[dat$type.name == "Half End",]$t[1] #HT in seconds
+  home_team <- df$team.name[1]
+  away_team <- df[df$team.name != home_team,]$team.name %>% unique
+  ht_t <- df[df$type.name == "Half End",]$t[1] #HT in seconds
   et_first <- ht_t - (45 * 60) #1H stoppage time
-  dat[dat$period == 2,]$t <- dat[dat$period == 2,]$t + et_first #add 1H stoppage time to 2H
-  ft_t <- dat[dat$type.name == "Half End",]$t[4] # FT in seconds
+  df[df$period == 2,]$t <- df[df$period == 2,]$t + et_first #add 1H stoppage time to 2H
+  ft_t <- df[df$type.name == "Half End",]$t[4] # FT in seconds
   
   # shot types
-  dat <- dat %>% 
+  df <- df %>% 
     filter(!is.na(type)) %>% 
     mutate(xg = shot.statsbomb_xg,
            xg = if_else(type %in% c("Pen", "OG"), 0, xg))
   
   # adjust xG using conditional probability when there are multiple shots in a single possession
   if(adj) {
-    xg <- dat %>%
+    xg <- df %>%
       filter(type == "Open") %>%
       group_by(team.name, possession) %>%
       mutate(xg_total = (1 - prod(1 - xg))) %>%
@@ -62,14 +67,14 @@ soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", adj = TRUE,
       ungroup() %>%
       select(id, xg_adj)
       
-    dat <- left_join(dat, xg, by = "id") %>% 
+    df <- left_join(df, xg, by = "id") %>% 
       mutate(xg_adj = replace_na(xg_adj, 0)) %>%
       select(-xg) %>% 
       rename(xg = xg_adj)
   }
   
   # compute cumulative xG (non-penalty, non-OG goals only)
-  shots <- dat %>% 
+  shots <- df %>% 
     group_by(team.name) %>%
     mutate(xg = cumsum(xg)) %>% 
     ungroup() %>% 
@@ -90,7 +95,7 @@ soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", adj = TRUE,
   shots <- rbind(shots, shots_start, shots_end)
   
   # get goals
-  goals <- dat %>% 
+  goals <- df %>% 
     filter(outcome == 1) %>% 
     select(id, team.name, player.name, t, type)
   
@@ -114,8 +119,8 @@ soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", adj = TRUE,
                    label)))
 
   y_lim <- ifelse(labels, max(shots$xg) + y_buffer, max(shots$xg) + 0.2)
-  title_a <- paste0(home_team, " ", max(goals$hg), " (", sprintf("%.1f", max(shots[shots$team.name == home_team,]$xg), 1), ")")
-  title_b <- paste0(away_team, " ", max(goals$ag), " (", sprintf("%.1f", max(shots[shots$team.name == away_team,]$xg), 1), ")")
+  title_a <- paste0(home_team, " ", max(goals$hg), " (", sprintf("%.1f", max(shots[shots$team.name == home_team,]$xg)), ")")
+  title_b <- paste0(away_team, " ", max(goals$ag), " (", sprintf("%.1f", max(shots[shots$team.name == away_team,]$xg)), ")")
   
   shots$team.name <- factor(shots$team.name, levels = c(home_team, away_team))
   goals$team.name <- factor(goals$team.name, levels = c(home_team, away_team))
@@ -131,7 +136,7 @@ soccerxGTimeline <- function(dat, homeCol = "red", awayCol = "blue", adj = TRUE,
     scale_y_continuous(limits = c(0, y_lim), expand = c(0,0)) +
     scale_x_continuous(breaks = c(seq(0, 45*60, 15*60), ht_t + seq(0, 45*60, 15*60)), labels = c("0'","15'","30'","","45'","60'","75'","90'"), limits = c(0, ft_t+60), expand = c(0, 0)) +
     scale_color_manual(breaks = c(home_team, away_team), values = c(homeCol, awayCol)) +
-    guides(col = FALSE) +
+    guides(col="none") +
     labs(title = title_a,
          subtitle = title_b,
          y = "xG") +
