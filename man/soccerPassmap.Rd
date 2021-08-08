@@ -4,16 +4,31 @@
 \alias{soccerPassmap}
 \title{Draw a passing network using StatsBomb data}
 \usage{
-soccerPassmap(df, lengthPitch = 105, widthPitch = 68, minPass = 3,
-  fill = "red", col = "black", edgeAlpha = 0.6, edgeCol = NULL,
-  label = TRUE, shortNames = TRUE, maxNodeSize = 30, maxEdgeSize = 30,
-  labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark",
-  "grey", "grass"), title = NULL)
+soccerPassmap(
+  df,
+  lengthPitch = 105,
+  widthPitch = 68,
+  minPass = 3,
+  fill = "red",
+  col = "black",
+  edgeAlpha = 0.6,
+  edgeCol = NULL,
+  label = TRUE,
+  shortNames = TRUE,
+  maxNodeSize = 30,
+  maxEdgeSize = 30,
+  labelSize = 4,
+  arrow = c("none", "r", "l"),
+  theme = c("light", "dark", "grey", "grass"),
+  title = NULL
+)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player passes}
 
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch, in metres}
+
+\item{minPass}{minimum number of passes between players for edge to be drawn}
 
 \item{fill, col}{fill and border colour of nodes}
 
@@ -31,7 +46,7 @@ soccerPassmap(df, lengthPitch = 105, widthPitch = 68, minPass = 3,
 
 \item{labelSize}{size of player name labels}
 
-\item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
+\item{arrow}{optional, adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'})}
 
 \item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch}
 

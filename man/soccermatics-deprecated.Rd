@@ -5,18 +5,26 @@
 \alias{soccermatics-deprecated}
 \title{Plot a full soccer pitch}
 \usage{
-soccerPitchBG(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r",
-  "l"), title = NULL, subtitle = NULL, theme = c("light", "dark", "grey",
-  "grass"))
+soccerPitchBG(
+  lengthPitch = 105,
+  widthPitch = 68,
+  arrow = c("none", "r", "l"),
+  title = NULL,
+  subtitle = NULL,
+  theme = c("light", "dark", "grey", "grass"),
+  data = NULL
+)
 }
 \arguments{
 \item{lengthPitch, widthPitch}{length and width of pitch in metres}
 
-\item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
+\item{arrow}{adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'}); \code{'none'} by default}
 
-\item{title, subtitle}{optional, adds title and subtitle to plot}
+\item{title, subtitle}{adds title and subtitle to plot; NULL by default}
 
-\item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch}
+\item{theme}{palette of pitch background and lines, either \code{light} (default), \code{dark}, \code{grey}, or \code{grass}}
+
+\item{data}{a default dataset for plotting in subsequent layers; NULL by default}
 
 \item{fillPitch, colPitch}{pitch fill and line colour}
 }
@@ -30,18 +38,6 @@ The functions listed below are deprecated and will be defunct in
   the near future. When possible, alternative functions with similar
   functionality are also mentioned. Help pages for deprecated functions are
   available at \code{help("soccermatics-deprecated")}.
-}
-\examples{
-library(ggplot2)
-data(statsbomb)
-
-# custom plot of France defensive pressure events vs. Argentina
-soccerPitchBG(arrow = "r", theme = "grass", 
-              title = "France (vs. Argentina)", 
-              subtitle = "Pressure events") + 
-  geom_point(data = filter(statsbomb, team.name == "France" & type.name == "Pressure"), 
-             aes(x = location.x, y = location.y), 
-             col = "blue", alpha = 0.5)
 }
 \seealso{
 \code{\link{soccermatics-deprecated}}

@@ -4,11 +4,22 @@
 \alias{soccerShotmap}
 \title{Draw an individual, team, or two team shotmap using StatsBomb data}
 \usage{
-soccerShotmap(df, lengthPitch = 105, widthPitch = 68, homeTeam = NULL,
-  adj = TRUE, n_players = 0, size_lim = c(2, 15), theme = c("light",
-  "dark", "grey", "grass"), title = NULL, subtitle = NULL)
+soccerShotmap(
+  df,
+  lengthPitch = 105,
+  widthPitch = 68,
+  homeTeam = NULL,
+  adj = TRUE,
+  n_players = 0,
+  size_lim = c(2, 15),
+  title = NULL,
+  subtitle = NULL,
+  theme = c("light", "dark", "grey", "grass")
+)
 }
 \arguments{
+\item{df}{dataframe containing x,y-coordinates of player passes}
+
 \item{lengthPitch, widthPitch}{length and width of pitch, in metres}
 
 \item{homeTeam}{if \code{df} contains two teams, the name of the home team to be displayed on the left hand side of the pitch. If \code{NULL}, infers home team as the team of the first event in \code{df}.}
@@ -19,9 +30,9 @@ soccerShotmap(df, lengthPitch = 105, widthPitch = 68, homeTeam = NULL,
 
 \item{size_lim}{minimum and maximum size of points, \code{c(min, max)}}
 
-\item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch with appropriate point colours}
-
 \item{title, subtitle}{optional, adds title and subtitle to half pitch plot. Title defaults to scoreline and team identity when two teams are defined in \code{df}.}
+
+\item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch with appropriate point colours}
 }
 \value{
 a ggplot object
@@ -30,7 +41,6 @@ a ggplot object
 If \code{df} contains two teams, draws a shotmap of each team at either end of a full pitch. If \code{df} contains one or more players from a single team, draws a vertical half pitch. Currently only works with StatsBomb data but compatability with other (non-StatsBomb) shot data will be added soon.
 }
 \examples{
-library(dplyr)
 data(statsbomb)
 
 # shot map of two teams on full pitch
@@ -39,7 +49,7 @@ statsbomb \%>\%
 
 # shot map of one player on half pitch
 statsbomb \%>\% 
-  filter(player.name == "Antoine Griezmann") \%>\% 
+  dplyr::filter(player.name == "Antoine Griezmann") \%>\% 
   soccerShotmap(theme = "grass",
                 title = "Antoine Griezmann", 
                 subtitle = "vs. Argentina, World Cup 2018")

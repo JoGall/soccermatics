@@ -2,18 +2,38 @@
 % Please edit documentation in R/soccerPositionMap.R
 \name{soccerPositionMap}
 \alias{soccerPositionMap}
-\title{Plot average player position}
+\title{Plot average player position using any event or tracking data}
 \usage{
-soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, fill1 = "red",
-  col1 = NULL, fill2 = "blue", col2 = NULL, labelCol = "black",
-  homeTeam = NULL, flipAwayTeam = TRUE, label = c("name", "number",
-  "none"), labelBox = TRUE, shortNames = TRUE, nodeSize = 5,
-  labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark",
-  "grey", "grass"), title = NULL, subtitle = NULL, source = c("manual",
-  "statsbomb"), x = "x", y = "y", id = "id", name = NULL, team = NULL)
+soccerPositionMap(
+  df,
+  lengthPitch = 105,
+  widthPitch = 68,
+  fill1 = "red",
+  col1 = NULL,
+  fill2 = "blue",
+  col2 = NULL,
+  labelCol = "black",
+  homeTeam = NULL,
+  flipAwayTeam = TRUE,
+  label = c("name", "number", "none"),
+  labelBox = TRUE,
+  shortNames = TRUE,
+  nodeSize = 5,
+  labelSize = 4,
+  arrow = c("none", "r", "l"),
+  theme = c("light", "dark", "grey", "grass"),
+  title = NULL,
+  subtitle = NULL,
+  source = c("manual", "statsbomb"),
+  x = "x",
+  y = "y",
+  id = "id",
+  name = NULL,
+  team = NULL
+)
 }
 \arguments{
-\item{df}{dataframe containing x,y-coordinates of player position}
+\item{df}{a dataframe containing x,y-coordinates of player position and a player identifier variable}
 
 \item{lengthPitch, widthPitch}{numeric, length and width of pitch in metres}
 
@@ -37,15 +57,15 @@ soccerPositionMap(df, lengthPitch = 105, widthPitch = 68, fill1 = "red",
 
 \item{labelSize}{numeric, size of labels}
 
-\item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
+\item{arrow}{optional, adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'})}
 
 \item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch}
 
 \item{title, subtitle}{optional, adds title and subtitle to plot}
 
-\item{source}{if \code{statsbomb}, uses StatsBomb definitions of required variable names (i.e. `location.x`, `location.y`, `player.id`, `team.name`). If \code{manual}, respects variable names defined in function arguments \code{x}, \code{y}, \code{id}, \code{name}, and \code{team}.}
+\item{source}{if \code{statsbomb}, uses StatsBomb definitions of required variable names (i.e. `location.x`, `location.y`, `player.id`, `team.name`); if \code{manual} (default), respects variable names defined in function arguments \code{x}, \code{y}, \code{id}, \code{name}, and \code{team}.}
 
-\item{x, y, id, name, team}{names of variables containing x,y-coordinates, unique player ids, player names, and team names. If \code{team} remains NULL, function expects only one team.}
+\item{x, y, id, name, team}{names of variables containing x,y-coordinates, unique player ids, player names, and team names, respectively; \code{name} and \code{team} NULL by default}
 }
 \description{
 Draws the average x,y-positions of each player from one or both teams on a soccer pitch.
@@ -66,7 +86,8 @@ data(statsbomb)
 statsbomb \%>\%
   filter(type.name == "Pass" & team.name == "France" & period == 1) \%>\%
   soccerPositionMap(source = "statsbomb",
-                    fill1 = "blue", arrow = "r", labelBox = F, theme = "grey", labelCol = "white",
+                    fill1 = "blue", arrow = "r", theme = "grey",
+                    labelBox = FALSE, labelCol = "white",
                     title = "France (vs Argentina, 30th June 2018)",
                     subtitle = "Average pass position (1' - 45')")
                  

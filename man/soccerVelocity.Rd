@@ -7,16 +7,18 @@
 soccerVelocity(dat)
 }
 \arguments{
-\item{dat}{dataframe containing unnormalised x,y-coordinates `x` and `y`, time variable `t`, and identifier `id`}
+\item{dat}{dataframe containing unnormalised x,y-coordinates \code{x} and \code{y}, time variable \code{'t'}, and player identifier \code{'id'}}
 }
 \value{
-a dataframe
+a dataframe with columns \code{'dist'}, \code{'speed'}, and \code{'direction'} added
 }
 \description{
 Compute instantaneous distance moved (in metres), speed (in metres per second), and direction (in radians) between subsequent frames in a dataframe of x,y-coordinates.
 }
 \examples{
-# calculate distance, speed, and direction for tromso dataset
+data(tromso)
+
+# calculate distance, speed, and direction for \code{tromso} dataset
 soccerVelocity(tromso)
 
 }

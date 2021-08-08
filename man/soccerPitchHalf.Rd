@@ -4,18 +4,26 @@
 \alias{soccerPitchHalf}
 \title{Draws a vertical half soccer pitch for the purpose of plotting shotmaps}
 \usage{
-soccerPitchHalf(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r",
-  "l"), theme = c("light", "dark", "grey", "grass"), title = NULL,
-  subtitle = NULL)
+soccerPitchHalf(
+  lengthPitch = 105,
+  widthPitch = 68,
+  arrow = c("none", "r", "l"),
+  theme = c("light", "dark", "grey", "grass"),
+  title = NULL,
+  subtitle = NULL,
+  data = NULL
+)
 }
 \arguments{
 \item{lengthPitch, widthPitch}{length and width of pitch in metres}
 
-\item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
+\item{arrow}{adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'}); \code{'none'} by default}
 
-\item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch}
+\item{theme}{palette of pitch background and lines, either \code{light} (default), \code{dark}, \code{grey}, or \code{grass};}
 
-\item{title, subtitle}{optional, adds title and subtitle to plot}
+\item{title, subtitle}{adds title and subtitle to plot; NULL by default}
+
+\item{data}{a default dataset for plotting in subsequent layers; NULL by default}
 }
 \value{
 a ggplot object
@@ -23,6 +31,26 @@ a ggplot object
 \description{
 Adds soccer pitch outlines (with transparent fill) to an existing ggplot object (e.g. heatmaps, passing maps, etc..)
 }
+\examples{
+library(ggplot2)
+library(dplyr)
+data(statsbomb)
+
+# normalise data, get non-penalty shots for France, 
+# add boolean variable 'goal' for plotting
+my_df <- statsbomb \%>\%
+  soccerTransform(method = 'statsbomb') \%>\% 
+  filter(team.name == "France" &
+         type.name == "Shot" &
+         shot.type.name != 'penalty') \%>\%
+  mutate(goal = as.factor(if_else(shot.outcome.name == "Goal", 1, 0)))
+  
+soccerPitchHalf(data = my_df, theme = 'light') +
+  geom_point(aes(x = location.y, y = location.x,
+                 size = shot.statsbomb_xg, colour = goal),
+             alpha = 0.7)
+            
+}
 \seealso{
-\code{\link{soccerShotmap}} for plotting a shotmap on a half pitch or \code{\link{soccerPitch}} for drawing a full size soccer pitch
+\code{\link{soccerShotmap}} for plotting a shotmap on a half pitch for a single player or \code{\link{soccerPitch}} for drawing a full size soccer pitch
 }

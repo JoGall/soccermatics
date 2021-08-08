@@ -2,35 +2,47 @@
 % Please edit documentation in R/soccerPath.R
 \name{soccerPath}
 \alias{soccerPath}
-\title{Draw a path of player trajectory on a soccer pitch.}
+\title{Draw a path of player trajectory on a soccer pitch using any tracking data}
 \usage{
-soccerPath(df, lengthPitch = 105, widthPitch = 68, col = "black",
-  arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"),
-  lwd = 1, title = NULL, subtitle = NULL, legend = FALSE, x = "x",
-  y = "y", id = NULL, plot = NULL)
+soccerPath(
+  df,
+  lengthPitch = 105,
+  widthPitch = 68,
+  col = "black",
+  arrow = c("none", "r", "l"),
+  theme = c("light", "dark", "grey", "grass"),
+  lwd = 1,
+  title = NULL,
+  subtitle = NULL,
+  legend = FALSE,
+  x = "x",
+  y = "y",
+  id = NULL,
+  plot = NULL
+)
 }
 \arguments{
 \item{df}{dataframe containing x,y-coordinates of player position}
 
 \item{lengthPitch, widthPitch}{length and width of pitch in metres}
 
-\item{col}{colour of path if no \code{'id'} is provided. If an \code{'id'} is present, colours from ColorBrewer's 'Paired' palette are used}
+\item{col}{colour of path if no \code{'id'} is provided; if an \code{'id'} is present, uses ColorBrewer's 'Paired' palette by default}
 
-\item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
+\item{arrow}{adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'}); \code{'none'} by default}
 
 \item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch}
 
 \item{lwd}{player path thickness}
 
-\item{title, subtitle}{optional, adds title and subtitle to plot}
+\item{title, subtitle}{adds title and subtitle to plot; NULL by default}
 
 \item{legend}{boolean, include legend}
 
-\item{x, y}{= name of variables containing x,y-coordinates}
+\item{x, y}{name of variables containing x,y-coordinates}
 
 \item{id}{character, the name of the column containing player identity (only required if \code{'df'} contains multiple players)}
 
-\item{plot}{plot to add path to, if desired}
+\item{plot}{base plot to add path layer to; NULL by default}
 }
 \value{
 a ggplot object

@@ -4,7 +4,9 @@
 \name{tromso_extra}
 \alias{tromso_extra}
 \title{x,y-coordinates and additional positional information on 11 soccer players over 12000 frames each}
-\format{A dataframe containing 12000 frames of x,y-coordinates and timestamps from 11 players.}
+\format{
+A dataframe containing 12000 frames of x,y-coordinates and timestamps from 11 players.
+}
 \source{
 \href{http://home.ifi.uio.no/paalh/dataset/alfheim/}{ZXY Sport Tracking}
 }
@@ -13,12 +15,6 @@ data(tromso_extra)
 }
 \description{
 x,y-coordinates of 11 soccer players over 10 minutes (Tromsø IL vs. Anzhi, 2013-11-07), plus additional information on player heading, direction, energy, speed, and total distance. Data captured at 20 Hz using the ZXY Sport Tracking system and made available in the publication \href{http://home.ifi.uio.no/paalh/dataset/alfheim/}{ZXY Sport Tracking}.
-}
-\examples{
-data(tromso_extra)
-# draw flow field showing mean direction of player #8's movement
-soccerFlow(subset(tromso_extra, id == 8), bins = 5, grass = TRUE)
-
 }
 \references{
 Pettersen et al. (2014) Proceedings of the International Conference on Multimedia Systems (MMSys)

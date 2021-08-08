@@ -4,20 +4,26 @@
 \alias{soccerPitch}
 \title{Plot a full soccer pitch}
 \usage{
-soccerPitch(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r",
-  "l"), title = NULL, subtitle = NULL, theme = c("light", "dark", "grey",
-  "grass"))
+soccerPitch(
+  lengthPitch = 105,
+  widthPitch = 68,
+  arrow = c("none", "r", "l"),
+  title = NULL,
+  subtitle = NULL,
+  theme = c("light", "dark", "grey", "grass"),
+  data = NULL
+)
 }
 \arguments{
 \item{lengthPitch, widthPitch}{length and width of pitch in metres}
 
-\item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
+\item{arrow}{adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'}); \code{'none'} by default}
 
-\item{title, subtitle}{optional, adds title and subtitle to plot}
+\item{title, subtitle}{adds title and subtitle to plot; NULL by default}
 
-\item{theme}{draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch}
+\item{theme}{palette of pitch background and lines, either \code{light} (default), \code{dark}, \code{grey}, or \code{grass}}
 
-\item{fillPitch, colPitch}{pitch fill and line colour}
+\item{data}{a default dataset for plotting in subsequent layers; NULL by default}
 }
 \value{
 a ggplot object
@@ -29,12 +35,19 @@ Draws a soccer pitch as a ggplot object for the purpose of adding layers such as
 library(ggplot2)
 data(statsbomb)
 
-# custom plot of France defensive pressure events vs. Argentina
-soccerPitch(arrow = "r", theme = "grass", 
+# transform Statsbomb coordinates to metre units for plotting
+my_df <- soccerTransform(statsbomb, method = "statsbomb")
+
+# filter events of interest (France defensive pressure events vs. Argentina)
+my_df <- my_df \%>\% 
+  dplyr::filter(team.name == "France" & type.name == "Pressure")
+
+# add custom layers to soccerPitch base
+soccerPitch(data = my_df,
+            arrow = "r", theme = "grass", 
             title = "France (vs. Argentina)", 
             subtitle = "Pressure events") + 
-  geom_point(data = filter(statsbomb, team.name == "France" & type.name == "Pressure"), 
-             aes(x = location.x, y = location.y), 
+  geom_point(aes(x = location.x, y = location.y), 
              col = "blue", alpha = 0.5)
 
 }

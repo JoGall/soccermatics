@@ -2,27 +2,31 @@
 % Please edit documentation in R/soccerResample.R
 \name{soccerResample}
 \alias{soccerResample}
-\title{Resample the frequency of x,y,t- time series with linear interpolation of x,y-coordinates.}
+\title{Resample the frames per second of any tracking data using linear interpolation}
 \usage{
-soccerResample(dat, r = 10, x = "x", y = "y", t = "t")
+soccerResample(df, r = 10, x = "x", y = "y", t = "t", id = "id")
 }
 \arguments{
-\item{dat}{= dataframe containing x,y-coordinates with time variable}
+\item{df}{a dataframe containing x,y-coordinates and time variable}
 
 \item{r}{resampling rate in frames per second}
 
-\item{x, y}{= name of variables containing x,y-coordinates}
+\item{x, y}{name of variables containing x,y-coordinates}
 
-\item{t}{= name of variable containing time data}
+\item{t}{name of variable containing time data}
+
+\item{id}{name of variable containing player identifier}
 }
 \value{
-a dataframe
+a dataframe with interpolated rows added
 }
 \description{
-Downsample or upsample dataframe containing x,y-coordinates and a time variable `t` with linear interpolation of x,y-coordinates and constant interpolation of all other variables.
+Downsample or upsample any tracking data containing x,y,t data using linear interpolation of x,y-coordinates (plus constant interpolation of all other variables in dataframe)
 }
 \examples{
+data(tromso)
+
 # resample tromso dataset from ~21 fps to 10 fps
-soccerResample(tromso)
+soccerResample(tromso, r=10)
 
 }

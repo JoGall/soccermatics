@@ -4,20 +4,26 @@
 \alias{soccerPitchFG}
 \title{Helper function to draw soccer pitch outlines over an existing ggplot object}
 \usage{
-soccerPitchFG(plot, lengthPitch = 105, widthPitch = 68,
-  colPitch = "black", arrow = c("none", "r", "l"), title = NULL,
-  subtitle = NULL)
+soccerPitchFG(
+  plot,
+  lengthPitch = 105,
+  widthPitch = 68,
+  colPitch = "black",
+  arrow = c("none", "r", "l"),
+  title = NULL,
+  subtitle = NULL
+)
 }
 \arguments{
-\item{plot}{an existing ggplot object to add pitch lines to}
+\item{plot}{an existing ggplot object to add pitch lines layer to}
 
 \item{lengthPitch, widthPitch}{length and width of pitch in metres}
 
-\item{colPitch}{pitch fill and line colour}
+\item{colPitch}{colour of pitch markings}
 
-\item{arrow}{optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})}
+\item{arrow}{adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'}); \code{'none'} by default}
 
-\item{title, subtitle}{optional, adds title and subtitle to plot}
+\item{title, subtitle}{adds title and subtitle to plot; NULL by default}
 }
 \value{
 a ggplot object
@@ -26,5 +32,5 @@ a ggplot object
 Adds soccer pitch outlines (with transparent fill) to an existing ggplot object (e.g. heatmaps, passing maps, etc..)
 }
 \seealso{
-\code{\link{soccerPitch}} for plotting a soccer pitch for the purpose of drawing over event data, average position, player trajectories, etc..
+\code{\link{soccerPitch}} for plotting a soccer pitch as background layer
 }

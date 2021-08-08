@@ -13,7 +13,7 @@ soccerShortenName(names)
 Helper function to extract last name (including common nobiliary particles) from full player names
 }
 \examples{
-attach(statsbomb)
+data(statsbomb)
 statsbomb$name <- soccerShortenName(statsbomb$player.name)
 
 }

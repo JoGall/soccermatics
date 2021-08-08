@@ -4,24 +4,32 @@
 \alias{soccerFlipDirection}
 \title{Flips x,y-coordinates horizontally in one half to account for changing sides at half-time}
 \usage{
-soccerFlipDirection(df, lengthPitch = 105, widthPitch = 68,
-  teamToFlip = NULL, periodToFlip = 1:2, team = "team",
-  period = "period", x = "x", y = "y")
+soccerFlipDirection(
+  df,
+  lengthPitch = 105,
+  widthPitch = 68,
+  teamToFlip = NULL,
+  periodToFlip = 1:2,
+  team = "team",
+  period = "period",
+  x = "x",
+  y = "y"
+)
 }
 \arguments{
-\item{df}{= dataframe containing unnormalised x,y-coordinates}
+\item{df}{dataframe containing unnormalised x,y-coordinates}
 
-\item{lengthPitch, widthPitch}{= length, width of pitch in metres}
+\item{lengthPitch, widthPitch}{length, width of pitch in metres}
 
-\item{teamToFlip}{= character, name of team to flip. If \code{NULL}, all x,y-coordinates in \code{df} will be flipped}
+\item{teamToFlip}{character, name of team to flip. If \code{NULL}, all x,y-coordinates in \code{df} will be flipped}
 
-\item{periodToFlip}{= integer, period(s) to flip}
+\item{periodToFlip}{integer, period(s) to flip}
 
-\item{team}{= character, name of variables containing x,y-coordinates}
+\item{team}{character, name of variables containing x,y-coordinates}
 
-\item{period}{= character, name of variable containing period labels}
+\item{period}{character, name of variable containing period labels}
 
-\item{x, y}{= character, name of variables containing x,y-coordinates}
+\item{x, y}{character, name of variables containing x,y-coordinates}
 }
 \value{
 a dataframe
@@ -38,12 +46,13 @@ library(dplyr)
 # flip x,y-coords of France in both halves of statsbomb data
 data(statsbomb)
 statsbomb \%>\% 
-  soccerFlipDirection(lengthPitch = 105, widthPitch = 68, teamToFlip = "France", team = "team.name", x = "location.x", y = "location.y")
+  soccerFlipDirection(team = "team.name", x = "location.x", y = "location.y",
+                      teamToFlip = "France")
   
 # flip x,y-coords in 2nd half of Tromso, based on a dummy period variable
 data(tromso)
 tromso \%>\% 
   mutate(period = if_else(t > as.POSIXct("2013-11-07 21:14:00 GMT"), 1, 2)) \%>\% 
-  soccerFlipDirection(lengthPitch = 105, widthPitch = 68, periodToFlip = 2)
+  soccerFlipDirection(periodToFlip = 2)
   
 }
