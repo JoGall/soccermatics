@@ -1,17 +1,19 @@
 Package: soccermatics
-Version: 0.9.4
+Version: 0.9.5
 Authors@R: person("Joe", "Gallagher", email = "joedgallagher@gmail.com", role = c("aut", "cre"))
-Title: Visualise tracking and event data from soccer matches
-Description: Provides tools to visualise x,y-coordinates of soccer players and event data (passes, shots). Uses ggplot to draw soccer pitch and overplot expected goal maps, pass maps, average player positions, player heatmaps, individual player paths, player flow fields, and more.
+Title: Visualise football (soccer) tracking and event data
+Description: Provides tools to visualise x,y-coordinates of soccer players and event data (e.g. passes, shots). Uses ggplot to draw soccer pitch and overplot expected goal maps, pass maps, average player positions, player heatmaps, individual player paths, player flow fields, and more.
 Depends: R (>= 3.4.1)
-Imports: dplyr, ggplot2
+Imports: cowplot, dplyr, forcats, ggforce, ggplot2, ggrepel, magrittr, MASS, plyr, rlang, scales, tidyr, xts, zoo
 License: GPL (>=3.0) Note: Use of the name 'soccermatics' was kindly permitted by David Sumpter and is protected from commercial use under EU copyright law.
 Encoding: UTF-8
-LazyData: true
 Collate: 
+    'package.R'
     'soccerFlipDirection.R'
     'soccerPitch.R'
     'soccerHeatmap.R'
+    'soccerSpokes.R'
+    'soccerFlow.R'
     'soccerPassmap.R'
     'soccerPath.R'
     'soccerPitchBG.R'
@@ -21,6 +23,7 @@ Collate:
     'soccerPositionMap.R'
     'soccerResample.R'
     'soccerShortenName.R'
+    'soccerStandardCols.R'
     'soccerTransform.R'
     'soccerVelocity.R'
     'soccermatics-deprecated.R'
@@ -28,4 +31,4 @@ Collate:
     'statsbomb.R'
     'tromso.R'
     'tromso_extra.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1
