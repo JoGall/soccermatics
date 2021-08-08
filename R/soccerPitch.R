@@ -1,4 +1,6 @@
 #' @import ggplot2
+#' @importFrom dplyr filter
+#' @importFrom magrittr "%>%"
 #' @importFrom ggforce geom_arc geom_circle
 #' @importFrom cowplot draw_text
 NULL
@@ -7,25 +9,33 @@ NULL
 #' @description Draws a soccer pitch as a ggplot object for the purpose of adding layers such as player positions, player trajectories, etc..
 #' 
 #' @param lengthPitch,widthPitch length and width of pitch in metres
-#' @param fillPitch,colPitch pitch fill and line colour
-#' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
-#' @param title,subtitle optional, adds title and subtitle to plot
-#' @param theme draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch
+#' @param arrow adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'}); \code{'none'} by default
+#' @param title,subtitle adds title and subtitle to plot; NULL by default
+#' @param theme palette of pitch background and lines, either \code{light} (default), \code{dark}, \code{grey}, or \code{grass}
+#' @param data a default dataset for plotting in subsequent layers; NULL by default
 #' @return a ggplot object
 #' @examples
 #' library(ggplot2)
 #' data(statsbomb)
 #' 
-#' # custom plot of France defensive pressure events vs. Argentina
-#' soccerPitch(arrow = "r", theme = "grass", 
+#' # transform Statsbomb coordinates to metre units for plotting
+#' my_df <- soccerTransform(statsbomb, method = "statsbomb")
+#' 
+#' # filter events of interest (France defensive pressure events vs. Argentina)
+#' my_df <- my_df %>% 
+#'   dplyr::filter(team.name == "France" & type.name == "Pressure")
+#' 
+#' # add custom layers to soccerPitch base
+#' soccerPitch(data = my_df,
+#'             arrow = "r", theme = "grass", 
 #'             title = "France (vs. Argentina)", 
 #'             subtitle = "Pressure events") + 
-#'   geom_point(data = filter(statsbomb, team.name == "France" & type.name == "Pressure"), 
-#'              aes(x = location.x, y = location.y), 
+#'   geom_point(aes(x = location.x, y = location.y), 
 #'              col = "blue", alpha = 0.5)
 #' 
 #' @export
-soccerPitch <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r", "l"), title = NULL, subtitle = NULL, theme = c("light", "dark", "grey", "grass")) {
+soccerPitch <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r", "l"), title = NULL, subtitle = NULL, theme = c("light", "dark", "grey", "grass"), data = NULL) {
+  start<-end<-NULL
   
   # define colours by theme
   if(theme[1] == "grass") {
@@ -47,11 +57,11 @@ soccerPitch <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r
     arrowCol <- "white"
     colText <- "black"
   } else if(theme[1] == "dark") {  
-    fill1 <- "#1C1F26"
-    fill2 <- "#1C1F26"
-    colPitch <- "white"
-    arrowCol <- "white"
-    colText <- "white"
+    fill1 <- "#1a1e2c"
+    fill2 <- "#1a1e2c"
+    colPitch <- "#F0F0F0"
+    arrowCol <- "#F0F0F0"
+    colText <- "#F0F0F0"
   } else if(theme[1] == "blank") {
     fill1 <- "white"
     fill2 <- "white"
@@ -69,7 +79,7 @@ soccerPitch <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r
   boxes <- data.frame(start = lines * 0:12 - border[4], end = lines * 1:13 - border[2])[seq(2, 12, 2),]
   
   # draw pitch
-  p <- ggplot() +
+  p <- ggplot(data) +
     # background
     geom_rect(aes(xmin = -border[4], xmax = lengthPitch + border[2], ymin = -border[3], ymax = widthPitch + border[1]), fill = fill1) +
     # mowed pitch lines
@@ -116,22 +126,22 @@ soccerPitch <- function(lengthPitch = 105, widthPitch = 68, arrow = c("none", "r
   theme_buffer <- ifelse(theme[1] == "light", 0, 4)
   if(!is.null(title) & !is.null(subtitle)) {
     p <- p +
-      cowplot::draw_text(title, 
+      draw_text(title, 
                          x = 0, y = widthPitch + 9, hjust = 0, vjust = 1,
                          size = 15, fontface = 'bold', col = colText) +
-      cowplot::draw_text(subtitle, 
+      draw_text(subtitle, 
                          x = 0, y = widthPitch + 4.5, hjust = 0, vjust = 1,
                          size = 13, col = colText) +
       theme(plot.margin = unit(c(-0.525,-0.9,-0.7,-0.9), "cm"))
   } else if(!is.null(title) & is.null(subtitle)) {
     p <- p +
-      cowplot::draw_text(title, 
+      draw_text(title, 
                          x = 0, y = widthPitch + 4.5, hjust = 0, vjust = 1,
                          size = 15, fontface = 'bold', col = colText) +
       theme(plot.margin = unit(c(-0.9,-0.9,-0.7,-0.9), "cm"))
   } else if(is.null(title) & !is.null(subtitle)) {
     p <- p +
-      cowplot::draw_text(subtitle, 
+      draw_text(subtitle, 
                          x = 0, y = widthPitch + 4.5, hjust = 0, vjust = 1,
                          size = 13, col = colText) +
       theme(plot.margin = unit(c(-0.9,-0.9,-0.7,-0.9), "cm"))
