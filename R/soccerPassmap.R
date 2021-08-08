@@ -1,6 +1,7 @@
 #' @include soccerPitch.R
 #' @import ggplot2
 #' @import dplyr
+#' @importFrom magrittr "%>%"
 #' @importFrom ggrepel geom_label_repel
 #' @importFrom forcats fct_explicit_na
 #' @importFrom scales rescale
@@ -11,6 +12,7 @@ NULL
 #' 
 #' @param df dataframe containing x,y-coordinates of player passes
 #' @param lengthPitch,widthPitch numeric, length and width of pitch, in metres
+#' @param minPass minimum number of passes between players for edge to be drawn
 #' @param fill,col fill and border colour of nodes
 #' @param edgeCol colour of edge lines. Default is complementary to \code{theme} colours.
 #' @param edgeAlpha transparency of edge lines, from \code{0} - \code{1}. Defaults to \code{0.6} so overlapping edges are visible.
@@ -19,7 +21,7 @@ NULL
 #' @param maxNodeSize maximum size of nodes
 #' @param maxEdgeSize maximum width of edge lines
 #' @param labelSize size of player name labels
-#' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
+#' @param arrow optional, adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'})
 #' @param theme draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch
 #' @param title adds custom title to plot. Defaults to team name.
 #' @examples
@@ -41,6 +43,7 @@ NULL
 #'                 title = "France (vs Argentina, 30th June 2018)")
 #' @export
 soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, fill = "red", col = "black", edgeAlpha = 0.6, edgeCol = NULL, label = TRUE, shortNames = TRUE, maxNodeSize = 30, maxEdgeSize = 30, labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), title = NULL) {
+  type.name<-pass.outcome.name<-period<-timestamp<-player.name<-pass.recipient.name<-from<-to<-xend<-yend<-events<-NULL
   
   if(length(unique(df$team.name)) > 1) stop("Data contains more than one team")
   
@@ -91,7 +94,7 @@ soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, f
   min_events <- df %>% 
     group_by(id) %>% 
     dplyr::summarise(period = min(period), timestamp = min(timestamp)) %>% 
-    na.omit() %>% 
+    stats::na.omit() %>% 
     arrange(period, timestamp)
   
   if(nrow(min_events) > 11) {
@@ -107,7 +110,7 @@ soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, f
     filter(type.name %in% c("Pass", "Ball Receipt*", "Ball Recovery", "Shot", "Dispossessed", "Interception", "Clearance", "Dribble", "Shot", "Goal Keeper", "Miscontrol", "Error")) %>% 
     group_by(id, name) %>% 
     dplyr::summarise(x = mean(x, na.rm=T), y = mean(y, na.rm=T), events = n()) %>% 
-    na.omit() %>% 
+    stats::na.omit() %>% 
     as.data.frame()
   
   # edges based only on completed passes
@@ -117,7 +120,7 @@ soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, f
     select(from = player.name, to = pass.recipient.name) %>% 
     group_by(from, to) %>% 
     dplyr::summarise(n = n()) %>% 
-    na.omit()
+    stats::na.omit()
   
   edges <- left_join(edgelist, 
             nodes %>% select(id, name, x, y),
@@ -162,7 +165,7 @@ soccerPassmap <- function(df, lengthPitch = 105, widthPitch = 68, minPass = 3, f
     geom_segment(data = edges, aes(x, y, xend = xend, yend = yend, size = n), col = edgeCol, alpha = edgeAlpha) +
     geom_point(data = nodes, aes(x, y, size = events), pch = 21, fill = fill, col = col) +
     scale_size_identity() +
-    guides(size = F) +
+    guides(size="none") +
     annotate("text", 104, 1, label = paste0("Passes: ", pass_n, "\nCompleted: ", sprintf("%.1f", pass_pc), "%"), hjust = 1, vjust = 0, size = labelSize * 7/8, col = colText)
   
   # add labels
