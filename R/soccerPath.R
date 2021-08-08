@@ -1,21 +1,22 @@
 #' @import ggplot2
 #' @import dplyr
+#' @importFrom magrittr "%>%"
 NULL
-#' Draw a path of player trajectory on a soccer pitch.
+#' Draw a path of player trajectory on a soccer pitch using any tracking data
 #'
 #' @description Draws a path connecting consecutive x,y-coordinates of a player on a soccer pitch. 
 #' 
 #' @param df dataframe containing x,y-coordinates of player position
 #' @param lengthPitch,widthPitch length and width of pitch in metres
-#' @param col colour of path if no \code{'id'} is provided. If an \code{'id'} is present, colours from ColorBrewer's 'Paired' palette are used
-#' @param arrow optional, adds arrow showing team attack direction as right (\code{'r'}) or left (\code{'l'})
+#' @param col colour of path if no \code{'id'} is provided; if an \code{'id'} is present, uses ColorBrewer's 'Paired' palette by default
+#' @param arrow adds team direction of play arrow as right (\code{'r'}) or left (\code{'l'}); \code{'none'} by default
 #' @param theme draws a \code{light}, \code{dark}, \code{grey}, or \code{grass} coloured pitch
 #' @param lwd player path thickness
-#' @param title,subtitle optional, adds title and subtitle to plot
+#' @param title,subtitle adds title and subtitle to plot; NULL by default
 #' @param legend boolean, include legend
-#' @param x,y = name of variables containing x,y-coordinates
+#' @param x,y name of variables containing x,y-coordinates
 #' @param id character, the name of the column containing player identity (only required if \code{'df'} contains multiple players)
-#' @param plot plot to add path to, if desired
+#' @param plot base plot to add path layer to; NULL by default
 #' @return a ggplot object
 #' @examples
 #' library(dplyr)
@@ -63,7 +64,7 @@ soccerPath <- function(df, lengthPitch = 105, widthPitch = 68, col = "black", ar
     #legend
     if(legend == FALSE) {
       p <- p +
-        guides(colour=FALSE)
+        guides(colour="none")
     }
   }
   
