@@ -23,7 +23,7 @@ Collate:
     'soccerPositionMap.R'
     'soccerResample.R'
     'soccerShortenName.R'
-    'soccerStandardCols.R'
+    'soccerStandardiseCols.R'
     'soccerTransform.R'
     'soccerVelocity.R'
     'soccermatics-deprecated.R'
