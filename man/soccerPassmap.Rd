@@ -58,17 +58,21 @@ Draw an undirected passing network of completed passes on pitch from StatsBomb d
 \examples{
 # France vs. Argentina, minimum of three passes
 library(dplyr)
-
-# Argentina pass map until first substituton with transparent edges
 data(statsbomb)
+
+# transform x,y-coords,
+# Argentina pass map until first substituton with transparent edges
 statsbomb \%>\% 
+  soccerTransform(method='statsbomb') \%>\% 
   filter(team.name == "Argentina") \%>\% 
   soccerPassmap(fill = "lightblue", arrow = "r",
                 title = "Argentina (vs France, 30th June 2018)")
 
-# France pass map until first substituton with opaque edges
+# transform x,y-coords,
+# France pass map until first substitution with opaque edges
 statsbomb \%>\% 
   filter(team.name == "France") \%>\% 
+  soccerTransform(method='statsbomb') \%>\% 
   soccerPassmap(fill = "blue", minPass = 3,
                 maxEdgeSize = 30, edgeCol = "grey40", edgeAlpha = 1,
                 title = "France (vs Argentina, 30th June 2018)")
