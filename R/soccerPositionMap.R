@@ -26,35 +26,42 @@ NULL
 #' @param x,y,id,name,team names of variables containing x,y-coordinates, unique player ids, player names, and team names, respectively; \code{name} and \code{team} NULL by default
 #' @examples
 #' library(dplyr)
+#' data(statsbomb)
 #' 
-#' # average player position for one team w/ jersey numbers
+#' # average player position from tracking data for one team
+#' # w/ jersey numbers labelled
 #' data(tromso)
-#' tromso %>% 
-#'   soccerPositionMap(label = "number", name = "id",
-#'                     labelCol = "white", nodeSize = 8, arrow = "r", theme = "grass",
-#'                     title = "Tromso IL (vs. Stromsgodset, 3rd Nov 2013)", 
+#' tromso %>%
+#'   soccerPositionMap(label = "number", id ="id",
+#'                     labelCol = "white", nodeSize = 8,
+#'                     arrow = "r", theme = "grass",
+#'                     title = "Tromso IL (vs. Stromsgodset, 3rd Nov 2013)",
 #'                     subtitle = "Average player position (1' - 16')")
 #' 
-#' # average pass position for one team w/ player name labelled as text
-#' data(statsbomb)
+#' # transform x,y-coords, standarise column names,
+#' # average pass position for one team using 'statsbomb' method
+#' # w/ player name as labels
 #' statsbomb %>%
+#'   soccerTransform(method='statsbomb') %>%
 #'   filter(type.name == "Pass" & team.name == "France" & period == 1) %>%
 #'   soccerPositionMap(source = "statsbomb",
-#'                     fill1 = "blue", arrow = "r", theme = "grey",
-#'                     labelBox = FALSE, labelCol = "white",
+#'                     fill1 = "blue", arrow = "r", theme = "light",
 #'                     title = "France (vs Argentina, 30th June 2018)",
 #'                     subtitle = "Average pass position (1' - 45')")
 #'                  
-#' # average pass position for two teams w/ player name labelled as text in boxes
+#' # transform x,y-coords, standarise column names,
+#' # average pass position for two teams using 'manual' method
+#' # w/ player names labelled
 #' statsbomb %>%
-#'   filter(type.name == "Pass" & period == 1) %>%
-#'   soccerPositionMap(source = "statsbomb",
-#'                     fill1 = "lightblue", fill2 = "blue",
+#'   soccerTransform(method='statsbomb') %>%
+#'   soccerStandardiseCols(method='statsbomb') %>% 
+#'   filter(event_name == "Pass" & period == 1) %>%
+#'   soccerPositionMap(fill1 = "lightblue", fill2 = "blue",
 #'                     title = "Argentina vs France, 30th June 2018",
 #'                     subtitle = "Average pass position (1' - 45')")
 #' 
 #' @export
-soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = NULL, fill2 = "blue", col2 = NULL, labelCol = "black", homeTeam = NULL, flipAwayTeam = TRUE, label = c("name", "number", "none"), labelBox = TRUE, shortNames = TRUE, nodeSize = 5, labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL, source = c("manual", "statsbomb"), x = "x", y = "y", id = "id", name = NULL, team = NULL) {
+soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "red", col1 = NULL, fill2 = "blue", col2 = NULL, labelCol = "black", homeTeam = NULL, flipAwayTeam = TRUE, label = c("name", "number", "none"), labelBox = TRUE, shortNames = TRUE, nodeSize = 5, labelSize = 4, arrow = c("none", "r", "l"), theme = c("light", "dark", "grey", "grass"), title = NULL, subtitle = NULL, source = c("manual", "statsbomb"), x = "x", y = "y", id = "player_id", name = "player_name", team = "team_name") {
   x.mean<-y.mean<-NULL
   
   # define colours by theme
@@ -85,10 +92,16 @@ soccerPositionMap <- function(df, lengthPitch = 105, widthPitch = 68, fill1 = "r
   df$x <- df[,x]
   df$y <- df[,y]
   df$id <- df[,id]
-  if(is.null(name)) name <- id
+  if(!name %in% colnames(df)) {
+    name <- id
+  }
   df$name <- df[,name]
-  if(is.null(team)) team <- "Team A"
-  df$team <- team
+  if(team %in% colnames(df)) {
+    df$team <- df[,team]
+  } else {
+    team <- "Team A"
+    df$team <- team
+  }
   
   # shorten player name
   if(!is.null(name) & shortNames == TRUE) {

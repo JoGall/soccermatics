@@ -23,11 +23,13 @@ NULL
 #' 
 #' # shot map of two teams on full pitch
 #' statsbomb %>%
+#'   soccerTransform(method='statsbomb') %>% 
 #'   soccerShotmap(theme = "gray")
 #' 
 #' # shot map of one player on half pitch
 #' statsbomb %>% 
 #'   dplyr::filter(player.name == "Antoine Griezmann") %>% 
+#'   soccerTransform(method='statsbomb') %>% 
 #'   soccerShotmap(theme = "grass",
 #'                 title = "Antoine Griezmann", 
 #'                 subtitle = "vs. Argentina, World Cup 2018")

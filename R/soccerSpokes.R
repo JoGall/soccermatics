@@ -36,8 +36,8 @@ NULL
 #' # filter only France pass events
 #' my_df <- statsbomb %>%
 #'  soccerTransform(method = 'statsbomb') %>%
-#'  soccerStandardCols(method = 'statsbomb') %>%
-#'   filter(team == "France" & event == "Pass")
+#'  soccerStandardiseCols(method = 'statsbomb') %>%
+#'   filter(team_name == "France" & event_name == "Pass")
 #'   
 #' # overlay flow field onto heatmap showing proportion of team passes per pitch zone
 #' soccerHeatmap(my_df, xBins=7, yBins=5,

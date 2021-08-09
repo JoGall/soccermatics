@@ -20,13 +20,14 @@ NULL
 #' @examples
 #' library(dplyr)
 #' 
-#' # Heatmap w/ ~5x5m bins (pitchLength / 5 = 21, pitchWidth / 5 = 13.6)
+#' # tracking data heatmap with 21x5 zones(~5x5m)
 #' data(tromso)
 #' tromso %>% 
 #'   filter(id == 8) %>% 
 #'   soccerHeatmap(xBins = 10)
 #' 
-#' # team pressure heatmap w/ 6x3 zones
+#' # transform x,y-coords, filter only France pressure events,
+#' # heatmap with 6x3 zones
 #' data(statsbomb)
 #' statsbomb %>%
 #'   soccerTransform(method='statsbomb') %>% 
@@ -36,12 +37,14 @@ NULL
 #'                 title = "France (vs Argentina, 30th June 2016)", 
 #'                 subtitle = "Defensive pressure heatmap")
 #'
-#' # player defensive action kernel density estimate heatmap
+#' # transform x,y-coords, standardise column names,
+#' # filter player defensive actions, plot kernel density estimate heatmap
 #' statsbomb %>%
-#'   filter(type.name %in% c("Duel", "Interception", "Clearance", "Block") &
-#'          player.name == "Samuel Yves Umtiti") %>%
-#'   soccerHeatmap(x = "location.x", y = "location.y",
-#'                 kde = TRUE, arrow = "r",
+#'   soccerTransform(method='statsbomb') %>% 
+#'   soccerStandardiseCols() %>% 
+#'   filter(event_name %in% c("Duel", "Interception", "Clearance", "Block") &
+#'          player_name == "Samuel Yves Umtiti") %>%
+#'   soccerHeatmap(kde = TRUE, arrow = "r",
 #'                 title = "Umtiti (vs Argentina, 30th June 2016)",
 #'                 subtitle = "Defensive actions heatmap")
 #'                 
